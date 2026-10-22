@@ -1,432 +1,280 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1020">
-<title>NEXORA — Creator & Productivity Hub</title>
+<meta name="theme-color" content="#080d19">
+<title>KHUJI — হারানো জিনিস খুঁজে নিন</title>
 <style>
-:root{--bg:#0a0d19;--panel:#11172a;--panel2:#171e34;--text:#f5f6ff;--muted:#9ca7c4;--line:#29314c;--a:#a78bfa;--b:#67e8d0;--danger:#ff8c9b;--shadow:0 18px 50px #0003}
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--bg:#080d19;--panel:#101828;--line:#253249;--text:#f2f5fc;--muted:#93a1b8;--green:#a3ffbf;--blue:#8db8ff;--red:#ff9b9b}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 80% -10%,#30235b 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',sans-serif}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--b);outline-offset:2px}
-button:disabled{opacity:.5;cursor:not-allowed}
-.app{display:grid;grid-template-columns:245px minmax(0,1fr);min-height:100vh}
-aside{border-right:1px solid var(--line);padding:24px 15px;background:#0b1020;position:sticky;top:0;height:100vh;overflow:auto}
-.brand{font-size:25px;font-weight:950;letter-spacing:-1.3px;padding:0 10px 25px}
-.brand span{color:var(--a)}
-.brand small{display:block;font-size:10px;color:var(--muted);letter-spacing:2px;font-weight:700}
-.navlabel{color:#75809e;font-size:10px;font-weight:800;letter-spacing:1.8px;padding:15px 10px 7px}
-.nav{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:11px 12px;border-radius:11px;border:1px solid transparent;background:none;color:var(--muted);margin:3px 0}
-.nav:hover,.nav.active{background:#1b2040;color:#fff;border-color:#35345f}
-.nav.active{box-shadow:inset 3px 0 var(--a)}
-.sidebarfoot{margin:30px 8px 5px;border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:13px;font-size:12px;color:var(--muted)}
-main{min-width:0;padding:0 30px 55px}
-.topbar{height:75px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
-.status{font-size:12px;color:var(--b);border:1px solid #24554d;padding:5px 10px;border-radius:30px}
-.avatar{width:37px;height:37px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(140deg,#bba4ff,#5de6d1);color:#111;font-weight:900}
-.topright{display:flex;align-items:center;gap:10px}
-.view{display:none;padding-top:25px;animation:appear .2s ease}
-.view.active{display:block}
-@keyframes appear{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}
-h1{font-size:clamp(29px,4vw,43px);line-height:1.15;letter-spacing:-1.5px;margin:8px 0 12px}
-h2{font-size:21px;margin:0 0 12px;letter-spacing:-.4px}
-h3{font-size:16px;margin:0 0 9px}
-p{margin:0 0 12px}
-.muted{color:var(--muted)}
-.small{font-size:12px}
-.eyebrow{font-size:11px;letter-spacing:2px;color:var(--b);font-weight:800}
-.hero{border:1px solid #37305c;border-radius:24px;padding:clamp(23px,5vw,44px);background:linear-gradient(115deg,#211b40,#17172f 55%,#10313b);position:relative;overflow:hidden}
-.hero:after{content:"✳";position:absolute;right:5%;top:5%;font-size:100px;color:#fff08;opacity:.1}
-.hero p{color:#c4c8de;max-width:620px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(120deg,#c0a9ff,#8c7aff);color:#120f25;border:0;border-radius:10px;padding:11px 16px;font-weight:800;text-decoration:none}
-.btn:hover{filter:brightness(1.08)}
-.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
-.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
-.btn.danger{background:#4b2332;color:#ffdce3}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
-.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:25px 0 13px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
-.card{background:linear-gradient(145deg,var(--panel),#101426);border:1px solid var(--line);border-radius:17px;padding:19px;min-width:0}
-.toolcard{cursor:pointer;transition:transform .18s,border-color .18s}
-.toolcard:hover{transform:translateY(-3px);border-color:#8471ca}
-.toolicon{font-size:26px}
-.toolcard h3{margin:12px 0 5px}
-.toolcard p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}
-.stat{padding:17px;border-radius:15px;background:var(--panel);border:1px solid var(--line)}
-.stat strong{font-size:27px;display:block;letter-spacing:-1px}
-.stat span{font-size:12px;color:var(--muted)}
-.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.field{min-width:0;margin-bottom:14px}
-.field.full{grid-column:1/-1}
-label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
-input,textarea,select{width:100%;min-width:0;background:#0b1020;border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text)}
-textarea{resize:vertical;min-height:130px;line-height:1.7}
-input[type=checkbox],input[type=radio]{width:auto}
-input[type=range]{padding:0;accent-color:var(--a)}
-.output{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b1020;border:1px solid var(--line);border-radius:12px;padding:15px;min-height:48px;margin-top:12px}
-.pills{display:flex;gap:7px;flex-wrap:wrap}
-.pill{border:1px solid var(--line);background:#1a2036;color:#dfe4ff;border-radius:30px;padding:6px 10px;font-size:12px}
-.list{display:grid;gap:9px}
-.item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:11px;background:#0d1222;border:1px solid var(--line)}
-.item input[type=checkbox]{margin-top:5px}
-.item .grow{flex:1;min-width:0;overflow-wrap:anywhere}
-.item.done .grow{text-decoration:line-through;color:var(--muted)}
-.right{margin-left:auto}
-.swatches{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-.swatch{height:110px;border-radius:11px;display:flex;align-items:end;padding:8px;font-size:11px;font-weight:800;text-shadow:0 1px 4px #000;cursor:pointer}
-.timer{font-size:clamp(54px,12vw,90px);font-weight:900;letter-spacing:-4px;text-align:center;line-height:1.3;font-variant-numeric:tabular-nums}
-.timerpanel{max-width:600px;margin:auto}
-.progress{height:6px;background:#252b40;border-radius:9px;overflow:hidden;margin:18px 0}
-.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b));transition:width .2s}
-#toast{position:fixed;z-index:20;bottom:20px;left:50%;transform:translateX(-50%);background:var(--b);color:#08231e;padding:11px 17px;border-radius:12px;font-weight:800;display:none;box-shadow:var(--shadow)}
-footer{padding:35px 0;text-align:center;color:var(--muted);font-size:12px}
-.mobilebrand{display:none}
-hr{border:0;border-top:1px solid var(--line);margin:23px 0}
-@media(max-width:950px){.app{grid-template-columns:200px minmax(0,1fr)}main{padding:0 20px 40px}.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:680px){
- .app{display:block}aside{height:auto;position:sticky;top:0;z-index:10;padding:9px 10px;border-right:0;border-bottom:1px solid var(--line)}
- .brand{font-size:20px;padding:2px 8px 9px}.brand small{display:none}
- .navlabel,.sidebarfoot{display:none}.navwrap{display:flex;overflow-x:auto;gap:5px;padding-bottom:2px}
- .nav{white-space:nowrap;width:auto;flex:0 0 auto;margin:0;padding:8px 10px;font-size:12px}
- .nav.active{box-shadow:inset 0 -2px var(--a)}
- main{padding:0 14px 35px}.topbar{height:54px}.grid,.grid.two,.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
- .card{padding:14px}.toolcard{min-height:140px}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}
- .swatches{grid-template-columns:repeat(3,minmax(0,1fr))}.hero:after{font-size:60px}
-}
-@media(max-width:390px){.grid,.grid.two,.grid.four{grid-template-columns:1fr}.status{display:none}}
+a{color:inherit}
+.wrap{max-width:1120px;margin:auto;padding:0 20px}
+nav{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.logo{font:800 25px Inter,sans-serif;letter-spacing:-1.5px}
+.logo span{color:var(--green)}
+.navright{display:flex;gap:10px;align-items:center}
+.btn{border:1px solid var(--line);background:#172237;color:white;border-radius:12px;padding:11px 16px;font-weight:600}
+.btn.primary{background:var(--green);color:#07130c;border-color:var(--green)}
+.btn:hover{filter:brightness(1.1)}
+.hero{padding:65px 0 36px;max-width:800px}
+.pill{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border:1px solid #34513f;border-radius:99px;color:var(--green);font-size:13px;background:#122319}
+h1{font:800 clamp(36px,7vw,68px)/1.12 Inter,'Hind Siliguri',sans-serif;letter-spacing:-2.5px;margin:22px 0 16px}
+h1 span{color:var(--green)}
+.hero p{font-size:18px;color:var(--muted);line-height:1.8;margin:0;max-width:650px}
+.searchbox{display:flex;gap:10px;margin-top:28px;max-width:680px}
+.searchbox input{flex:1;min-width:0}
+input,textarea,select{width:100%;background:#0b1322;color:white;border:1px solid var(--line);border-radius:11px;padding:13px 14px;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--green)}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin:25px 0 40px}
+.stat{background:var(--panel);border:1px solid var(--line);padding:12px 17px;border-radius:13px;color:var(--muted);font-size:13px}
+.stat b{color:white;font:700 19px Inter,sans-serif;display:block;margin-bottom:4px}
+.sectionhead{display:flex;justify-content:space-between;gap:15px;align-items:center;margin:25px 0 17px}
+h2{font-size:24px;margin:0}
+.small{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:5px}
+.tab{white-space:nowrap;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--muted);padding:9px 14px}
+.tab.active{background:var(--green);color:#07130c;border-color:var(--green);font-weight:700}
+.filters{display:grid;grid-template-columns:1fr 210px;gap:10px;margin:16px 0 22px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:17px;padding:18px;display:flex;flex-direction:column;min-height:220px;transition:.2s}
+.card:hover{transform:translateY(-3px);border-color:#526987}
+.cardtop{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tag{font-size:12px;padding:5px 9px;border-radius:8px;background:#1d2b40;color:var(--blue)}
+.tag.lost{color:#ffb4a8;background:#36211f}
+.tag.found{color:var(--green);background:#183425}
+.card h3{font-size:20px;margin:17px 0 7px;line-height:1.5}
+.desc{color:var(--muted);font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{font-size:13px;color:#c2ccdc;margin-top:15px}
+.cardfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:13px;margin-top:auto}
+.cardfoot button{padding:7px 10px;font-size:13px}
+.empty{grid-column:1/-1;text-align:center;padding:50px 15px;border:1px dashed var(--line);border-radius:16px;color:var(--muted)}
+.empty strong{display:block;font-size:21px;color:white;margin-bottom:8px}
+.notice{margin:45px 0 20px;padding:20px;border:1px solid #3c3a29;background:#201e16;border-radius:15px;color:#e6d9a9;font-size:14px;line-height:1.8}
+footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 38px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.overlay{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:16px;z-index:10;overflow:auto}
+.overlay.open{display:flex}
+.modal{width:100%;max-width:520px;background:#101828;border:1px solid var(--line);border-radius:20px;padding:23px;max-height:92vh;overflow:auto}
+.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modalhead h2{font-size:22px}
+.close{border:1px solid var(--line);border-radius:9px;background:transparent;color:white;padding:5px 11px}
+.field{margin:13px 0}
+.field label{display:block;margin-bottom:7px;font-size:14px;color:#d5deec}
+.field small{display:block;color:var(--muted);margin-top:5px}
+.formrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#07130c;padding:12px 18px;border-radius:12px;font-weight:700;display:none;z-index:30;max-width:90%;text-align:center}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding-top:42px}h1{letter-spacing:-1.5px}.stats{margin-bottom:28px}}
+@media(max-width:520px){.wrap{padding:0 14px}nav{height:65px}.logo{font-size:22px}.navright .btn{padding:9px 10px;font-size:13px}.hero p{font-size:16px}.searchbox{flex-direction:column}.searchbox .btn{width:100%}.grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.sectionhead{align-items:flex-start;flex-direction:column}.formrow{grid-template-columns:1fr}.card{min-height:195px}}
 </style>
 </head>
 <body>
-<div class="app">
-<aside>
-  <div class="brand">NEXORA<span>✦</span><small>CREATE · ORGANIZE · GROW</small></div>
-  <div class="navlabel">WORKSPACE</div>
-  <div class="navwrap">
-    <button class="nav active" data-view="home">⌂ &nbsp; Dashboard</button>
-    <button class="nav" data-view="creator">✍️ &nbsp; Creator Studio</button>
-    <button class="nav" data-view="career">💼 &nbsp; Career Lab</button>
-    <button class="nav" data-view="tasks">☑ &nbsp; My Tasks</button>
-    <button class="nav" data-view="notes">📝 &nbsp; Notes</button>
-    <button class="nav" data-view="focus">◷ &nbsp; Focus Room</button>
-    <button class="nav" data-view="money">৳ &nbsp; Money Tools</button>
-    <button class="nav" data-view="toolbox">✦ &nbsp; Smart Toolbox</button>
-  </div>
-  <div class="sidebarfoot">✦ <b>Make your next move.</b><br><br>Save time. Create better. Keep growing.<br><br><span style="color:var(--b)">● Local workspace enabled</span></div>
-</aside>
-<main>
-<header class="topbar">
-  <div class="muted small" id="today"></div>
-  <div class="topright"><span class="status">● Workspace ready</span><div class="avatar">N</div></div>
-</header>
+<div class="wrap">
+  <nav>
+    <div class="logo">KHUJI<span>.</span></div>
+    <div class="navright">
+      <button class="btn" onclick="showAbout()">কীভাবে কাজ করে?</button>
+      <button class="btn primary" onclick="openModal()">+ পোস্ট দিন</button>
+    </div>
+  </nav>
 
-<section class="view active" id="home">
-  <div class="hero">
-    <div class="eyebrow">YOUR PERSONAL DIGITAL WORKSPACE</div>
-    <h1>Create more.<br>Achieve <span style="color:var(--b)">anything.</span></h1>
-    <p>One place for content ideas, career tools, personal organization and everyday utilities. Built to help you do more with less friction.</p>
-    <div class="actions"><button class="btn" onclick="go('creator')">✦ Open Creator Studio</button><button class="btn secondary" onclick="go('toolbox')">Explore all tools →</button></div>
-  </div>
-  <div class="sectionhead"><h2>Your workspace</h2><span class="muted small">Saved on this device</span></div>
-  <div class="grid four">
-    <div class="stat"><strong id="taskStat">0</strong><span>Tasks completed</span></div>
-    <div class="stat"><strong id="noteStat">0</strong><span>Saved notes</span></div>
-    <div class="stat"><strong id="sessionStat">0</strong><span>Focus sessions</span></div>
-    <div class="stat"><strong id="ideaStat">0</strong><span>Ideas generated</span></div>
-  </div>
-  <div class="sectionhead"><h2>Jump back in</h2></div>
-  <div class="grid">
-    <div class="card toolcard" onclick="go('creator')"><div class="toolicon">🚀</div><h3>Creator Studio</h3><p>Generate caption ideas, bios, hooks and hashtags.</p></div>
-    <div class="card toolcard" onclick="go('career')"><div class="toolicon">💼</div><h3>Career Lab</h3><p>Create a CV preview and a professional introduction.</p></div>
-    <div class="card toolcard" onclick="go('focus')"><div class="toolicon">🎯</div><h3>Focus Room</h3><p>Use a focus timer to work without distractions.</p></div>
-  </div>
-  <div class="sectionhead"><h2>Daily inspiration</h2></div>
-  <div class="card"><div class="eyebrow">A SMALL REMINDER</div><h2 id="quote" style="margin-top:10px">Progress is built one small step at a time.</h2><p class="muted small">Your next action matters more than a perfect plan.</p><button class="btn secondary" onclick="newQuote()">Another thought ↻</button></div>
-</section>
+  <header class="hero">
+    <div class="pill">● বাংলাদেশের জন্য তৈরি</div>
+    <h1>হারিয়েছে কিছু?<br><span>খুঁজে নিন এখানেই।</span></h1>
+    <p>হারানো ফোন, মানিব্যাগ, সার্টিফিকেট কিংবা খুঁজে পাওয়া কোনো জিনিস—পোস্ট করুন, এলাকার মানুষের সঙ্গে শেয়ার করুন।</p>
+    <div class="searchbox">
+      <input id="heroSearch" placeholder="কী হারিয়েছে বা কোথায় পেয়েছেন?" oninput="syncSearch(this.value)">
+      <button class="btn primary" onclick="document.getElementById('feed').scrollIntoView({behavior:'smooth'})">খুঁজুন ↗</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="totalCount">০</b>মোট পোস্ট</div>
+      <div class="stat"><b id="lostCount">০</b>হারানো জিনিস</div>
+      <div class="stat"><b id="foundCount">০</b>পাওয়া জিনিস</div>
+    </div>
+  </header>
 
-<section class="view" id="creator">
-  <div class="eyebrow">CONTENT WORKSHOP</div><h1>Creator Studio ✦</h1><p class="muted">Generate useful starting points for social posts, profile bios and content ideas. Review and personalize before publishing.</p>
-  <div class="grid two">
-    <div class="card">
-      <h2>Caption Maker</h2>
-      <div class="field"><label>What is your post about?</label><input id="capTopic" placeholder="e.g. new clothing brand, travel, study tips"></div>
-      <div class="field"><label>Language</label><select id="capLang"><option value="bn">বাংলা</option><option value="en">English</option><option value="mix">Banglish</option></select></div>
-      <div class="field"><label>Platform</label><select id="capPlatform"><option>Facebook</option><option>Instagram</option><option>TikTok</option><option>LinkedIn</option><option>YouTube</option></select></div>
-      <div class="field"><label>Tone</label><select id="capTone"><option value="friendly">Friendly</option><option value="professional">Professional</option><option value="fun">Funny</option><option value="inspiring">Inspiring</option><option value="minimal">Minimal</option></select></div>
-      <button class="btn" onclick="makeCaption()">Generate captions ✦</button>
-      <div id="capOut" class="output">Your caption ideas will appear here.</div><div class="actions"><button class="btn secondary" onclick="copy('capOut')">Copy captions</button><button class="btn ghost" onclick="saveOutput('Caption', 'capOut')">Save to notes</button></div>
+  <main id="feed">
+    <div class="sectionhead">
+      <div><h2>সাম্প্রতিক পোস্ট</h2><div class="small">আপনার এলাকার পোস্ট খুঁজে নিন</div></div>
+      <button class="btn primary" onclick="openModal()">+ নতুন পোস্ট</button>
     </div>
-    <div class="card">
-      <h2>Hashtag Studio</h2>
-      <div class="field"><label>Topic / niche</label><input id="hashTopic" placeholder="e.g. street photography"></div>
-      <div class="field"><label>How many?</label><select id="hashCount"><option>10</option><option selected>15</option><option>20</option><option>25</option></select></div>
-      <button class="btn" onclick="makeHashtags()">Create hashtags</button>
-      <div id="hashOut" class="output">Your hashtags will appear here.</div><div class="actions"><button class="btn secondary" onclick="copy('hashOut')">Copy hashtags</button></div>
-      <hr>
-      <h2>Content Idea Generator</h2>
-      <div class="field"><label>Your niche</label><input id="ideaTopic" placeholder="e.g. tech, fashion, education"></div>
-      <button class="btn" onclick="makeIdeas()">Generate ideas</button>
-      <div id="ideasOut" class="output">Fresh content prompts will appear here.</div><div class="actions"><button class="btn secondary" onclick="saveOutput('Content ideas','ideasOut')">Save ideas</button></div>
+    <div class="tabs">
+      <button class="tab active" data-kind="all" onclick="setKind('all',this)">সব পোস্ট</button>
+      <button class="tab" data-kind="lost" onclick="setKind('lost',this)">🔎 হারিয়েছে</button>
+      <button class="tab" data-kind="found" onclick="setKind('found',this)">🎉 পাওয়া গেছে</button>
     </div>
-    <div class="card">
-      <h2>Profile Bio Maker</h2>
-      <div class="field"><label>Your name or brand</label><input id="bioName" placeholder="Your name"></div>
-      <div class="field"><label>What do you do?</label><input id="bioWork" placeholder="e.g. student, designer, creator"></div>
-      <div class="field"><label>One interest or goal</label><input id="bioInterest" placeholder="e.g. design, technology, learning"></div>
-      <button class="btn" onclick="makeBio()">Generate bios</button><div id="bioOut" class="output">Your bio options will appear here.</div>
-      <div class="actions"><button class="btn secondary" onclick="copy('bioOut')">Copy bio</button></div>
+    <div class="filters">
+      <input id="search" placeholder="নাম, বিবরণ বা এলাকা দিয়ে খুঁজুন..." oninput="render()">
+      <select id="district" onchange="render()">
+        <option value="">সব এলাকা</option>
+        <option>ঢাকা</option><option>চট্টগ্রাম</option><option>নরসিংদী</option>
+        <option>গাজীপুর</option><option>নারায়ণগঞ্জ</option><option>কুমিল্লা</option>
+        <option>সিলেট</option><option>রাজশাহী</option><option>খুলনা</option>
+        <option>বরিশাল</option><option>রংপুর</option><option>ময়মনসিংহ</option>
+        <option>অন্যান্য</option>
+      </select>
     </div>
-    <div class="card">
-      <h2>Hook Generator</h2>
-      <div class="field"><label>Video / post topic</label><input id="hookTopic" placeholder="What is your content about?"></div>
-      <button class="btn" onclick="makeHooks()">Create opening hooks</button><div id="hookOut" class="output">Attention-grabbing opening ideas will appear here.</div>
-      <div class="actions"><button class="btn secondary" onclick="copy('hookOut')">Copy hooks</button></div>
-    </div>
-  </div>
-  <p class="muted small" style="margin-top:15px">These generators use built-in templates, not a live AI model. Connect an AI API on a secure backend to generate more context-aware results.</p>
-</section>
+    <div class="grid" id="cards"></div>
+  </main>
 
-<section class="view" id="career">
-  <div class="eyebrow">CAREER LAB</div><h1>Present yourself better.</h1><p class="muted">Create a clean CV draft, professional summary and interview practice prompts.</p>
-  <div class="grid two">
-    <div class="card">
-      <h2>CV Builder</h2>
-      <div class="fields">
-        <div class="field"><label>Full name</label><input id="cvName" placeholder="Your name"></div>
-        <div class="field"><label>Email</label><input id="cvEmail" type="email" placeholder="you@example.com"></div>
-        <div class="field"><label>Phone (optional)</label><input id="cvPhone" placeholder="Phone number"></div>
-        <div class="field"><label>Location</label><input id="cvLocation" placeholder="City, country"></div>
-        <div class="field full"><label>Professional summary</label><textarea id="cvSummary" placeholder="Write 2–3 lines about your goals and strengths"></textarea></div>
-        <div class="field full"><label>Education</label><textarea id="cvEducation" placeholder="Institution, qualification, years"></textarea></div>
-        <div class="field full"><label>Skills</label><textarea id="cvSkills" placeholder="Communication, teamwork, tools..."></textarea></div>
-        <div class="field full"><label>Experience / projects</label><textarea id="cvExperience" placeholder="Projects, volunteering or experience"></textarea></div>
-      </div>
-      <div class="actions"><button class="btn" onclick="buildCV()">Build CV preview</button><button class="btn secondary" onclick="printCV()">Print / Save PDF</button></div>
-    </div>
-    <div class="card">
-      <h2>CV Preview</h2><div class="output" id="cvOut">Fill in your details, then build your CV.</div>
-      <div class="actions"><button class="btn secondary" onclick="copy('cvOut')">Copy CV text</button></div>
-      <hr><h2>Interview Practice</h2><p class="muted small">Pick a practice question and write your answer aloud or in a notebook.</p>
-      <div class="output" id="interviewQ">Tell me about yourself and one skill you are currently improving.</div>
-      <div class="actions"><button class="btn secondary" onclick="nextQuestion()">Next question ↻</button></div>
-    </div>
-    <div class="card">
-      <h2>Professional Introduction</h2>
-      <div class="field"><label>Role or goal</label><input id="introRole" placeholder="e.g. junior web developer"></div>
-      <div class="field"><label>Top skills</label><input id="introSkills" placeholder="e.g. HTML, teamwork, communication"></div>
-      <div class="field"><label>What are you looking for?</label><input id="introGoal" placeholder="e.g. internship or first opportunity"></div>
-      <button class="btn" onclick="makeIntro()">Draft introduction</button><div class="output" id="introOut">Your introduction will appear here.</div><div class="actions"><button class="btn secondary" onclick="copy('introOut')">Copy</button></div>
-    </div>
+  <div class="notice">
+    <strong>🔐 নিরাপত্তা মনে রাখুন</strong><br>
+    জিনিস ফেরত নেওয়ার আগে মালিকানার প্রমাণ যাচাই করুন। OTP, পাসওয়ার্ড বা ব্যাংকের তথ্য কাউকে দেবেন না। কোনো জিনিস ফেরত দেওয়ার জন্য আগাম টাকা পাঠাবেন না।
   </div>
-</section>
-
-<section class="view" id="tasks">
-  <div class="eyebrow">PERSONAL ORGANIZATION</div><h1>My Tasks ☑</h1><p class="muted">Plan your next move. Your tasks are saved in this browser.</p>
-  <div class="card">
-    <div class="fields">
-      <div class="field"><label>Task</label><input id="taskInput" placeholder="What do you need to do?"></div>
-      <div class="field"><label>Category</label><select id="taskCategory"><option>Personal</option><option>Study</option><option>Work</option><option>Creator</option></select></div>
-    </div>
-    <button class="btn" onclick="addTask()">+ Add task</button>
-  </div>
-  <div class="sectionhead"><h2>Task list</h2><button class="btn ghost" onclick="clearCompleted()">Clear completed</button></div>
-  <div id="taskList" class="list"></div>
-</section>
-
-<section class="view" id="notes">
-  <div class="eyebrow">YOUR IDEAS, IN ONE PLACE</div><h1>Notes & Ideas 📝</h1><p class="muted">Create, edit, search and download your notes.</p>
-  <div class="card">
-    <div class="field"><label>Note title</label><input id="noteTitle" placeholder="Give your note a title"></div>
-    <div class="field"><label>Note content</label><textarea id="noteBody" placeholder="Write your thoughts, plans, links or ideas..."></textarea></div>
-    <div class="actions"><button class="btn" onclick="saveNote()">Save note</button><button class="btn secondary" onclick="clearNoteEditor()">New note</button><button class="btn ghost" onclick="downloadNote()">Download current note</button></div>
-  </div>
-  <div class="sectionhead"><h2>Your saved notes</h2><span id="noteCount" class="muted small">0 notes</span></div>
-  <div class="field"><input id="noteSearch" placeholder="Search saved notes..." oninput="renderNotes()"></div>
-  <div id="noteList" class="grid two"></div>
-</section>
-
-<section class="view" id="focus">
-  <div class="eyebrow">DEEP WORK ZONE</div><h1>Focus Room ◷</h1><p class="muted">Set a timer, choose a goal and give one task your attention.</p>
-  <div class="card timerpanel">
-    <div class="pills" style="justify-content:center;margin-bottom:22px"><button class="pill" onclick="setTimer(25)">Focus · 25m</button><button class="pill" onclick="setTimer(5)">Short break · 5m</button><button class="pill" onclick="setTimer(15)">Long break · 15m</button></div>
-    <div class="field"><label>What are you focusing on?</label><input id="focusGoal" placeholder="e.g. Finish my assignment"></div>
-    <div class="timer" id="timer">25:00</div><div class="progress"><span id="timerProgress"></span></div>
-    <div class="actions" style="justify-content:center"><button class="btn" id="timerStart" onclick="toggleTimer()">▶ Start focus</button><button class="btn secondary" onclick="resetTimer()">↺ Reset</button></div>
-    <p class="muted small" id="timerStatus" style="text-align:center;margin-top:18px">Choose a goal and start when you're ready.</p>
-  </div>
-  <div class="sectionhead"><h2>Focus tips</h2></div>
-  <div class="grid"><div class="card"><div class="toolicon">📵</div><h3>Remove distractions</h3><p class="muted small">Silence unnecessary notifications and keep only the tools you need open.</p></div><div class="card"><div class="toolicon">🎯</div><h3>One clear goal</h3><p class="muted small">Choose one realistic task before each session.</p></div><div class="card"><div class="toolicon">🌿</div><h3>Take a break</h3><p class="muted small">Stretch, drink water and rest your eyes between sessions.</p></div></div>
-</section>
-
-<section class="view" id="money">
-  <div class="eyebrow">EVERYDAY FINANCE UTILITIES</div><h1>Money Tools ৳</h1><p class="muted">Split shared expenses and calculate a simple budget.</p>
-  <div class="grid two">
-    <div class="card">
-      <h2>Split the Bill</h2>
-      <div class="field"><label>Total amount (৳)</label><input id="billTotal" type="number" min="0" step=".01" placeholder="1500"></div>
-      <div class="field"><label>People</label><input id="billPeople" type="number" min="1" max="1000" value="3"></div>
-      <div class="field"><label>Tip / extra (%)</label><input id="billTip" type="number" min="0" max="100" value="0"></div>
-      <button class="btn" onclick="splitBill()">Calculate shares</button><div class="output" id="billOut">Each person's share appears here.</div>
-    </div>
-    <div class="card">
-      <h2>Monthly Budget Planner</h2>
-      <div class="field"><label>Monthly income (৳)</label><input id="budgetIncome" type="number" min="0" placeholder="20000"></div>
-      <div class="field"><label>Needs / essentials (৳)</label><input id="budgetNeeds" type="number" min="0" placeholder="10000"></div>
-      <div class="field"><label>Wants / lifestyle (৳)</label><input id="budgetWants" type="number" min="0" placeholder="4000"></div>
-      <div class="field"><label>Savings (৳)</label><input id="budgetSave" type="number" min="0" placeholder="3000"></div>
-      <button class="btn" onclick="budgetCalc()">Review budget</button><div class="output" id="budgetOut">Your budget summary appears here.</div>
-    </div>
-  </div>
-  <p class="muted small" style="margin-top:14px">These are basic planning calculators, not financial advice.</p>
-</section>
-
-<section class="view" id="toolbox">
-  <div class="eyebrow">EVERYDAY UTILITY SUITE</div><h1>Smart Toolbox ✦</h1><p class="muted">Practical utilities for your daily work.</p>
-  <div class="grid two">
-    <div class="card">
-      <h2>QR Code Generator</h2><div class="field"><label>Text or website link</label><input id="qrText" placeholder="https://example.com"></div>
-      <div class="actions"><button class="btn" onclick="makeQR()">Generate QR</button><button class="btn secondary" onclick="downloadQR()">Download PNG</button></div>
-      <div id="qrArea" style="margin-top:15px"></div><p class="muted small" id="qrStatus">Internet connection is needed to load the QR library.</p>
-    </div>
-    <div class="card">
-      <h2>Image Compressor</h2><div class="field"><label>Select image</label><input id="imgFile" type="file" accept="image/*"></div>
-      <div class="field"><label>Quality <span id="qualityText">75%</span></label><input id="imgQuality" type="range" min="20" max="95" value="75"></div>
-      <div class="field"><label>Format</label><select id="imgFormat"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option></select></div>
-      <button class="btn" onclick="compressImage()">Compress image</button><div id="imgResult" class="output">Choose an image to get started.</div>
-      <div class="actions"><a class="btn secondary" id="imgDownload" hidden download="nexora-image.webp">Download result</a></div>
-    </div>
-    <div class="card">
-      <h2>Color Palette Lab</h2><p class="muted small">Generate colors for a design or brand. Tap a swatch to copy its HEX code.</p>
-      <div class="swatches" id="swatches"></div><div class="actions"><button class="btn" onclick="newPalette()">New palette ↻</button><button class="btn secondary" onclick="copyPalette()">Copy palette</button></div>
-    </div>
-    <div class="card">
-      <h2>JSON Formatter</h2><div class="field"><label>Paste JSON</label><textarea id="jsonIn" placeholder='{"name":"Nexora","active":true}'></textarea></div>
-      <div class="actions"><button class="btn" onclick="formatJSON()">Format</button><button class="btn secondary" onclick="minifyJSON()">Minify</button><button class="btn ghost" onclick="copy('jsonOut')">Copy</button></div><div id="jsonOut" class="output">JSON result appears here.</div>
-    </div>
-    <div class="card">
-      <h2>Text Lab</h2><div class="field"><label>Your text</label><textarea id="textIn" placeholder="Type or paste your text..."></textarea></div>
-      <div class="pills"><span class="pill">Words: <b id="wordCount">0</b></span><span class="pill">Characters: <b id="charCount">0</b></span><span class="pill">Reading time: <b id="readCount">0</b> min</span></div>
-      <div class="actions"><button class="btn secondary" onclick="transform('upper')">UPPERCASE</button><button class="btn secondary" onclick="transform('lower')">lowercase</button><button class="btn secondary" onclick="transform('title')">Title Case</button><button class="btn ghost" onclick="transform('clean')">Clean spaces</button><button class="btn" onclick="copy('textIn')">Copy text</button></div>
-    </div>
-    <div class="card">
-      <h2>Quick Calculator</h2><div class="field"><label>Expression</label><input id="calcIn" placeholder="(125 + 75) * 2 / 4"></div>
-      <button class="btn" onclick="calculate()">Calculate</button><div id="calcOut" class="output">Result appears here.</div>
-      <p class="muted small">Supported: numbers, brackets and + − × ÷ %.</p>
-    </div>
-    <div class="card">
-      <h2>Random Decision Picker</h2><p class="muted small">Can't choose? Add options and pick one at random.</p>
-      <div class="field"><label>One option per line</label><textarea id="choices" placeholder="Learn a skill&#10;Work on a project&#10;Take a break"></textarea></div>
-      <button class="btn" onclick="pickChoice()">Pick an option</button><div id="choiceOut" class="output">Your result will appear here.</div>
-    </div>
-    <div class="card">
-      <h2>Secure Password Generator</h2><div class="field"><label>Length (8–64)</label><input id="passLen" type="number" min="8" max="64" value="18"></div>
-      <div class="field"><label>Character set</label><select id="passType"><option value="all">Letters, numbers & symbols</option><option value="alnum">Letters & numbers</option><option value="letters">Letters only</option><option value="numbers">Numbers only</option></select></div>
-      <button class="btn" onclick="makePassword()">Generate</button><div id="passOut" class="output">Your password appears here.</div><div class="actions"><button class="btn secondary" onclick="copy('passOut')">Copy password</button></div>
-    </div>
-  </div>
-  <hr>
-  <div class="card"><h2>Your data & privacy</h2><p class="muted small">Your notes and tasks are stored in this browser. Export a backup before clearing browser data or switching devices.</p><div class="actions"><button class="btn" onclick="exportData()">Export workspace backup</button><label class="btn secondary" style="cursor:pointer">Import backup <input type="file" id="importFile" accept=".json,application/json" hidden onchange="importData(event)"></label><button class="btn danger" onclick="clearWorkspace()">Clear all workspace data</button></div></div>
-</section>
-
-<footer>NEXORA ✦ Made for ideas, productivity and creativity.<br><br>Local-first workspace · No account required</footer>
-</main>
+  <footer>
+    <div><strong style="color:white">KHUJI.</strong> — হারানো জিনিস খোঁজার কমিউনিটি</div>
+    <div>আপনার তথ্য সুরক্ষিত রাখুন · নিরাপদে দেখা করুন</div>
+  </footer>
 </div>
-<div id="toast" role="status" aria-live="polite"></div>
+
+<div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modalhead"><h2>নতুন পোস্ট তৈরি করুন</h2><button class="close" onclick="closeModal()">✕</button></div>
+    <form id="postForm">
+      <div class="field"><label for="kind">পোস্টের ধরন</label>
+        <select id="kind" required><option value="lost">🔎 আমি কিছু হারিয়েছি</option><option value="found">🎉 আমি কিছু পেয়েছি</option></select>
+      </div>
+      <div class="field"><label for="title">জিনিসটির নাম *</label><input id="title" maxlength="90" required placeholder="যেমন: কালো মানিব্যাগ"></div>
+      <div class="field"><label for="desc">বিস্তারিত *</label><textarea id="desc" maxlength="700" rows="3" required placeholder="কখন, কোথায়, কীভাবে হারিয়েছে বা পেয়েছেন?"></textarea></div>
+      <div class="formrow">
+        <div class="field"><label for="area">জেলা / এলাকা *</label>
+          <select id="area" required>
+            <option value="">এলাকা বাছুন</option>
+            <option>ঢাকা</option><option>চট্টগ্রাম</option><option>নরসিংদী</option>
+            <option>গাজীপুর</option><option>নারায়ণগঞ্জ</option><option>কুমিল্লা</option>
+            <option>সিলেট</option><option>রাজশাহী</option><option>খুলনা</option>
+            <option>বরিশাল</option><option>রংপুর</option><option>ময়মনসিংহ</option><option>অন্যান্য</option>
+          </select>
+        </div>
+        <div class="field"><label for="date">তারিখ</label><input type="date" id="date"></div>
+      </div>
+      <div class="field"><label for="contact">যোগাযোগের উপায় *</label><input id="contact" maxlength="100" required placeholder="ফোন নম্বর / ইমেইল / যোগাযোগের তথ্য"><small>সতর্কতা: এই তথ্য পোস্টে দেখা যাবে। ব্যক্তিগত তথ্য দেওয়ার আগে বিবেচনা করুন।</small></div>
+      <button class="btn primary" style="width:100%;margin-top:8px" type="submit">পোস্ট প্রকাশ করুন ↗</button>
+    </form>
+  </div>
+</div>
+
+<div class="overlay" id="about" onclick="if(event.target===this)closeAbout()">
+  <div class="modal">
+    <div class="modalhead"><h2>KHUJI কীভাবে কাজ করে?</h2><button class="close" onclick="closeAbout()">✕</button></div>
+    <p>১. হারানো বা পাওয়া জিনিসের পোস্ট দিন।</p>
+    <p>২. এলাকা ও কীওয়ার্ড দিয়ে পোস্ট খুঁজুন।</p>
+    <p>৩. পোস্টদাতার দেওয়া যোগাযোগের তথ্য দিয়ে যোগাযোগ করুন।</p>
+    <p style="color:var(--muted);font-size:13px">এই সংস্করণে পোস্ট আপনার বর্তমান ব্রাউজারেই সংরক্ষিত হয়। এটি এখনো কোনো অনলাইন সার্ভারে পোস্ট শেয়ার করে না। অন্য ব্যবহারকারীদের সঙ্গে বাস্তব সময়ে পোস্ট শেয়ার করতে সার্ভার ও ডেটাবেস যুক্ত করতে হবে।</p>
+    <button class="btn primary" style="width:100%" onclick="closeAbout();openModal()">পোস্ট তৈরি করুন</button>
+  </div>
+</div>
+<div id="toast"></div>
 
 <script>
-const $=id=>document.getElementById(id);
-const KEY='nexora_workspace_v1';
-const defaults={tasks:[],notes:[],sessions:0,ideas:0};
-let db=loadDB(),editingNote=null,toastTimer=null;
-function loadDB(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{return {...defaults}}}
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(db));updateStats()}catch{notify('Storage is full. Export a backup or remove some data.')}}
-function notify(s){$('toast').textContent=s;$('toast').style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.display='none',2300)}
+const KEY='khuji_posts_v1';
+const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const initial=[
+{id:'demo1',kind:'lost',title:'কালো মানিব্যাগ হারিয়েছে',desc:'বাসস্ট্যান্ডের আশেপাশে একটি কালো মানিব্যাগ হারিয়েছে। যার সন্ধান জানা আছে, অনুগ্রহ করে যোগাযোগ করুন।',area:'নরসিংদী',date:'',contact:'উদাহরণ পোস্ট — নিজের পোস্ট দিন',demo:true},
+{id:'demo2',kind:'found',title:'একটি বই পাওয়া গেছে',desc:'একটি বই পাওয়া গেছে। প্রকৃত মালিক বইটির নাম ও ভেতরের পরিচিতি জানিয়ে যোগাযোগ করতে পারেন।',area:'ঢাকা',date:'',contact:'উদাহরণ পোস্ট — নিজের পোস্ট দিন',demo:true},
+{id:'demo3',kind:'lost',title:'আইডি কার্ড হারানো',desc:'একটি পরিচয়পত্র হারিয়েছে। পরিচয়পত্রের সম্পূর্ণ নম্বর এখানে প্রকাশ করবেন না।',area:'গাজীপুর',date:'',contact:'উদাহরণ পোস্ট — নিজের পোস্ট দিন',demo:true}
+];
+let kindFilter='all';
+function getPosts(){
+ try{
+  const saved=localStorage.getItem(KEY);
+  return saved?JSON.parse(saved):initial;
+ }catch(e){return initial}
+}
+function savePosts(posts){localStorage.setItem(KEY,JSON.stringify(posts))}
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='tasks')renderTasks();if(id==='notes')renderNotes();if(id==='home')updateStats()}
-document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>go(b.dataset.view)));
-$('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-function updateStats(){$('taskStat').textContent=db.tasks.filter(t=>t.done).length;$('noteStat').textContent=db.notes.length;$('sessionStat').textContent=db.sessions;$('ideaStat').textContent=db.ideas;$('noteCount').textContent=db.notes.length+' notes'}
-const quotes=['Progress is built one small step at a time.','Make something useful before making something perfect.','Consistency turns small actions into real progress.','A good idea becomes valuable when you put it into action.','Learn a little. Build a little. Improve a little.'];
-function newQuote(){$('quote').textContent=quotes[Math.floor(Math.random()*quotes.length)]}
-function copy(id){let e=$(id),s=e.value!==undefined?e.value:e.innerText;copyText(s)}
-async function copyText(s){try{await navigator.clipboard.writeText(s);notify('Copied to clipboard!')}catch{let t=document.createElement('textarea');t.value=s;document.body.append(t);t.select();let ok=document.execCommand('copy');t.remove();notify(ok?'Copied!':'Copy failed')}}
-function saveOutput(title,id){let content=$(id).innerText.trim();if(!content||content.startsWith('Your ')){notify('Generate some content first');return}db.notes.unshift({id:Date.now(),title,body:content,updated:new Date().toISOString()});persist();notify('Saved to notes')}
-function addTask(){let title=$('taskInput').value.trim();if(!title){notify('Write a task first');return}db.tasks.unshift({id:Date.now(),title,category:$('taskCategory').value,done:false});$('taskInput').value='';persist();renderTasks();notify('Task added')}
-$('taskInput').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
-function renderTasks(){let el=$('taskList');if(!db.tasks.length){el.innerHTML='<div class="card muted">No tasks yet. Add your first task above.</div>';return}el.innerHTML=db.tasks.map(t=>`<div class="item ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} aria-label="Mark task complete" onchange="toggleTask(${t.id})"><div class="grow"><b>${escapeHTML(t.title)}</b><div class="muted small">${escapeHTML(t.category)}</div></div><button class="btn ghost" onclick="deleteTask(${t.id})" aria-label="Delete task">×</button></div>`).join('')}
-function toggleTask(id){let t=db.tasks.find(x=>x.id===id);if(t)t.done=!t.done;persist();renderTasks()}
-function deleteTask(id){db.tasks=db.tasks.filter(x=>x.id!==id);persist();renderTasks()}
-function clearCompleted(){db.tasks=db.tasks.filter(x=>!x.done);persist();renderTasks();notify('Completed tasks cleared')}
-function clearNoteEditor(){editingNote=null;$('noteTitle').value='';$('noteBody').value=''}
-function saveNote(){let title=$('noteTitle').value.trim(),body=$('noteBody').value.trim();if(!title&&!body){notify('Write something first');return}title=title||'Untitled note';if(editingNote){let n=db.notes.find(n=>n.id===editingNote);if(n){n.title=title;n.body=body;n.updated=new Date().toISOString()}}else db.notes.unshift({id:Date.now(),title,body,updated:new Date().toISOString()});persist();renderNotes();clearNoteEditor();notify('Note saved')}
-function renderNotes(){let q=$('noteSearch').value.toLowerCase(),arr=db.notes.filter(n=>(n.title+' '+n.body).toLowerCase().includes(q));$('noteCount').textContent=db.notes.length+' notes';$('noteList').innerHTML=arr.length?arr.map(n=>`<div class="card"><h3>${escapeHTML(n.title)}</h3><p class="muted small">${escapeHTML(new Date(n.updated||Date.now()).toLocaleString())}</p><p style="white-space:pre-wrap;overflow-wrap:anywhere">${escapeHTML(n.body.slice(0,380))}${n.body.length>380?'…':''}</p><div class="actions"><button class="btn secondary" onclick="editNote(${n.id})">Edit</button><button class="btn ghost" onclick="downloadSavedNote(${n.id})">Download</button><button class="btn danger" onclick="deleteNote(${n.id})">Delete</button></div></div>`).join(''):'<div class="card muted">No matching notes found.</div>'}
-function editNote(id){let n=db.notes.find(n=>n.id===id);if(!n)return;editingNote=id;$('noteTitle').value=n.title;$('noteBody').value=n.body;window.scrollTo({top:0,behavior:'smooth'})}
-function deleteNote(id){if(!confirm('Delete this note?'))return;db.notes=db.notes.filter(n=>n.id!==id);if(editingNote===id)clearNoteEditor();persist();renderNotes()}
-function downloadBlob(name,content,type='text/plain;charset=utf-8'){let u=URL.createObjectURL(new Blob([content],{type})),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
-function downloadNote(){let t=$('noteTitle').value.trim()||'note';downloadBlob(t.replace(/[^\p{L}\p{N}_-]+/gu,'_')+'.txt',$('noteBody').value)}
-function downloadSavedNote(id){let n=db.notes.find(n=>n.id===id);if(n)downloadBlob(n.title.replace(/[^\p{L}\p{N}_-]+/gu,'_')+'.txt',n.body)}
-function makeCaption(){
- let t=$('capTopic').value.trim();if(!t){notify('Enter a topic first');return}
- let lang=$('capLang').value,tone=$('capTone').value,platform=$('capPlatform').value;
- let b={
- bn:{friendly:[`✨ ${t} নিয়ে আজকের ছোট্ট শেয়ার। তোমাদের মতামত কী? 💬`,`নতুন কিছু, নতুন অভিজ্ঞতা—${t} নিয়ে তোমাদের সঙ্গে পথচলা। 💜`,`ভালো লাগলে শেয়ার করো, আর তোমার মতামত জানাও! ✨`],professional:[`${t} নিয়ে আমাদের নতুন আপডেট। আপনার মতামত ও পরামর্শ আমাদের কাছে গুরুত্বপূর্ণ।`,`প্রতিটি পদক্ষেপে উন্নতির লক্ষ্য। ${t} নিয়ে আরও জানতে সঙ্গে থাকুন।`],fun:[`${t} নিয়ে কথা বলতে গেলে পোস্ট ছোট রাখা কঠিন! 😂`,`আজকের mood: ${t} আর অনেক ভালো vibes! 😎`],inspiring:[`ছোট পদক্ষেপ থেকেই বড় পরিবর্তনের শুরু। আজকের ভাবনা: ${t} ✨`,`নিজের পথে এগিয়ে চলো। ${t} হোক নতুন শুরুর অনুপ্রেরণা। 💫`],minimal:[`${t}। নতুন ভাবনা, নতুন শুরু. ✨`,`কম কথা, স্পষ্ট লক্ষ্য: ${t}.`]},
- en:{friendly:[`A little update about ${t} ✨ What do you think?`,`Sharing something new about ${t}. Drop your thoughts below!`,`Good ideas grow when we share them. Today's topic: ${t}.`],professional:[`An update on ${t}. Your feedback and perspective are always welcome.`,`Exploring new possibilities around ${t}. More to come.`],fun:[`POV: you said one thing about ${t} and made a whole post 😂`,`Current mood: ${t} and good vibes only.`],inspiring:[`Small steps create meaningful progress. Today, we're exploring ${t}. ✨`,`Keep learning, keep building. Let ${t} inspire your next step.`],minimal:[`${t}. A new perspective.`,`Less noise. More meaning. ${t}.`]},
- mix:{friendly:[`${t} niye ajker little update ✨ Tomader thoughts ki?`,`New day, new idea — ${t}! Comment e bolo kemon laglo 💬`],professional:[`${t} niye amader new update. Tomader feedback is always welcome.`,`Keep learning, keep growing. Ajker focus: ${t}.`],fun:[`${t} niye bolte gele caption shesh hoy na 😂`,`Mood: ${t} + good vibes only 😎`],inspiring:[`Small steps, big dreams. Ajker inspiration: ${t} ✨`,`Nijer pace e agiye jao. ${t} hote pare next big thing.`],minimal:[`${t}. New energy. ✨`,`Less noise, more focus. ${t}.`]}
+function syncSearch(value){document.getElementById('search').value=value;render()}
+function setKind(kind,el){
+ kindFilter=kind;
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+ el.classList.add('active');render();
+}
+function render(){
+ const posts=getPosts();
+ const q=document.getElementById('search').value.trim().toLowerCase();
+ const area=document.getElementById('district').value;
+ document.getElementById('totalCount').textContent=bn(posts.filter(p=>!p.demo).length);
+ document.getElementById('lostCount').textContent=bn(posts.filter(p=>!p.demo&&p.kind==='lost').length);
+ document.getElementById('foundCount').textContent=bn(posts.filter(p=>!p.demo&&p.kind==='found').length);
+ const shown=posts.filter(p=>{
+  const hay=[p.title,p.desc,p.area].join(' ').toLowerCase();
+  return (kindFilter==='all'||p.kind===kindFilter)&&(!q||hay.includes(q))&&(!area||p.area===area);
+ });
+ const root=document.getElementById('cards');
+ if(!shown.length){
+  root.innerHTML='<div class="empty"><strong>কোনো পোস্ট পাওয়া যায়নি</strong>অন্য শব্দ বা এলাকা দিয়ে খুঁজে দেখুন।</div>';return;
+ }
+ root.innerHTML=shown.map(p=>`
+ <article class="card">
+  <div class="cardtop">
+   <span class="tag ${p.kind}">${p.kind==='lost'?'🔎 হারিয়েছে':'🎉 পাওয়া গেছে'}</span>
+   <span class="small">${p.demo?'ডেমো':escapeHTML(p.date||'তারিখ নেই')}</span>
+  </div>
+  <h3>${escapeHTML(p.title)}</h3>
+  <div class="desc">${escapeHTML(p.desc)}</div>
+  <div class="meta">📍 ${escapeHTML(p.area)}</div>
+  <div class="cardfoot">
+   <span class="small">${p.demo?'নমুনা পোস্ট':'যোগাযোগের তথ্য'}</span>
+   <button class="btn" onclick="contactPost('${escapeHTML(p.id)}')">বিস্তারিত ↗</button>
+  </div>
+ </article>`).join('');
+}
+function contactPost(id){
+ const p=getPosts().find(p=>p.id===id);
+ if(!p)return;
+ if(p.demo){toast('এটি নমুনা পোস্ট। বাস্তব পোস্ট তৈরি করতে “পোস্ট দিন” চাপুন।');return}
+ alert('শিরোনাম: '+p.title+'\nএলাকা: '+p.area+'\nযোগাযোগ: '+p.contact);
+}
+function openModal(){
+ document.getElementById('modal').classList.add('open');
+ document.body.style.overflow='hidden';
+}
+function closeModal(){
+ document.getElementById('modal').classList.remove('open');
+ document.body.style.overflow='';
+}
+function showAbout(){document.getElementById('about').classList.add('open')}
+function closeAbout(){document.getElementById('about').classList.remove('open')}
+let toastTimer;
+function toast(msg){
+ const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',2800);
+}
+document.getElementById('postForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const post={
+  id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+  kind:document.getElementById('kind').value,
+  title:document.getElementById('title').value.trim(),
+  desc:document.getElementById('desc').value.trim(),
+  area:document.getElementById('area').value,
+  date:document.getElementById('date').value,
+  contact:document.getElementById('contact').value.trim(),
+  demo:false
  };
- let out=(b[lang][tone]||b[lang].friendly).map((x,i)=>(i+1)+'. '+x).join('\n\n');
- if(platform==='LinkedIn')out+='\n\nWhat has your experience with this been?';
- if(platform==='YouTube')out+='\n\nSubscribe for more updates.';
- $('capOut').textContent=out;db.ideas++;persist()
-}
-const stopWords=new Set(['the','and','for','with','from','your','this','that','about','into','yourself','have','what','when','where','how','are','you','our','new','best','good','বাংলা','এবং','জন্য','নিয়ে','করে','একটি','আমার','তোমার']);
-function topicTags(s){return s.toLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}\s]/gu,' ').split(/\s+/).filter(x=>x.length>1&&!stopWords.has(x)).slice(0,5)}
-function makeHashtags(){let t=$('hashTopic').value.trim();if(!t){notify('Enter a topic');return}let base=topicTags(t),generic=['contentcreator','creativity','inspiration','community','explore','dailyupdate','learnsomething','digitalcreator','newideas','creativelife','shareyourstory','discover','trendingtopic','madebyme','nexora'];let tags=[...base.map(x=>x.replace(/\s/g,'')),...generic];let unique=[...new Set(tags)].slice(0,Number($('hashCount').value));$('hashOut').textContent=unique.map(x=>'#'+x).join(' ')}
-function makeIdeas(){let t=$('ideaTopic').value.trim();if(!t){notify('Enter a niche');return}let templates=[`5 things beginners should know about ${t}`,`The biggest mistake people make with ${t}`,`A beginner's guide to ${t}`,`What I wish I knew earlier about ${t}`,`Myth vs fact: ${t}`,`3 tools that can help with ${t}`,`A 30-second tip about ${t}`,`Answer a common question about ${t}`,`Compare two approaches to ${t}`,`A personal story or lesson from ${t}`,`A simple challenge related to ${t}`,`Behind the scenes: your ${t} process`];$('ideasOut').textContent=templates.sort(()=>Math.random()-.5).slice(0,8).map((x,i)=>(i+1)+'. '+x).join('\n\n');db.ideas++;persist()}
-function makeBio(){let n=$('bioName').value.trim(),w=$('bioWork').value.trim(),i=$('bioInterest').value.trim();if(!n&&!w&&!i){notify('Fill in at least one field');return}let who=w||'curious learner',goal=i||'new ideas';$('bioOut').textContent=[`${n||'Your Name'} ✨\n${who} | Exploring ${goal}\nLearning • Creating • Growing`,`✦ ${n||'Your Name'}\n${who}\nPassionate about ${goal}\n📩 Open to meaningful connections`,`Building my journey in ${who}.\nInterested in ${goal}.\nOne step at a time. 🚀`].join('\n\n────────────\n\n')}
-function makeHooks(){let t=$('hookTopic').value.trim();if(!t){notify('Enter a topic');return}$('hookOut').textContent=[`“Before you try ${t}, watch this.”`,`“Three things I wish I knew about ${t}.”`,`“Most people overlook this about ${t}.”`,`“Let's make ${t} simpler in 30 seconds.”`,`“Is ${t} really worth it? Let's break it down.”`,`“Here is one thing you can try today with ${t}.”`].join('\n\n')}
-const questions=['Tell me about yourself and one skill you are currently improving.','Describe a challenge you solved and what you learned.','Why are you interested in this role or field?','What is one strength you would bring to a team?','Tell me about a time you learned something quickly.','What would you like to achieve in your first 90 days?'];let qi=0;
-function nextQuestion(){qi=(qi+1)%questions.length;$('interviewQ').textContent=questions[qi]}
-function makeIntro(){let r=$('introRole').value.trim(),s=$('introSkills').value.trim(),g=$('introGoal').value.trim();if(!r&&!s&&!g){notify('Fill in a field first');return}$('introOut').textContent=`Hello, I'm working toward ${r||'my next professional goal'}. My key strengths include ${s||'learning, communication and teamwork'}. I'm currently looking for ${g||'opportunities to learn and contribute'}. I value continuous improvement and enjoy working on meaningful challenges.`}
-function buildCV(){
- const v=id=>$(id).value.trim(),n=v('cvName')||'Your Name';
- let sections=[n,[v('cvEmail'),v('cvPhone'),v('cvLocation')].filter(Boolean).join(' · '),'\nPROFESSIONAL SUMMARY\n'+(v('cvSummary')||'Add a concise professional summary.'),'\nEDUCATION\n'+(v('cvEducation')||'Add your education.'),'\nSKILLS\n'+(v('cvSkills')||'Add your skills.'),'\nEXPERIENCE & PROJECTS\n'+(v('cvExperience')||'Add projects or relevant experience.')];
- $('cvOut').textContent=sections.join('\n');
-}
-function printCV(){buildCV();let cv=$('cvOut').textContent,w=window.open('','_blank');if(!w){notify('Allow pop-ups to print the CV');return}w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>CV</title><style>body{font:15px/1.65 Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;white-space:pre-wrap;color:#111}h1{font-size:30px}@media print{body{margin:10mm}}</style></head><body></body></html>');w.document.body.textContent=cv;w.document.close();w.focus();setTimeout(()=>w.print(),300)}
-function splitBill(){let total=Number($('billTotal').value),n=Number($('billPeople').value),tip=Number($('billTip').value),o=$('billOut');if(!Number.isFinite(total)||total<0||!Number.isInteger(n)||n<1||n>1000||!Number.isFinite(tip)||tip<0||tip>100){o.textContent='Enter a valid amount, people count and tip.';return}let t=total*(1+tip/100);o.textContent=`Subtotal: ৳${total.toFixed(2)}\nExtra: ৳${(t-total).toFixed(2)}\nTotal: ৳${t.toFixed(2)}\nPeople: ${n}\nEach share: ৳${(t/n).toFixed(2)}`}
-function budgetCalc(){let inc=Number($('budgetIncome').value),n=Number($('budgetNeeds').value),w=Number($('budgetWants').value),s=Number($('budgetSave').value);if([inc,n,w,s].some(x=>!Number.isFinite(x)||x<0)||inc<=0){$('budgetOut').textContent='Enter a positive income and valid expense amounts.';return}let rem=inc-n-w-s;$('budgetOut').textContent=`Income: ৳${inc.toFixed(2)}\nNeeds: ৳${n.toFixed(2)} (${(n/inc*100).toFixed(1)}%)\nWants: ৳${w.toFixed(2)} (${(w/inc*100).toFixed(1)}%)\nSavings: ৳${s.toFixed(2)} (${(s/inc*100).toFixed(1)}%)\n${rem>=0?'Remaining':'Over budget'}: ৳${Math.abs(rem).toFixed(2)}`}
-let palette=[];
-function secureRandom(n){let a=new Uint32Array(n);crypto.getRandomValues(a);return a}
-function newPalette(){palette=Array.from({length:5},()=> '#'+Array.from(secureRandom(3),x=>(x%256).toString(16).padStart(2,'0')).join('').toUpperCase());$('swatches').innerHTML=palette.map(c=>`<div class="swatch" style="background:${c}" onclick="copyText('${c}')" title="Copy ${c}">${c}</div>`).join('')}
-function copyPalette(){copyText(palette.join('\n'))}
-function makeQR(){let text=$('qrText').value.trim();if(!text){notify('Enter text or a URL');return}if(!window.QRCode){$('qrStatus').textContent='QR library unavailable. Check internet and reload.';return}$('qrArea').innerHTML='';new QRCode($('qrArea'),{text,width:220,height:220,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});$('qrStatus').textContent='Scan the code to test it before sharing.'}
-function downloadQR(){let c=$('qrArea').querySelector('canvas'),im=$('qrArea').querySelector('img');let url=c?c.toDataURL('image/png'):im?im.src:null;if(!url){notify('Generate a QR first');return}let a=document.createElement('a');a.href=url;a.download='nexora-qr.png';a.click()}
-$('imgQuality').addEventListener('input',e=>$('qualityText').textContent=e.target.value+'%');
-let imgURL=null;
-function compressImage(){let f=$('imgFile').files[0];if(!f||!f.type.startsWith('image/')){notify('Choose a valid image first');return}let r=new FileReader();r.onload=e=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;let ctx=c.getContext('2d');if($('imgFormat').value==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height)}ctx.drawImage(im,0,0);c.toBlob(b=>{if(!b){notify('Could not process image');return}if(imgURL)URL.revokeObjectURL(imgURL);imgURL=URL.createObjectURL(b);$('imgResult').textContent=`Original: ${(f.size/1024).toFixed(1)} KB\nCompressed: ${(b.size/1024).toFixed(1)} KB\n${b.size<f.size?'Saved '+((1-b.size/f.size)*100).toFixed(1)+'%':'Output is not smaller; try another format or quality.'}`;$('imgDownload').href=imgURL;$('imgDownload').download='nexora-image.'+($('imgFormat').value==='image/webp'?'webp':'jpg');$('imgDownload').hidden=false},$('imgFormat').value,Number($('imgQuality').value)/100)};im.onerror=()=>notify('Could not read image');im.src=e.target.result};r.readAsDataURL(f)}
-function formatJSON(){try{$('jsonOut').textContent=JSON.stringify(JSON.parse($('jsonIn').value),null,2)}catch(e){$('jsonOut').textContent='Invalid JSON: '+e.message}}
-function minifyJSON(){try{$('jsonOut').textContent=JSON.stringify(JSON.parse($('jsonIn').value))}catch(e){$('jsonOut').textContent='Invalid JSON: '+e.message}}
-$('textIn').addEventListener('input',()=>{let s=$('textIn').value;$('charCount').textContent=s.length;$('wordCount').textContent=s.trim()?s.trim().split(/\s+/).length:0;$('readCount').textContent=s.trim()?Math.max(1,Math.ceil(s.trim().split(/\s+/).length/200)):0});
-function transform(t){let e=$('textIn'),s=e.value;if(t==='upper')s=s.toUpperCase();if(t==='lower')s=s.toLowerCase();if(t==='title')s=s.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());if(t==='clean')s=s.replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();e.value=s;e.dispatchEvent(new Event('input'))}
-function calculate(){let s=$('calcIn').value.trim();if(!s||!/^[\d\s()+\-*/%.]+$/.test(s)){$('calcOut').textContent='Enter a valid expression with numbers and basic math operators.';return}try{let r=Function('"use strict";return ('+s+')')();$('calcOut').textContent=Number.isFinite(r)?String(r):'Result is not finite'}catch{$('calcOut').textContent='Invalid expression. Check brackets and operators.'}}
-function makePassword(){let len=Number($('passLen').value);if(!Number.isInteger(len)||len<8||len>64){notify('Password length must be 8–64');return}let type=$('passType').value,chars=type==='numbers'?'0123456789':type==='letters'?'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ':type==='alnum'?'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789':'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}?';let out='',max=Math.floor(4294967296/chars.length)*chars.length;while(out.length<len){let a=secureRandom(len-out.length);for(let x of a){if(x<max){out+=chars[x%chars.length];if(out.length===len)break}}}$('passOut').textContent=out}
-function pickChoice(){let arr=$('choices').value.split('\n').map(s=>s.trim()).filter(Boolean);$('choiceOut').textContent=arr.length?arr[Math.floor(Math.random()*arr.length)]:'Add at least two options, one per line.'}
-function exportData(){downloadBlob('nexora-backup.json',JSON.stringify(db,null,2),'application/json')}
-function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||!Array.isArray(x.tasks)||!Array.isArray(x.notes))throw Error('Unexpected format');db={...defaults,...x};persist();renderTasks();renderNotes();notify('Backup imported')}catch(err){notify('Invalid backup file')}e.target.value=''};r.readAsText(f)}
-function clearWorkspace(){if(!confirm('Delete all saved tasks, notes and focus counts from this browser? Export a backup first if needed.'))return;db={...defaults};persist();renderTasks();renderNotes();clearNoteEditor();notify('Workspace cleared')}
-let timerLength=25*60,timerLeft=timerLength,timerInterval=null,focusStart=0;
-function showTimer(){$('timer').textContent=String(Math.floor(timerLeft/60)).padStart(2,'0')+':'+String(timerLeft%60).padStart(2,'0');$('timerProgress').style.width=((timerLength-timerLeft)/timerLength*100)+'%'}
-function setTimer(min){stopTimer();timerLength=min*60;timerLeft=timerLength;showTimer();$('timerStatus').textContent='Timer ready.';$('timerStart').textContent='▶ Start focus'}
-function toggleTimer(){if(timerInterval){stopTimer();$('timerStatus').textContent='Timer paused.';return}focusStart=Date.now();$('timerStart').textContent='Ⅱ Pause';$('timerStatus').textContent='Stay with one task. You can do this.';timerInterval=setInterval(()=>{timerLeft=Math.max(0,timerLeft-1);showTimer();if(timerLeft<=0){stopTimer();$('timerStatus').textContent='Session complete! Take a short break.';if(timerLength>=20*60){db.sessions++;persist()}notify('Timer finished! Take a break.')}},1000)}
-function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}$('timerStart').textContent='▶ Start focus'}
-function resetTimer(){stopTimer();timerLeft=timerLength;showTimer();$('timerStatus').textContent='Timer reset.'}
-window.addEventListener('beforeunload',()=>{if(imgURL)URL.revokeObjectURL(imgURL)});
-newPalette();showTimer();renderTasks();renderNotes();updateStats();
+ if(!post.title||!post.desc||!post.area||!post.contact)return;
+ try{
+  const posts=getPosts().filter(p=>!p.demo);
+  posts.unshift(post);savePosts(posts);
+  document.getElementById('postForm').reset();
+  closeModal();kindFilter='all';
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.kind==='all'));
+  document.getElementById('search').value='';
+  document.getElementById('heroSearch').value='';
+  document.getElementById('district').value='';
+  render();document.getElementById('feed').scrollIntoView({behavior:'smooth'});
+  toast('আপনার পোস্ট এই ব্রাউজারে সংরক্ষিত হয়েছে ✓');
+ }catch(err){
+  toast('পোস্ট সংরক্ষণ করা যায়নি। ব্রাউজারের স্টোরেজ পরীক্ষা করুন।');
+ }
+});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'){closeModal();closeAbout()}
+});
+render();
 </script>
 </body>
 </html>
