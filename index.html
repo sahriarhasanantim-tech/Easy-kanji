@@ -1,882 +1,833 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#6d5dfc">
-  <meta name="description" content="Kotoba — Japanese kanji, vocabulary, grammar and review. Data loads automatically online.">
-  <title>Kotoba — Japanese Learning</title>
-  <style>
-*{box-sizing:border-box}
-:root{--bg:#f5f6fb;--card:#fff;--text:#171823;--muted:#747786;--border:#e6e7ef;--primary:#6d5dfc;--primary2:#9187ff;--shadow:0 12px 35px rgba(36,34,74,.08);--danger:#d64c4c}
-html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body.dark{--bg:#101116;--card:#181920;--text:#f3f3f6;--muted:#a3a4af;--border:#292a33;--shadow:0 12px 35px rgba(0,0,0,.25)}
-button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
-.hidden{display:none!important}.muted{color:var(--muted)}
-.topbar{height:68px;position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.brand,.top-actions,.brand>div{display:flex;align-items:center}.brand{gap:10px}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:1px}.brand-mark{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2));font-size:23px;font-family:serif}.topbar{padding:0 max(16px,calc((100vw - 1100px)/2))}.topbar{display:flex;justify-content:space-between;align-items:center}.top-actions{gap:8px}
-.icon-btn{width:42px;height:42px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text)}
-.app{max-width:1100px;margin:auto;padding:22px 16px 105px}.page{display:none}.page.active{display:block}
-.hero{min-height:270px;border-radius:28px;padding:30px;color:#fff;background:linear-gradient(135deg,#6252f4,#9389ff);display:flex;justify-content:space-between;align-items:center;overflow:hidden;box-shadow:var(--shadow)}.eyebrow{font-size:11px;letter-spacing:1.5px;opacity:.8}.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.04;margin:9px 0}.hero p{max-width:550px;opacity:.9}.hero-character{font:180px/1 serif;opacity:.16;margin-right:20px}.hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
-.btn{border:0;border-radius:13px;padding:12px 17px;font-weight:800}.btn.primary{background:var(--primary);color:#fff}.btn.white{background:#fff;color:#5c4de7}.btn.dark{background:#211c52;color:#fff}.btn.outline{background:var(--card);color:var(--text);border:1px solid var(--border)}.btn.wide{width:100%;margin-top:15px}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}.stat-card{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:15px;box-shadow:var(--shadow)}.stat-card span{font-size:19px}.stat-card strong{display:block;font-size:25px;margin-top:7px}.stat-card small{color:var(--muted)}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin:28px 2px 13px}.section-head h2{font-size:19px;margin:0}.text-btn{border:0;background:transparent;color:var(--primary);font-weight:800}
-.level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.level-card{border:1px solid var(--border);background:var(--card);border-radius:18px;padding:17px;cursor:pointer;box-shadow:var(--shadow)}.level-card b{font-size:27px}.level-card p{font-size:12px;color:var(--muted);margin:4px 0}.bar{height:6px;background:#ededf4;border-radius:99px;overflow:hidden;margin-top:12px}.dark .bar{background:#2a2b34}.bar i{display:block;height:100%;background:var(--primary);width:0}
-.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.feature-card{text-align:left;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:18px;padding:17px;box-shadow:var(--shadow)}.feature-card span{font-size:27px;display:block;margin-bottom:12px}.feature-card b{display:block}.feature-card small{display:block;color:var(--muted);margin-top:4px}
-.page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.page-head h1{margin:0;font-size:30px}.page-head p{margin:5px 0 0;color:var(--muted)}
-.toolbar{margin-bottom:15px}.search{width:100%;padding:14px 15px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);outline:none}.search:focus{border-color:var(--primary)}.chips{display:flex;gap:7px;overflow:auto;padding:9px 0}.chip{white-space:nowrap;border:1px solid var(--border);background:var(--card);color:var(--muted);padding:8px 12px;border-radius:999px}.chip.active{background:#eeecff;color:var(--primary);border-color:#dcd8ff;font-weight:800}
-.kanji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.kanji-card{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:13px 7px;text-align:center;cursor:pointer;min-height:132px;box-shadow:var(--shadow)}.kanji-char{font:44px/1.1 "Noto Serif JP","Yu Mincho",serif}.kanji-card b{display:block;font-size:11px;margin-top:8px}.kanji-card small{display:block;color:var(--muted);margin-top:4px}.level-pill{display:inline-block;font-size:10px;font-weight:800;color:var(--primary);background:#efedff;border-radius:8px;padding:3px 7px;margin-top:7px}
-.word-list,.grammar-list{display:grid;gap:10px}.word-row,.grammar-row{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:15px;box-shadow:var(--shadow);cursor:pointer}.word-main{display:flex;justify-content:space-between;gap:12px}.jp{font-size:23px;font-family:serif}.kana{color:var(--primary);margin-top:2px}.meaning{color:var(--muted);margin-top:5px}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.tag{font-size:10px;border-radius:7px;background:#f0f0f6;color:var(--muted);padding:4px 7px}.dark .tag{background:#24252d}
-.review-card{min-height:430px;background:var(--card);border:1px solid var(--border);border-radius:25px;box-shadow:var(--shadow);display:grid;place-items:center;text-align:center;padding:30px}.review-inner{width:100%}.review-char{font:110px/1.1 serif}.review-reading{font-size:25px;color:var(--primary);margin-top:10px}.review-meaning{color:var(--muted);margin-top:6px}.review-extra{margin-top:25px;color:var(--muted);font-size:13px}.review-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}.review-buttons button{border:0;border-radius:13px;padding:13px;font-weight:900}.r-again{background:#ffe7e7;color:#c53e3e}.r-hard{background:#fff0d9;color:#a96800}.r-good{background:#e3f7ed;color:#137d53}.r-easy{background:#e9e8ff;color:#5548cc}
-.writing-layout{display:grid;grid-template-columns:1fr 1fr;gap:13px}.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:var(--shadow)}.writing-target{display:flex;align-items:center;gap:15px}.target-char{font:82px/1 serif}.writing-target small{display:block;color:var(--muted);margin-top:4px}.writing-target .icon-btn{margin-left:auto}.stroke-box{min-height:270px;margin:16px 0;border-radius:16px;background:#fafafe;display:grid;place-items:center;overflow:hidden}.dark .stroke-box{background:#202129}.stroke-box svg{width:260px;height:260px}.stroke-placeholder{color:var(--muted);padding:20px;text-align:center}.writing-actions{display:flex;gap:8px;flex-wrap:wrap}#drawCanvas{display:block;width:100%;height:300px;border:2px dashed var(--border);border-radius:16px;touch-action:none;background:#fff}.dark #drawCanvas{background:#111217}
-.progress-card{display:flex;align-items:center;gap:20px}.progress-ring{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--primary) 0deg,#e9e9f0 0deg);flex:none}.dark .progress-ring{background:conic-gradient(var(--primary) 0deg,#2a2b34 0deg)}.progress-ring:after{content:"";position:absolute}.progress-ring span{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:var(--card);font-weight:900}.progress-levels{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
-.settings-list{display:grid;gap:9px}.setting-row{width:100%;display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:15px;padding:15px;color:var(--text);text-align:left}.setting-row span{display:flex;gap:12px;align-items:center}.setting-row i{font-style:normal;color:var(--muted);font-size:12px}.danger-row{color:var(--danger)}.file-row input{max-width:150px}.credits{margin-top:14px}
-.bottom-nav{position:fixed;z-index:25;left:50%;bottom:10px;transform:translateX(-50%);width:min(700px,calc(100% - 18px));background:color-mix(in srgb,var(--card) 95%,transparent);backdrop-filter:blur(16px);border:1px solid var(--border);box-shadow:var(--shadow);border-radius:20px;display:grid;grid-template-columns:repeat(5,1fr);padding:6px}.nav{border:0;background:transparent;color:var(--muted);padding:8px;border-radius:13px;font-size:19px}.nav small{display:block;font-size:10px;margin-top:3px}.nav.active{background:#efedff;color:var(--primary);font-weight:800}
-.modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;padding:16px}.modal.show{display:flex}.modal-panel{width:min(700px,100%);max-height:92vh;overflow:auto;background:var(--card);border-radius:24px;padding:20px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.detail-kanji{text-align:center;font:130px/1 serif}.detail-center{text-align:center}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:15px 0}.info-box{background:#f5f5fa;border-radius:13px;padding:12px}.dark .info-box{background:#22232b}.info-box small{display:block;color:var(--muted)}.example{border-left:3px solid var(--primary);padding:9px 12px;margin:9px 0;background:#fafaff;border-radius:7px}.dark .example{background:#202129}
-.loading-screen{position:fixed;inset:0;display:grid;place-items:center;align-content:center;text-align:center;background:var(--bg);z-index:100}.spinner{width:42px;height:42px;border:4px solid #ddd;border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.toast{position:fixed;z-index:100;bottom:88px;left:50%;transform:translate(-50%,20px);background:#20212a;color:#fff;padding:11px 16px;border-radius:12px;opacity:0;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:760px){.hero-character{display:none}.stats-grid{grid-template-columns:repeat(2,1fr)}.level-grid{grid-template-columns:repeat(3,1fr)}.feature-grid{grid-template-columns:repeat(2,1fr)}.kanji-grid{grid-template-columns:repeat(4,1fr)}.writing-layout{grid-template-columns:1fr}.progress-levels{grid-template-columns:1fr}}
-@media(max-width:480px){.app{padding-left:12px;padding-right:12px}.level-grid{grid-template-columns:repeat(2,1fr)}.kanji-grid{grid-template-columns:repeat(3,1fr)}.review-buttons{grid-template-columns:repeat(2,1fr)}.hero{padding:23px}.page-head h1{font-size:26px}.target-char{font-size:68px}}
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyFlow — Smart Study Space</title>
+<style>
+:root {
+  --bg:#f4f5fb;
+  --panel:#ffffff;
+  --text:#20213a;
+  --muted:#8589a2;
+  --primary:#7057f5;
+  --border:#e8e9f2;
+  --green:#24a879;
+  --red:#e45d72;
+  --shadow:0 8px 28px #27254b08;
+}
+body.dark {
+  --bg:#141522;
+  --panel:#202132;
+  --text:#f1f0ff;
+  --muted:#a2a5bd;
+  --border:#34354b;
+  --shadow:0 8px 28px #0002;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  transition:background .2s,color .2s;
+}
+button,input,textarea,select { font:inherit; }
+button { cursor:pointer; }
+button:focus-visible,input:focus-visible,textarea:focus-visible {
+  outline:3px solid #7057f566;outline-offset:2px;
+}
+.app { max-width:1400px;margin:auto;padding:22px; }
+header {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;flex-wrap:wrap;margin-bottom:28px;
+}
+.brand { display:flex;align-items:center;gap:12px; }
+.logo {
+  width:46px;height:46px;border-radius:15px;background:var(--primary);
+  color:white;display:grid;place-items:center;font-size:24px;
+  box-shadow:0 7px 20px #7057f540;
+}
+.brand h2 { margin:0;font-size:22px;letter-spacing:-1px; }
+.brand small { color:var(--muted);font-size:10px;letter-spacing:1.5px; }
+.header-actions { display:flex;align-items:center;gap:9px;flex-wrap:wrap; }
+.clock { font-size:13px;font-weight:800;background:var(--panel);
+  border:1px solid var(--border);border-radius:12px;padding:11px 14px; }
+.btn {
+  border:0;border-radius:11px;padding:10px 14px;
+  background:var(--primary);color:white;font-weight:750;font-size:12px;
+}
+.btn.secondary { background:var(--bg);color:var(--text);border:1px solid var(--border); }
+.btn.green { background:var(--green); }
+.btn.red { background:var(--red); }
+.btn.small { padding:7px 10px;font-size:11px; }
+h1 { margin:0;font-size:clamp(27px,4vw,38px);letter-spacing:-1.5px; }
+.subtitle { color:var(--muted);font-size:13px;margin-top:8px; }
+.hero {
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:20px;margin-bottom:23px;flex-wrap:wrap;
+}
+.eyebrow { color:var(--primary);font-size:10px;font-weight:850;letter-spacing:2px;margin-bottom:9px; }
+.goal-box { background:var(--panel);border:1px solid var(--border);
+  padding:15px 18px;border-radius:17px;min-width:210px;box-shadow:var(--shadow); }
+.goal-top { display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:800; }
+.muted { color:var(--muted); }
+.progress { height:7px;background:var(--bg);border-radius:20px;overflow:hidden;margin-top:12px; }
+.progress div { height:100%;width:0;background:var(--primary);border-radius:20px;transition:width .3s; }
+.grid { display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:17px; }
+.card {
+  min-width:0;background:var(--panel);border:1px solid var(--border);
+  border-radius:20px;padding:20px;box-shadow:var(--shadow);
+}
+.span-12 { grid-column:span 12; }
+.span-8 { grid-column:span 8; }
+.span-7 { grid-column:span 7; }
+.span-6 { grid-column:span 6; }
+.span-5 { grid-column:span 5; }
+.span-4 { grid-column:span 4; }
+.card-head { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px; }
+.card h3 { font-size:14px;margin:0;font-weight:850; }
+.card-desc { color:var(--muted);font-size:11px;margin-top:5px; }
+.tabs { display:flex;gap:5px;padding:4px;background:var(--bg);border-radius:12px; }
+.tabs button {
+  border:0;background:transparent;color:var(--muted);font-size:11px;
+  font-weight:800;padding:9px 10px;border-radius:9px;
+}
+.tabs button.active { background:var(--panel);color:var(--primary);box-shadow:var(--shadow); }
+.timer-wrap { display:flex;flex-direction:column;align-items:center;padding:10px 0 5px; }
+.ring { width:min(230px,65vw);aspect-ratio:1;position:relative;display:grid;place-items:center; }
+.ring svg { position:absolute;width:100%;height:100%;transform:rotate(-90deg); }
+.ring circle { fill:none;stroke-width:8; }
+.ring .track { stroke:var(--bg); }
+.ring .arc { stroke:var(--primary);stroke-linecap:round;stroke-dasharray:565.49;stroke-dashoffset:0;transition:stroke-dashoffset .25s; }
+.time { font-size:clamp(38px,7vw,54px);font-weight:850;letter-spacing:-3px;font-variant-numeric:tabular-nums; }
+.timer-status { font-size:10px;color:var(--muted);font-weight:800;margin-top:7px; }
+.timer-controls { display:flex;gap:9px;margin-top:19px;align-items:center;flex-wrap:wrap;justify-content:center; }
+.timer-controls .btn { min-width:95px; }
+.timer-options { display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap;justify-content:center;font-size:11px;color:var(--muted); }
+.timer-options input { width:52px;padding:6px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text); }
+.stats { display:grid;grid-template-columns:repeat(3,1fr);gap:9px; }
+.stat { background:var(--bg);padding:13px;border-radius:14px;min-width:0; }
+.stat-icon { font-size:18px;margin-bottom:8px; }
+.stat-number { font-size:23px;font-weight:850;letter-spacing:-1px;overflow-wrap:anywhere; }
+.stat-label { font-size:9px;font-weight:800;color:var(--muted);margin-top:4px; }
+.field {
+  width:100%;border:1px solid var(--border);border-radius:11px;padding:11px 12px;
+  background:var(--bg);color:var(--text);font-size:12px;min-width:0;
+}
+textarea.field { resize:vertical;line-height:1.6; }
+.row { display:flex;gap:8px;align-items:center; }
+.row > .field { flex:1; }
+.stack { display:grid;gap:9px; }
+.list { display:grid;gap:8px; }
+.task {
+  display:flex;align-items:center;gap:9px;padding:11px;
+  border:1px solid var(--border);border-radius:12px;min-width:0;
+}
+.task input[type=checkbox] { accent-color:var(--primary);width:17px;height:17px;flex-shrink:0; }
+.task-text { flex:1;min-width:0;overflow-wrap:anywhere;font-size:12px;font-weight:700; }
+.task.done .task-text { text-decoration:line-through;color:var(--muted); }
+.task-meta { color:var(--muted);font-size:10px; }
+.delete { background:transparent;border:0;color:var(--muted);font-size:17px; }
+.badge { background:#eeeaff;color:var(--primary);border-radius:7px;padding:5px 7px;font-size:9px;font-weight:850;white-space:nowrap; }
+body.dark .badge { background:#383052; }
+.subject-item { display:grid;grid-template-columns:1fr auto;gap:6px;font-size:12px; }
+.subject-item .progress { grid-column:span 2;margin-top:0; }
+.subject-item strong { font-size:12px; }
+.flashcard {
+  min-height:155px;border:1px dashed #b7abff;border-radius:16px;
+  display:grid;place-items:center;text-align:center;padding:20px;
+  cursor:pointer;background:var(--bg);
+}
+.flashcard .fc-label { color:var(--primary);font-size:10px;font-weight:850;letter-spacing:1px; }
+.flashcard .fc-main { font-size:22px;font-weight:850;margin-top:12px;overflow-wrap:anywhere; }
+.flashcard .fc-hint { color:var(--muted);font-size:10px;margin-top:12px; }
+.quiz-question { font-size:14px;font-weight:800;line-height:1.6;margin-bottom:12px; }
+.quiz-option {
+  display:block;width:100%;text-align:left;border:1px solid var(--border);
+  border-radius:11px;padding:11px;margin:7px 0;background:var(--bg);color:var(--text);font-size:12px;
+}
+.quiz-option.correct { border-color:var(--green);background:#24a87918; }
+.quiz-option.wrong { border-color:var(--red);background:#e45d7218; }
+.note-status { color:var(--green);font-size:10px;font-weight:800; }
+.stopwatch-display { font-size:38px;font-weight:850;letter-spacing:-1.5px;font-variant-numeric:tabular-nums;margin:15px 0; }
+.calc-display {
+  width:100%;text-align:right;font-size:27px;font-weight:800;padding:16px;
+  border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);
+  margin-bottom:10px;
+}
+.calc-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:6px; }
+.calc-grid button { border:0;border-radius:10px;padding:14px 4px;background:var(--bg);color:var(--text);font-weight:800; }
+.calc-grid button.op { color:var(--primary); }
+.calc-grid button.eq { background:var(--primary);color:white; }
+.history { display:grid;gap:8px; }
+.history-item { display:flex;justify-content:space-between;gap:10px;padding:10px;border-radius:10px;background:var(--bg);font-size:11px; }
+.history-item strong { overflow-wrap:anywhere; }
+.day-grid { display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px; }
+.day { text-align:center;padding:10px 2px;border-radius:10px;background:var(--bg);font-size:9px;color:var(--muted); }
+.day b { display:block;color:var(--text);font-size:12px;margin-top:6px; }
+.day.today { background:#eeeaff;color:var(--primary); }
+body.dark .day.today { background:#383052; }
+footer { text-align:center;color:var(--muted);font-size:10px;padding:24px 0 8px; }
+.toast {
+  position:fixed;bottom:20px;left:50%;transform:translate(-50%,15px);
+  background:var(--text);color:var(--panel);padding:12px 16px;border-radius:11px;
+  font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:10;max-width:90%;
+}
+.toast.show { opacity:1;transform:translate(-50%,0); }
+.hidden { display:none!important; }
+@media(max-width:850px) {
+  .span-8,.span-7,.span-6,.span-5,.span-4 { grid-column:span 6; }
+  .span-12 { grid-column:span 12; }
+}
+@media(max-width:560px) {
+  .app { padding:13px; }
+  .span-8,.span-7,.span-6,.span-5,.span-4,.span-12 { grid-column:span 12; }
+  .card { padding:16px;border-radius:17px; }
+  .header-actions { width:100%; }
+  .clock { flex:1;text-align:center; }
+  .stats { gap:6px; }
+  .stat { padding:10px; }
+  .stat-number { font-size:20px; }
+  .timer-options { gap:8px; }
+}
 </style>
 </head>
 <body>
-<header class="topbar">
+<div class="app">
+<header>
   <div class="brand">
-    <div class="brand-mark">言</div>
-    <div><b>Kotoba</b><small>Japanese Learning</small></div>
+    <div class="logo">✦</div>
+    <div><h2>StudyFlow<span style="color:var(--primary)">.</span></h2>
+      <small>YOUR PERSONAL STUDY SPACE</small></div>
   </div>
-  <div class="top-actions">
-    <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">◐</button>
-    <button class="icon-btn" id="settingsBtn" aria-label="Settings">⚙</button>
+  <div class="header-actions">
+    <div class="clock" id="clock">00:00:00</div>
+    <button class="btn secondary" id="themeBtn">☾ Theme</button>
+    <button class="btn secondary" id="exportBtn">↧ Export data</button>
   </div>
 </header>
 
-<div id="loading" class="loading-screen">
-  <div class="spinner"></div>
-  <h2>Loading Kotoba</h2>
-  <p id="loadingText">Preparing Japanese data…</p>
-</div>
+<section class="hero">
+  <div><div class="eyebrow">SMALL STEPS. BIG PROGRESS.</div>
+    <h1 id="greeting">Ready to focus?</h1>
+    <div class="subtitle" id="dateText">Make today count, one session at a time.</div></div>
+  <div class="goal-box">
+    <div class="goal-top"><span>Daily study goal</span><span id="goalText">0 / 120 min</span></div>
+    <div class="progress"><div id="goalBar"></div></div>
+    <div class="row" style="margin-top:12px">
+      <input class="field" id="goalInput" type="number" min="1" max="1440" value="120" aria-label="Daily goal in minutes">
+      <button class="btn small" id="saveGoal">Set goal</button>
+    </div>
+  </div>
+</section>
 
-<main id="app" class="app hidden">
-  <section id="homePage" class="page active">
-    <div class="hero">
-      <div>
-        <span class="eyebrow">YOUR JAPANESE JOURNEY</span>
-        <h1>Learn Japanese,<br>one step at a time.</h1>
-        <p>Kanji, vocabulary, grammar, examples and spaced review in one place.</p>
-        <div class="hero-actions">
-          <button class="btn white" id="startReviewBtn">Start review</button>
-          <button class="btn dark" id="browseKanjiBtn">Browse kanji</button>
+<main class="grid">
+  <section class="card span-7">
+    <div class="card-head">
+      <div><h3>⏱ Focus timer</h3><div class="card-desc">Stay present. One task at a time.</div></div>
+      <div class="tabs" id="timerTabs">
+        <button class="active" data-mode="focus">Focus</button>
+        <button data-mode="short">Short</button>
+        <button data-mode="long">Long</button>
+      </div>
+    </div>
+    <div class="timer-wrap">
+      <div class="ring">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="track" cx="100" cy="100" r="90"/>
+          <circle class="arc" id="timerArc" cx="100" cy="100" r="90"/>
+        </svg>
+        <div style="text-align:center">
+          <div class="time" id="timerDisplay">25:00</div>
+          <div class="timer-status" id="timerStatus">READY WHEN YOU ARE</div>
         </div>
       </div>
-      <div class="hero-character">日</div>
-    </div>
-
-    <div class="stats-grid">
-      <div class="stat-card"><span>🔥</span><strong id="statStreak">0</strong><small>day streak</small></div>
-      <div class="stat-card"><span>📚</span><strong id="statStudied">0</strong><small>studied</small></div>
-      <div class="stat-card"><span>⭐</span><strong id="statMastered">0</strong><small>mastered</small></div>
-      <div class="stat-card"><span>🔁</span><strong id="statReviews">0</strong><small>reviews</small></div>
-    </div>
-
-    <div class="section-head"><h2>JLPT</h2><button class="text-btn" id="allKanjiBtn">All kanji →</button></div>
-    <div id="jlptGrid" class="level-grid"></div>
-
-    <div class="section-head"><h2>Continue learning</h2></div>
-    <div class="feature-grid">
-      <button class="feature-card" data-page="review"><span>🧠</span><b>Review</b><small>Practice cards due for review</small></button>
-      <button class="feature-card" data-page="vocab"><span>語</span><b>Vocabulary</b><small>Search common Japanese words</small></button>
-      <button class="feature-card" data-page="grammar"><span>文</span><b>Grammar</b><small>Explore JLPT grammar points</small></button>
-      <button class="feature-card" data-page="writing"><span>筆</span><b>Writing</b><small>Practice kanji strokes</small></button>
-    </div>
-  </section>
-
-  <section id="kanjiPage" class="page">
-    <div class="page-head"><div><h1>Kanji</h1><p id="kanjiCount">Loading…</p></div></div>
-    <div class="toolbar">
-      <input id="kanjiSearch" class="search" placeholder="Search kanji, meaning or reading…">
-      <div id="kanjiFilters" class="chips"></div>
-    </div>
-    <div id="kanjiGrid" class="kanji-grid"></div>
-    <button id="kanjiMore" class="btn outline wide">Load more</button>
-  </section>
-
-  <section id="vocabPage" class="page">
-    <div class="page-head"><div><h1>Vocabulary</h1><p id="wordCount">Loading…</p></div></div>
-    <div class="toolbar">
-      <input id="wordSearch" class="search" placeholder="Search Japanese, kana or English…">
-      <div id="wordFilters" class="chips"></div>
-    </div>
-    <div id="wordList" class="word-list"></div>
-    <button id="wordMore" class="btn outline wide">Load more</button>
-  </section>
-
-  <section id="reviewPage" class="page">
-    <div class="page-head"><div><h1>Review</h1><p id="reviewMeta">Spaced review</p></div></div>
-    <div id="reviewCard" class="review-card"></div>
-    <div id="reviewButtons" class="review-buttons">
-      <button data-rating="again" class="r-again">Again</button>
-      <button data-rating="hard" class="r-hard">Hard</button>
-      <button data-rating="good" class="r-good">Good</button>
-      <button data-rating="easy" class="r-easy">Easy</button>
-    </div>
-  </section>
-
-  <section id="writingPage" class="page">
-    <div class="page-head"><div><h1>Writing</h1><p>Trace the stroke order, then draw it yourself.</p></div></div>
-    <div class="writing-layout">
-      <div class="card">
-        <div class="writing-target">
-          <div class="target-char" id="writingChar">日</div>
-          <div><b id="writingMeaning">day / sun</b><small id="writingReading">ニチ · ひ</small></div>
-          <button class="icon-btn" id="writingSpeak">🔊</button>
-        </div>
-        <div id="strokeBox" class="stroke-box"><div class="stroke-placeholder">Stroke order will appear here.</div></div>
-        <div class="writing-actions">
-          <button class="btn outline" id="showStrokeBtn">Show stroke order</button>
-          <button class="btn outline" id="clearCanvasBtn">Clear</button>
-          <button class="btn primary" id="nextWritingBtn">Next</button>
-        </div>
+      <div class="timer-controls">
+        <button class="btn secondary" id="resetTimer">↺ Reset</button>
+        <button class="btn" id="startTimer">▶ Start</button>
+        <button class="btn secondary" id="skipTimer">Skip ↠</button>
       </div>
-      <div class="card">
-        <h3>Draw it</h3>
-        <canvas id="drawCanvas"></canvas>
-        <p class="muted">Use your finger on mobile.</p>
+      <div class="timer-options">
+        <label>Focus <input id="focusLen" type="number" min="1" max="180" value="25"></label>
+        <label>Short break <input id="shortLen" type="number" min="1" max="60" value="5"></label>
+        <label>Long break <input id="longLen" type="number" min="1" max="120" value="15"></label>
+        <button class="btn small secondary" id="applyLengths">Apply</button>
       </div>
     </div>
   </section>
 
-  <section id="grammarPage" class="page">
-    <div class="page-head"><div><h1>Grammar</h1><p id="grammarCount">Loading…</p></div></div>
-    <div class="toolbar"><input id="grammarSearch" class="search" placeholder="Search grammar pattern or meaning…"></div>
-    <div id="grammarList" class="grammar-list"></div>
+  <section class="card span-5">
+    <div class="card-head"><div><h3>📊 Today's progress</h3><div class="card-desc">Every minute counts.</div></div></div>
+    <div class="stats">
+      <div class="stat"><div class="stat-icon">⌛</div><div class="stat-number" id="minutesStat">0</div><div class="stat-label">STUDY MIN</div></div>
+      <div class="stat"><div class="stat-icon">✓</div><div class="stat-number" id="tasksStat">0/0</div><div class="stat-label">TASKS DONE</div></div>
+      <div class="stat"><div class="stat-icon">⚡</div><div class="stat-number" id="sessionsStat">0</div><div class="stat-label">SESSIONS</div></div>
+    </div>
+    <div style="margin-top:22px">
+      <div class="row" style="justify-content:space-between;margin-bottom:9px">
+        <strong style="font-size:12px">Weekly activity</strong>
+        <span class="muted" style="font-size:10px">Last 7 days</span>
+      </div>
+      <div class="day-grid" id="weekGrid"></div>
+    </div>
+    <div style="margin-top:18px" class="row">
+      <button class="btn secondary" id="manualLog" style="flex:1">+ Log study time</button>
+      <button class="btn secondary" id="notifyBtn" title="Allow timer notifications">🔔 Alerts</button>
+    </div>
   </section>
 
-  <section id="progressPage" class="page">
-    <div class="page-head"><div><h1>Progress</h1><p>Your learning statistics are stored on this device.</p></div></div>
-    <div class="card progress-card">
-      <div class="progress-ring" id="overallRing"><span id="overallPercent">0%</span></div>
-      <div><h2 id="progressTitle">Getting started</h2><p id="progressText" class="muted"></p></div>
+  <section class="card span-6">
+    <div class="card-head">
+      <div><h3>☑ My tasks</h3><div class="card-desc">Turn your plans into progress.</div></div>
+      <span class="badge" id="taskBadge">0 TASKS</span>
     </div>
-    <div id="progressLevels" class="progress-levels"></div>
+    <form id="taskForm" class="stack">
+      <input class="field" id="taskInput" placeholder="What do you need to study?" maxlength="150" required>
+      <div class="row">
+        <select class="field" id="taskSubject" aria-label="Task subject">
+          <option>General</option><option>Japanese</option><option>English</option>
+          <option>Math</option><option>Science</option><option>Other</option>
+        </select>
+        <select class="field" id="taskPriority" aria-label="Task priority">
+          <option value="Normal">Normal priority</option>
+          <option value="High">High priority</option>
+          <option value="Low">Low priority</option>
+        </select>
+        <button class="btn" type="submit">Add</button>
+      </div>
+    </form>
+    <div class="list" id="taskList" style="margin-top:14px"></div>
+    <div class="row" style="margin-top:12px;justify-content:space-between">
+      <span class="muted" style="font-size:10px">Completed tasks stay saved.</span>
+      <button class="btn small secondary" id="clearDone">Clear completed</button>
+    </div>
   </section>
 
-  <section id="settingsPage" class="page">
-    <div class="page-head"><div><h1>Settings</h1><p>Kotoba preferences and data.</p></div></div>
-    <div class="settings-list">
-      <button class="setting-row" id="themeSetting"><span>🌙<b>Dark mode</b></span><i id="themeState">Off</i></button>
-      <button class="setting-row" id="exportBtn"><span>⬇️<b>Export progress</b></span><i>JSON</i></button>
-      <label class="setting-row file-row"><span>⬆️<b>Import progress</b></span><input id="importInput" type="file" accept=".json"></label>
-      <button class="setting-row danger-row" id="resetBtn"><span>🗑️<b>Reset progress</b></span><i>Reset</i></button>
+  <section class="card span-6">
+    <div class="card-head">
+      <div><h3>📚 Subject tracker</h3><div class="card-desc">Log time for each subject.</div></div>
     </div>
-    <div class="card credits">
-      <h3>Data & attribution</h3>
-      <p>Kotoba loads openly licensed Japanese-language data automatically online from the project dataset. No JSON data files are required in your GitHub repository. See the dataset attribution and license information in the project README.</p>
+    <div class="row">
+      <select class="field" id="subjectSelect" aria-label="Subject">
+        <option>Japanese</option><option>English</option><option>Math</option>
+        <option>Science</option><option>History</option><option>Other</option>
+      </select>
+      <input class="field" id="subjectMinutes" type="number" min="1" max="1440" value="25" aria-label="Minutes">
+      <button class="btn" id="addSubject">Log</button>
     </div>
+    <div class="stack" id="subjectList" style="margin-top:17px"></div>
+  </section>
+
+  <section class="card span-6">
+    <div class="card-head">
+      <div><h3>📝 Smart notes</h3><div class="card-desc">Your notes save automatically on this device.</div></div>
+      <span class="note-status" id="noteStatus">● Saved</span>
+    </div>
+    <textarea class="field" id="notes" rows="9" placeholder="Write what you learned, important formulas, new words, or tomorrow's plan..."></textarea>
+    <div class="row" style="justify-content:space-between;margin-top:10px">
+      <span class="muted" style="font-size:10px" id="wordCount">0 words · 0 characters</span>
+      <button class="btn small secondary" id="downloadNotes">Download notes</button>
+    </div>
+  </section>
+
+  <section class="card span-6">
+    <div class="card-head">
+      <div><h3>🃏 Flashcards</h3><div class="card-desc">Remember more with active recall.</div></div>
+      <span class="badge" id="flashCount">0 CARDS</span>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <input class="field" id="flashFront" placeholder="Question / Japanese word">
+      <input class="field" id="flashBack" placeholder="Answer / meaning">
+    </div>
+    <button class="btn" id="addFlash">+ Create flashcard</button>
+    <div class="flashcard" id="flashCard" tabindex="0" role="button" aria-label="Flip flashcard" style="margin-top:15px">
+      <div><div class="fc-label" id="flashLabel">YOUR FLASHCARDS</div><div class="fc-main" id="flashMain">Add a card to begin</div><div class="fc-hint" id="flashHint">Create your own study cards above.</div></div>
+    </div>
+    <div class="row" style="justify-content:center;margin-top:12px;flex-wrap:wrap">
+      <button class="btn secondary" id="prevFlash">← Previous</button>
+      <button class="btn secondary" id="flipFlash">Flip card</button>
+      <button class="btn secondary" id="nextFlash">Next →</button>
+      <button class="btn secondary" id="deleteFlash">Delete</button>
+    </div>
+  </section>
+
+  <section class="card span-6">
+    <div class="card-head">
+      <div><h3>🧠 Quick quiz</h3><div class="card-desc">Test yourself and learn from mistakes.</div></div>
+      <span class="badge" id="quizScore">SCORE: 0</span>
+    </div>
+    <div id="quizArea">
+      <div class="quiz-question" id="quizQuestion">Ready for a quick brain check?</div>
+      <div id="quizOptions"></div>
+      <div class="muted" style="font-size:11px;margin-top:10px" id="quizFeedback">Choose an answer to begin.</div>
+    </div>
+    <button class="btn" id="nextQuiz" style="margin-top:12px">New question ↻</button>
+  </section>
+
+  <section class="card span-4">
+    <div class="card-head"><div><h3>⏱ Stopwatch</h3><div class="card-desc">Track any activity.</div></div></div>
+    <div class="stopwatch-display" id="stopwatchDisplay">00:00.0</div>
+    <div class="row">
+      <button class="btn" id="swStart">▶ Start</button>
+      <button class="btn secondary" id="swLap">Lap</button>
+      <button class="btn secondary" id="swReset">Reset</button>
+    </div>
+    <div class="history" id="laps" style="margin-top:12px"></div>
+  </section>
+
+  <section class="card span-4">
+    <div class="card-head"><div><h3>🧮 Calculator</h3><div class="card-desc">Quick calculations, no app switching.</div></div></div>
+    <input class="calc-display" id="calcDisplay" value="0" aria-label="Calculator display" readonly>
+    <div class="calc-grid" id="calcKeys">
+      <button data-key="C" class="op">AC</button><button data-key="(">(</button><button data-key=")">)</button><button data-key="/" class="op">÷</button>
+      <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button data-key="*" class="op">×</button>
+      <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button data-key="-" class="op">−</button>
+      <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button data-key="+" class="op">+</button>
+      <button data-key="0">0</button><button data-key=".">.</button><button data-key="DEL">⌫</button><button data-key="=" class="eq">=</button>
+    </div>
+  </section>
+
+  <section class="card span-4">
+    <div class="card-head"><div><h3>⏰ Study alarm</h3><div class="card-desc">Set a reminder for your next session.</div></div></div>
+    <div class="stack">
+      <label class="muted" for="alarmTime" style="font-size:11px">Reminder time</label>
+      <input class="field" type="time" id="alarmTime">
+      <input class="field" id="alarmMessage" placeholder="Reminder message" value="Time to study!">
+      <div class="row">
+        <button class="btn" id="setAlarm">Set alarm</button>
+        <button class="btn secondary" id="cancelAlarm">Cancel</button>
+      </div>
+      <div class="muted" id="alarmStatus" style="font-size:11px">No alarm set.</div>
+    </div>
+  </section>
+
+  <section class="card span-12">
+    <div class="card-head">
+      <div><h3>📅 Revision planner</h3><div class="card-desc">Plan when you will revisit important topics.</div></div>
+    </div>
+    <form id="revisionForm" class="row" style="flex-wrap:wrap">
+      <input class="field" id="revisionTopic" placeholder="Topic to revise" required style="flex:2">
+      <input class="field" id="revisionDate" type="date" required style="flex:1">
+      <select class="field" id="revisionStage" style="flex:1" aria-label="Revision stage">
+        <option>First review</option><option>Second review</option><option>Final review</option>
+      </select>
+      <button class="btn" type="submit">Add revision</button>
+    </form>
+    <div class="list" id="revisionList" style="margin-top:13px"></div>
   </section>
 </main>
-
-<nav id="bottomNav" class="bottom-nav">
-  <button data-page="home" class="nav active">⌂<small>Home</small></button>
-  <button data-page="kanji" class="nav">字<small>Kanji</small></button>
-  <button data-page="vocab" class="nav">語<small>Words</small></button>
-  <button data-page="review" class="nav">🧠<small>Review</small></button>
-  <button data-page="progress" class="nav">◔<small>Progress</small></button>
-</nav>
-
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="modal-panel">
-    <div class="modal-head"><b id="modalTitle">Details</b><button class="icon-btn" id="modalClose">×</button></div>
-    <div id="modalBody"></div>
-  </div>
+<footer>StudyFlow · Focus on learning, not perfection. Your saved data stays in this browser.</footer>
 </div>
-<div id="toast" class="toast"></div>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
-/* Embedded data loader: no JSON data files need to be uploaded to GitHub.
-   The app downloads open Japanese-language data directly from the public dataset. */
-/*
-  Kotoba data loader
-  Default source: jkindrix/japanese-language-data
-  You can switch DATA_BASE below to your own GitHub repository after
-  downloading/copying the data files.
-*/
+(() => {
+"use strict";
+const $ = id => document.getElementById(id);
+const DAY = () => new Date().toLocaleDateString("en-CA");
+const read = (key, fallback) => {
+  try { const x = localStorage.getItem("studyflow:"+key); return x === null ? fallback : JSON.parse(x); }
+  catch { return fallback; }
+};
+const save = (key, value) => {
+  try { localStorage.setItem("studyflow:"+key, JSON.stringify(value)); }
+  catch { toast("Could not save data. Check your browser storage."); }
+};
+const todayKey = DAY();
+let data = read("data", {});
+if (data.date !== todayKey) {
+  data = {...data,date:todayKey,minutes:0,sessions:0,subjects:{},quizScore:0};
+  save("data",data);
+}
+data.subjects ||= {};
+data.minutes ||= 0;
+data.sessions ||= 0;
+let goal = read("goal",120);
+let tasks = read("tasks",[]);
+let subjects = read("subjects",{});
+let cards = read("cards",[]);
+let revisions = read("revisions",[]);
+let focusMinutes = read("lengths",{focus:25,short:5,long:15});
+let timerMode = "focus", timerRunning = false, remaining = focusMinutes.focus*60;
+let timerEnd = 0, timerInterval = null, focusLast = Date.now();
+let swRunning = false, swStartAt = 0, swElapsed = 0, swInterval = null, laps = [];
+let flashIndex = 0, flashBack = false, quizCurrent = null, quizAnswered = false;
+let alarmTimeout = null, alarmPoll = null;
+let calcExpression = "";
+const circumference = 2*Math.PI*90;
+$("timerArc").style.strokeDasharray = circumference;
+$("goalInput").value = goal;
+$("focusLen").value = focusMinutes.focus;
+$("shortLen").value = focusMinutes.short;
+$("longLen").value = focusMinutes.long;
 
-const DATA_BASE =
-  "https://raw.githubusercontent.com/jkindrix/japanese-language-data/main/data";
+function toast(msg) {
+  const el=$("toast");el.textContent=msg;el.classList.add("show");
+  clearTimeout(toast.timeout);toast.timeout=setTimeout(()=>el.classList.remove("show"),2400);
+}
+function clockTick() {
+  const d=new Date();
+  $("clock").textContent=d.toLocaleTimeString([], {hour12:false});
+  $("dateText").textContent=d.toLocaleDateString([], {weekday:"long",year:"numeric",month:"long",day:"numeric"});
+  const h=d.getHours();
+  $("greeting").textContent=h<12?"Good morning.":h<17?"Ready to focus?":"Make tonight count.";
+}
+clockTick();setInterval(clockTick,1000);
+function saveData(){save("data",data);renderStats();}
+function renderStats() {
+  $("minutesStat").textContent=data.minutes||0;
+  $("tasksStat").textContent=tasks.filter(t=>t.done).length+"/"+tasks.length;
+  $("sessionsStat").textContent=data.sessions||0;
+  $("goalText").textContent=(data.minutes||0)+" / "+goal+" min";
+  $("goalBar").style.width=Math.min(100,(data.minutes||0)/Math.max(1,goal)*100)+"%";
+  $("taskBadge").textContent=tasks.length+" TASKS";
+  $("goalInput").value=goal;
+  renderWeek();
+}
+function renderWeek() {
+  const box=$("weekGrid");box.innerHTML="";
+  const history=read("history",{});
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const key=d.toLocaleDateString("en-CA");
+    const minutes=key===data.date?data.minutes:(history[key]?.minutes||0);
+    const el=document.createElement("div");
+    el.className="day"+(i===0?" today":"");
+    el.innerHTML="<span>"+d.toLocaleDateString("en",{weekday:"short"})+"</span><b>"+minutes+"m</b>";
+    box.append(el);
+  }
+}
+function recordMinutes(n) {
+  n=Math.max(0,Math.floor(n));if(!n)return;
+  const history=read("history",{});
+  history[data.date] ||= {minutes:0,sessions:0};
+  history[data.date].minutes+=n;data.minutes=(data.minutes||0)+n;
+  save("history",history);saveData();
+}
+$("saveGoal").onclick=()=>{
+  const n=Number($("goalInput").value);
+  if(!Number.isFinite(n)||n<1||n>1440){toast("Set a goal between 1 and 1440 minutes.");return;}
+  goal=Math.floor(n);save("goal",goal);renderStats();toast("Daily goal updated.");
+};
+$("themeBtn").onclick=()=>{
+  document.body.classList.toggle("dark");
+  const dark=document.body.classList.contains("dark");
+  save("dark",dark);$("themeBtn").textContent=dark?"☀ Light":"☾ Theme";
+};
+if(read("dark",false)){document.body.classList.add("dark");$("themeBtn").textContent="☀ Light";}
 
-const DATA_FILES = {
-  kanji: `${DATA_BASE}/core/kanji.json`,
-  words: `${DATA_BASE}/core/words.json`,
-  radicals: `${DATA_BASE}/core/radicals.json`,
-  sentences: `${DATA_BASE}/corpus/sentences.json`,
-  grammar: `${DATA_BASE}/grammar/grammar.json`,
-  conjugations: `${DATA_BASE}/grammar/conjugations.json`,
-  jlpt: `${DATA_BASE}/enrichment/jlpt-classifications.json`,
-  strokeIndex: `${DATA_BASE}/enrichment/stroke-order-index.json`
+function fmt(sec) {
+  sec=Math.max(0,Math.ceil(sec));
+  return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
+}
+function paintTimer() {
+  $("timerDisplay").textContent=fmt(remaining);
+  $("timerStatus").textContent=timerRunning?"SESSION IN PROGRESS":remaining===0?"SESSION COMPLETE":"READY WHEN YOU ARE";
+  $("startTimer").textContent=timerRunning?"Ⅱ Pause":"▶ Start";
+  $("timerArc").style.strokeDashoffset=circumference*(1-remaining/(focusMinutes[timerMode]*60));
+  $("timerArc").style.stroke=timerMode==="focus"?"#7057f5":timerMode==="short"?"#24a879":"#efa34d";
+  document.title=(timerRunning?fmt(remaining)+" — ":"")+"StudyFlow";
+}
+function stopTimer() {
+  timerRunning=false;clearInterval(timerInterval);timerInterval=null;paintTimer();
+}
+function setMode(mode) {
+  stopTimer();timerMode=mode;remaining=focusMinutes[mode]*60;
+  document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
+  paintTimer();
+}
+function timerTick() {
+  if(!timerRunning)return;
+  remaining=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));
+  paintTimer();
+  if(remaining===0) {
+    stopTimer();
+    if(timerMode==="focus"){
+      recordMinutes(focusMinutes.focus);
+      data.sessions=(data.sessions||0)+1;saveData();
+      toast("Focus session complete! Take a break.");
+    } else toast("Break finished. Ready to focus?");
+    if("Notification" in window && Notification.permission==="granted"){
+      new Notification("StudyFlow",{body:"Your timer has finished."});
+    }
+    try{const a=new AudioContext();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=700;g.gain.value=.07;o.start();o.stop(a.currentTime+.35);}catch(e){}
+  }
+}
+function startTimer() {
+  if(remaining<=0)remaining=focusMinutes[timerMode]*60;
+  timerRunning=true;timerEnd=Date.now()+remaining*1000;
+  timerInterval=setInterval(timerTick,200);paintTimer();
+}
+$("timerTabs").querySelectorAll("button").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+$("startTimer").onclick=()=>{
+  if(timerRunning){remaining=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));stopTimer();}
+  else startTimer();
+};
+$("resetTimer").onclick=()=>{stopTimer();remaining=focusMinutes[timerMode]*60;paintTimer();};
+$("skipTimer").onclick=()=>{
+  const modes=["focus","short","long"];
+  setMode(modes[(modes.indexOf(timerMode)+1)%modes.length]);
+};
+$("applyLengths").onclick=()=>{
+  const vals={focus:Number($("focusLen").value),short:Number($("shortLen").value),long:Number($("longLen").value)};
+  if(Object.values(vals).some(n=>!Number.isInteger(n)||n<1||n>(n===vals.focus?180:120))){
+    toast("Enter valid timer lengths.");return;
+  }
+  stopTimer();focusMinutes=vals;save("lengths",vals);remaining=focusMinutes[timerMode]*60;paintTimer();toast("Timer lengths updated.");
+};
+$("notifyBtn").onclick=async()=>{
+  if(!("Notification" in window)){toast("This browser does not support notifications.");return;}
+  const p=await Notification.requestPermission();
+  toast(p==="granted"?"Timer notifications enabled.":"Notifications were not enabled.");
+};
+$("manualLog").onclick=()=>{
+  const n=prompt("How many study minutes would you like to log?");
+  if(n===null)return;
+  const v=Number(n);
+  if(!Number.isInteger(v)||v<1||v>1440){toast("Enter a whole number from 1 to 1440.");return;}
+  recordMinutes(v);toast(v+" study minutes logged.");
 };
 
-function unwrap(raw) {
-  if (Array.isArray(raw)) return raw;
-  if (!raw || typeof raw !== "object") return [];
-  for (const key of ["data","items","entries","records","classifications","kanji","words","sentences","grammar","conjugations"]) {
-    if (Array.isArray(raw[key])) return raw[key];
+function renderTasks() {
+  const box=$("taskList");box.innerHTML="";
+  if(!tasks.length){box.textContent="No tasks yet. Add your first task above.";box.style.color="var(--muted)";box.style.fontSize="12px";}
+  tasks.forEach((t,i)=>{
+    const row=document.createElement("div");row.className="task"+(t.done?" done":"");
+    const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!t.done;cb.setAttribute("aria-label","Complete task");
+    cb.onchange=()=>{tasks[i].done=cb.checked;save("tasks",tasks);renderTasks();renderStats();};
+    const text=document.createElement("div");text.className="task-text";text.textContent=t.text;
+    const sub=document.createElement("span");sub.className="badge";sub.textContent=t.subject;
+    const pri=document.createElement("span");pri.className="task-meta";pri.textContent=t.priority==="High"?"! High":t.priority==="Low"?"Low":"";
+    const del=document.createElement("button");del.className="delete";del.textContent="×";del.setAttribute("aria-label","Delete task");
+    del.onclick=()=>{tasks.splice(i,1);save("tasks",tasks);renderTasks();renderStats();};
+    row.append(cb,text,sub,pri,del);box.append(row);
+  });
+}
+$("taskForm").onsubmit=e=>{
+  e.preventDefault();
+  const text=$("taskInput").value.trim();if(!text)return;
+  tasks.unshift({text,subject:$("taskSubject").value,priority:$("taskPriority").value,done:false});
+  save("tasks",tasks);$("taskInput").value="";renderTasks();renderStats();toast("Task added.");
+};
+$("clearDone").onclick=()=>{
+  tasks=tasks.filter(t=>!t.done);save("tasks",tasks);renderTasks();renderStats();toast("Completed tasks cleared.");
+};
+
+function renderSubjects() {
+  const box=$("subjectList");box.innerHTML="";
+  const entries=Object.entries(data.subjects||{}).sort((a,b)=>b[1]-a[1]);
+  if(!entries.length){box.innerHTML='<div class="muted" style="font-size:12px">No subject time logged yet.</div>';return;}
+  const max=Math.max(1,...entries.map(x=>x[1]));
+  entries.forEach(([name,mins])=>{
+    const wrap=document.createElement("div");wrap.className="subject-item";
+    const label=document.createElement("span");label.textContent=name;
+    const val=document.createElement("strong");val.textContent=mins+" min";
+    const prog=document.createElement("div");prog.className="progress";
+    const fill=document.createElement("div");fill.style.width=(mins/max*100)+"%";prog.append(fill);
+    wrap.append(label,val,prog);box.append(wrap);
+  });
+}
+$("addSubject").onclick=()=>{
+  const name=$("subjectSelect").value,n=Number($("subjectMinutes").value);
+  if(!Number.isInteger(n)||n<1||n>1440){toast("Enter minutes between 1 and 1440.");return;}
+  data.subjects[name]=(data.subjects[name]||0)+n;recordMinutes(n);saveData();renderSubjects();toast(name+": "+n+" minutes logged.");
+};
+
+function updateWordCount() {
+  const text=$("notes").value;
+  const words=text.trim()?text.trim().split(/\s+/).length:0;
+  $("wordCount").textContent=words+" words · "+text.length+" characters";
+}
+$("notes").value=read("notes","");
+let noteDebounce;
+$("notes").oninput=()=>{
+  $("noteStatus").textContent="Saving…";updateWordCount();clearTimeout(noteDebounce);
+  noteDebounce=setTimeout(()=>{save("notes",$("notes").value);$("noteStatus").textContent="● Saved";},300);
+};
+$("downloadNotes").onclick=()=>{
+  downloadFile("study-notes.txt",$("notes").value,"text/plain;charset=utf-8");
+};
+updateWordCount();
+function downloadFile(name,content,type) {
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function renderFlash() {
+  $("flashCount").textContent=cards.length+" CARDS";
+  if(!cards.length){
+    $("flashLabel").textContent="YOUR FLASHCARDS";
+    $("flashMain").textContent="Add a card to begin";
+    $("flashHint").textContent="Create your own study cards above.";return;
   }
-  return raw;
+  flashIndex=(flashIndex+cards.length)%cards.length;
+  const c=cards[flashIndex];
+  $("flashLabel").textContent=flashBack?"ANSWER":"QUESTION";
+  $("flashMain").textContent=flashBack?c.back:c.front;
+  $("flashHint").textContent=(flashIndex+1)+" / "+cards.length+" · Tap to flip";
 }
+function flipFlash(){if(!cards.length)return;flashBack=!flashBack;renderFlash();}
+$("addFlash").onclick=()=>{
+  const front=$("flashFront").value.trim(),back=$("flashBack").value.trim();
+  if(!front||!back){toast("Enter both the question and answer.");return;}
+  cards.push({front,back});save("cards",cards);flashIndex=cards.length-1;flashBack=false;
+  $("flashFront").value="";$("flashBack").value="";renderFlash();toast("Flashcard created.");
+};
+$("flashCard").onclick=flipFlash;
+$("flashCard").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipFlash();}};
+$("flipFlash").onclick=flipFlash;
+$("prevFlash").onclick=()=>{if(cards.length){flashIndex=(flashIndex-1+cards.length)%cards.length;flashBack=false;renderFlash();}};
+$("nextFlash").onclick=()=>{if(cards.length){flashIndex=(flashIndex+1)%cards.length;flashBack=false;renderFlash();}};
+$("deleteFlash").onclick=()=>{
+  if(!cards.length)return;
+  cards.splice(flashIndex,1);save("cards",cards);flashIndex=0;flashBack=false;renderFlash();
+};
+renderFlash();
 
-async function fetchJSON(url) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 60000);
-  let response;
-  try {
-    response = await fetch(url, { cache: "force-cache", signal: controller.signal });
-  } finally {
-    clearTimeout(timer);
-  }
-  if (!response.ok) throw new Error(`HTTP ${response.status}: ${url}`);
-  return response.json();
-}
-
-class DataLoader {
-  constructor() {
-    this.cache = new Map();
-  }
-
-  async get(name) {
-    if (this.cache.has(name)) return this.cache.get(name);
-    const url = DATA_FILES[name];
-    if (!url) throw new Error(`Unknown dataset: ${name}`);
-    const promise = fetchJSON(url).then(unwrap);
-    this.cache.set(name, promise);
-    return promise;
-  }
-
-  async loadCore() {
-    const results = await Promise.allSettled([
-      this.get("kanji"),
-      this.get("words"),
-      this.get("radicals"),
-      this.get("sentences"),
-      this.get("grammar"),
-      this.get("conjugations"),
-      this.get("jlpt"),
-      this.get("strokeIndex")
-    ]);
-
-    const names = ["kanji","words","radicals","sentences","grammar","conjugations","jlpt","strokeIndex"];
-    const data = {};
-    results.forEach((r, i) => {
-      data[names[i]] = r.status === "fulfilled" ? r.value : [];
-    });
-
-    return data;
-  }
-
-  async strokeSVG(character, strokeIndex) {
-    let file = null;
-
-    if (strokeIndex && typeof strokeIndex === "object" && !Array.isArray(strokeIndex)) {
-      const hit = strokeIndex[character];
-      if (typeof hit === "string") file = hit;
-      else if (hit && typeof hit === "object") file = hit.svg || hit.file || hit.filename;
-    }
-
-    if (!file) {
-      const cp = character.codePointAt(0).toString(16).padStart(5, "0").toLowerCase();
-      file = `${cp}.svg`;
-    }
-
-    const candidates = [
-      `${DATA_BASE}/enrichment/stroke-order/${file}`,
-      `${DATA_BASE}/enrichment/stroke-order/${String(file).replace(/^.*[\/]/,"")}`
-    ];
-
-    for (const url of candidates) {
-      try {
-        const r = await fetch(url, {cache:"force-cache"});
-        if (r.ok) return await r.text();
-      } catch (_) {}
-    }
-    return null;
-  }
-}
-
-
-
-
-const STORAGE = "kotoba_state_v2";
-
-function safeJSON(value, fallback) {
-  try { return JSON.parse(value) ?? fallback; } catch { return fallback; }
-}
-
-function defaultState() {
-  return {
-    studied: [],
-    mastered: [],
-    favorites: [],
-    reviews: 0,
-    streak: 0,
-    lastStudy: "",
-    srs: {},
-    settings: { dark: false }
-  };
-}
-
-function loadState() {
-  const saved = safeJSON(localStorage.getItem(STORAGE), null);
-  return {...defaultState(), ...(saved || {}), settings:{...defaultState().settings,...(saved?.settings || {})}};
-}
-
-function esc(s) {
-  return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-}
-
-function arr(v) {
-  if (Array.isArray(v)) return v;
-  if (v == null) return [];
-  return [v];
-}
-
-function first(v) {
-  return arr(v)[0] ?? "";
-}
-
-function textOfMeaning(v) {
-  if (Array.isArray(v)) {
-    return v.map(x => typeof x === "string" ? x : (x?.gloss || x?.meaning || x?.text || "")).filter(Boolean).join(", ");
-  }
-  if (typeof v === "object" && v) return v.gloss || v.meaning || v.text || "";
-  return String(v ?? "");
-}
-
-function getChar(k) {
-  return k?.character || k?.kanji || k?.literal || k?.k || k?.glyph || "";
-}
-
-function getMean(k) {
-  return textOfMeaning(k?.meanings || k?.meaning || k?.glosses || k?.gloss || "");
-}
-
-function getOn(k) {
-  return arr(k?.onyomi || k?.on || k?.onYomi || k?.readings?.onyomi).join(" · ");
-}
-
-function getKun(k) {
-  return arr(k?.kunyomi || k?.kun || k?.kunYomi || k?.readings?.kunyomi).join(" · ");
-}
-
-function getLevel(x) {
-  const raw = x?.jlpt || x?.level || x?.jlptLevel || x?.classification?.jlpt || "";
-  const s = String(raw).toUpperCase();
-  const m = s.match(/N[1-5]/);
-  return m ? m[0] : "";
-}
-
-function getStrokes(k) {
-  return k?.strokeCount || k?.strokes || k?.stroke_count || k?.strokeCountTotal || "";
-}
-
-function wordJapanese(w) {
-  const writings = w?.kanji || w?.kanjiWritings || w?.writings || w?.written || [];
-  if (typeof writings === "string") return writings;
-  if (Array.isArray(writings)) return writings.map(x => typeof x === "string" ? x : x?.text || x?.writing || "").filter(Boolean).join("、");
-  return w?.word || w?.japanese || w?.expression || w?.surface || "";
-}
-
-function wordKana(w) {
-  const readings = w?.kana || w?.readings || w?.kanaWritings || [];
-  if (typeof readings === "string") return readings;
-  if (Array.isArray(readings)) return readings.map(x => typeof x === "string" ? x : x?.text || x?.reading || "").filter(Boolean).join("、");
-  return "";
-}
-
-function wordMeaning(w) {
-  return textOfMeaning(w?.senses || w?.meanings || w?.meaning || w?.glosses || "");
-}
-
-function examplesForSentence(s) {
-  const jp = s?.japanese || s?.ja || s?.text || s?.sentence || "";
-  const en = s?.english || s?.en || s?.translation || "";
-  return {jp: typeof jp === "string" ? jp : textOfMeaning(jp), en: typeof en === "string" ? en : textOfMeaning(en)};
-}
-
-class KotobaApp {
-  constructor(loader) {
-    this.loader = loader;
-    this.state = loadState();
-    this.data = {};
-    this.page = "home";
-    this.kanjiFilter = "ALL";
-    this.wordFilter = "ALL";
-    this.kanjiShown = 120;
-    this.wordsShown = 60;
-    this.reviewQueue = [];
-    this.reviewIndex = 0;
-    this.writingIndex = 0;
-    this.canvas = null;
-    this.ctx = null;
-    this.drawing = false;
-  }
-
-  async init() {
-    if (this.state.settings.dark) document.body.classList.add("dark");
-    this.bindStatic();
-    this.setLoading("Loading kanji, vocabulary and grammar…");
-    this.data = await this.loader.loadCore();
-
-    if (!this.data.kanji.length) {
-      this.setLoading("The dataset could not be reached. Check your GitHub Pages network access.");
-      return;
-    }
-
-    this.prepareIndexes();
-    this.renderHome();
-    this.renderKanji();
-    this.renderWords();
-    this.renderGrammar();
-    this.renderReview();
-    this.renderProgress();
-    this.setupCanvas();
-    this.setLoading("Ready");
-    setTimeout(() => {
-      document.getElementById("loading").classList.add("hidden");
-      document.getElementById("app").classList.remove("hidden");
-    }, 250);
-  }
-
-  setLoading(text) {
-    const el = document.getElementById("loadingText");
-    if (el) el.textContent = text;
-  }
-
-  prepareIndexes() {
-    this.kanji = Array.isArray(this.data.kanji) ? this.data.kanji : [];
-    this.words = Array.isArray(this.data.words) ? this.data.words : [];
-    this.grammar = Array.isArray(this.data.grammar) ? this.data.grammar : [];
-    this.sentences = Array.isArray(this.data.sentences) ? this.data.sentences : [];
-    this.strokeIndex = this.data.strokeIndex || {};
-    this.kanjiByChar = new Map(this.kanji.map(k => [getChar(k), k]));
-    this.wordById = new Map(this.words.map(w => [String(w?.id ?? w?.entryId ?? ""), w]));
-    this.sentenceById = new Map(this.sentences.map(s => [String(s?.id ?? s?.sentenceId ?? ""), s]));
-  }
-
-  bindStatic() {
-    document.querySelectorAll(".nav").forEach(b => b.addEventListener("click", () => this.go(b.dataset.page)));
-    document.querySelectorAll(".feature-card").forEach(b => b.addEventListener("click", () => this.go(b.dataset.page)));
-
-    const q = id => document.getElementById(id);
-    q("startReviewBtn").onclick = () => this.go("review");
-    q("browseKanjiBtn").onclick = () => this.go("kanji");
-    q("allKanjiBtn").onclick = () => this.go("kanji");
-    q("themeBtn").onclick = () => this.toggleTheme();
-    q("settingsBtn").onclick = () => this.go("settings");
-    q("themeSetting").onclick = () => this.toggleTheme();
-    q("kanjiSearch").oninput = () => { this.kanjiShown=120; this.renderKanji(); };
-    q("wordSearch").oninput = () => { this.wordsShown=60; this.renderWords(); };
-    q("grammarSearch").oninput = () => this.renderGrammar();
-    q("kanjiMore").onclick = () => { this.kanjiShown += 120; this.renderKanji(); };
-    q("wordMore").onclick = () => { this.wordsShown += 60; this.renderWords(); };
-    q("reviewButtons").onclick = e => {
-      const btn = e.target.closest("button[data-rating]");
-      if (btn) this.rate(btn.dataset.rating);
-    };
-    q("modalClose").onclick = () => this.closeModal();
-    q("modal").onclick = e => { if (e.target.id === "modal") this.closeModal(); };
-    q("showStrokeBtn").onclick = () => this.showStroke();
-    q("clearCanvasBtn").onclick = () => this.clearCanvas();
-    q("nextWritingBtn").onclick = () => this.nextWriting();
-    q("writingSpeak").onclick = () => this.speak(this.currentWritingChar());
-    q("exportBtn").onclick = () => this.exportProgress();
-    q("importInput").onchange = e => this.importProgress(e.target.files?.[0]);
-    q("resetBtn").onclick = () => this.resetProgress();
-
-    window.addEventListener("resize", () => this.resizeCanvas());
-  }
-
-  go(page) {
-    this.page = page;
-    document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
-    const p = document.getElementById(`${page}Page`);
-    if (p) p.classList.add("active");
-
-    document.querySelectorAll(".nav").forEach(x => x.classList.toggle("active", x.dataset.page === page));
-    if (page === "writing") { this.setupCanvas(); this.renderWritingTarget(); }
-    if (page === "review") this.renderReview();
-    if (page === "progress") this.renderProgress();
-  }
-
-  toggleTheme() {
-    document.body.classList.toggle("dark");
-    this.state.settings.dark = document.body.classList.contains("dark");
-    localStorage.setItem(STORAGE, JSON.stringify(this.state));
-    document.getElementById("themeState").textContent = this.state.settings.dark ? "On" : "Off";
-  }
-
-  renderHome() {
-    document.getElementById("statStreak").textContent = this.state.streak;
-    document.getElementById("statStudied").textContent = this.state.studied.length;
-    document.getElementById("statMastered").textContent = this.state.mastered.length;
-    document.getElementById("statReviews").textContent = this.state.reviews;
-    document.getElementById("themeState").textContent = this.state.settings.dark ? "On" : "Off";
-
-    const box = document.getElementById("jlptGrid");
-    const levels = ["N5","N4","N3","N2","N1"];
-    box.innerHTML = levels.map(level => {
-      const total = this.kanji.filter(k => getLevel(k) === level).length;
-      const mastered = this.state.mastered.filter(c => getLevel(this.kanjiByChar.get(c)) === level).length;
-      const pct = total ? Math.round(mastered / total * 100) : 0;
-      return `<button class="level-card" data-level="${level}">
-        <b>${level}</b><p>${total.toLocaleString()} kanji</p>
-        <div class="bar"><i style="width:${pct}%"></i></div>
-        <small>${mastered} mastered</small>
-      </button>`;
-    }).join("");
-    box.querySelectorAll("[data-level]").forEach(b => b.onclick = () => {
-      this.kanjiFilter = b.dataset.level;
-      this.go("kanji");
-      this.renderKanji();
-    });
-  }
-
-  renderKanji() {
-    if (!this.kanji) return;
-    const query = document.getElementById("kanjiSearch").value.trim().toLowerCase();
-    const levels = ["ALL","N5","N4","N3","N2","N1"];
-    document.getElementById("kanjiFilters").innerHTML = levels.map(l =>
-      `<button class="chip ${this.kanjiFilter===l?"active":""}" data-l="${l}">${l==="ALL"?"All":l}</button>`
-    ).join("");
-    document.querySelectorAll("#kanjiFilters .chip").forEach(b => b.onclick = () => {
-      this.kanjiFilter = b.dataset.l; this.kanjiShown=120; this.renderKanji();
-    });
-
-    let data = this.kanji;
-    if (this.kanjiFilter !== "ALL") data = data.filter(k => getLevel(k) === this.kanjiFilter);
-    if (query) {
-      data = data.filter(k => {
-        const blob = `${getChar(k)} ${getMean(k)} ${getOn(k)} ${getKun(k)}`.toLowerCase();
-        return blob.includes(query);
+const quizBank=[
+  {q:"What is the main purpose of active recall?",a:["To practise retrieving information from memory","To read the same page repeatedly","To avoid testing yourself","To study without breaks"],correct:0,why:"Trying to retrieve information helps strengthen memory."},
+  {q:"Which is a good way to plan a large assignment?",a:["Wait until the last day","Break it into smaller tasks","Do everything at once","Avoid setting deadlines"],correct:1,why:"Small, manageable tasks make a large assignment easier to start and finish."},
+  {q:"What does the Japanese word 'ありがとう' mean?",a:["Good morning","Thank you","Good night","Excuse me"],correct:1,why:"ありがとう (arigatou) means 'thank you'."},
+  {q:"Which unit is used to measure electric current?",a:["Volt","Watt","Ampere","Ohm"],correct:2,why:"Electric current is measured in amperes (A)."},
+  {q:"What is 15% of 200?",a:["15","20","30","45"],correct:2,why:"0.15 × 200 = 30."},
+  {q:"Which sentence is in the past tense?",a:["I study every day.","I will study later.","I studied yesterday.","I am studying now."],correct:2,why:"'Studied' is the simple past form."},
+  {q:"What is the best first step when a topic feels difficult?",a:["Give up immediately","Identify what you do not understand","Memorise without understanding","Skip every related exercise"],correct:1,why:"Identifying the exact difficulty helps you choose the next step."},
+  {q:"Which is a prime number?",a:["21","27","29","33"],correct:2,why:"29 has exactly two positive divisors: 1 and 29."}
+];
+function newQuiz() {
+  quizCurrent=quizBank[Math.floor(Math.random()*quizBank.length)];quizAnswered=false;
+  $("quizQuestion").textContent=quizCurrent.q;$("quizOptions").innerHTML="";
+  $("quizFeedback").textContent="Choose the best answer.";
+  quizCurrent.a.forEach((answer,i)=>{
+    const b=document.createElement("button");b.className="quiz-option";b.textContent=String.fromCharCode(65+i)+". "+answer;
+    b.onclick=()=>{
+      if(quizAnswered)return;quizAnswered=true;
+      const correct=i===quizCurrent.correct;
+      if(correct){data.quizScore=(data.quizScore||0)+1;saveData();}
+      [...$("quizOptions").children].forEach((el,j)=>{
+        if(j===quizCurrent.correct)el.classList.add("correct");
+        else if(j===i)el.classList.add("wrong");
       });
-    }
-
-    document.getElementById("kanjiCount").textContent = `${data.length.toLocaleString()} results`;
-    const slice = data.slice(0, this.kanjiShown);
-    document.getElementById("kanjiGrid").innerHTML = slice.map(k => {
-      const c=getChar(k), level=getLevel(k), meaning=getMean(k);
-      return `<button class="kanji-card" data-char="${esc(c)}">
-        <div class="kanji-char">${esc(c)}</div>
-        <b>${esc(meaning.split(",")[0] || "—")}</b>
-        <small>${esc(getOn(k) || getKun(k) || "—")}</small>
-        ${level ? `<span class="level-pill">${esc(level)}</span>` : ""}
-      </button>`;
-    }).join("");
-    document.querySelectorAll("#kanjiGrid .kanji-card").forEach(b => b.onclick = () => this.openKanji(b.dataset.char));
-    document.getElementById("kanjiMore").disabled = this.kanjiShown >= data.length;
-  }
-
-  async openKanji(char) {
-    const k = this.kanjiByChar.get(char);
-    if (!k) return;
-    const examples = this.findExamples(char, 4);
-    const radicals = this.radicalsFor(char, k);
-    const favorite = this.state.favorites.includes(char);
-    const body = `
-      <div class="detail-kanji">${esc(char)}</div>
-      <div class="detail-center">
-        <button class="btn primary" id="speakDetail">🔊 Listen</button>
-        <button class="btn outline" id="favoriteDetail">${favorite?"★ Saved":"☆ Favorite"}</button>
-      </div>
-      <h2>${esc(getMean(k) || "Kanji")}</h2>
-      <div class="info-grid">
-        <div class="info-box"><small>JLPT</small><b>${esc(getLevel(k)||"—")}</b></div>
-        <div class="info-box"><small>Strokes</small><b>${esc(getStrokes(k)||"—")}</b></div>
-        <div class="info-box"><small>On'yomi</small><b>${esc(getOn(k)||"—")}</b></div>
-        <div class="info-box"><small>Kun'yomi</small><b>${esc(getKun(k)||"—")}</b></div>
-      </div>
-      <p><b>Radicals/components:</b> ${esc(radicals || "—")}</p>
-      <h3>Example sentences</h3>
-      ${examples.length ? examples.map(e=>`<div class="example"><b>${esc(e.jp)}</b><br><span class="muted">${esc(e.en)}</span></div>`).join("") : `<p class="muted">No linked example found in the loaded curated corpus.</p>`}
-    `;
-    this.openModal(`${char} · Kanji`, body);
-    document.getElementById("speakDetail").onclick = () => this.speak(char);
-    document.getElementById("favoriteDetail").onclick = () => {
-      this.toggleFavorite(char); this.openKanji(char);
+      $("quizFeedback").textContent=(correct?"Correct! ":"Not quite. ")+quizCurrent.why;
+      $("quizScore").textContent="SCORE: "+(data.quizScore||0);
     };
-  }
+    $("quizOptions").append(b);
+  });
+}
+$("nextQuiz").onclick=newQuiz;
+$("quizScore").textContent="SCORE: "+(data.quizScore||0);
+newQuiz();
 
-  radicalsFor(char, k) {
-    const r = k?.radicals || k?.radical || k?.components;
-    if (Array.isArray(r)) return r.map(x => typeof x==="string"?x:(x?.character||x?.radical||x?.component||"")).filter(Boolean).join(" · ");
-    if (typeof r === "string") return r;
-    const cross = this.data?.radicals;
-    if (Array.isArray(cross)) {
-      const hit = cross.find(x => (x.character||x.kanji||x.radical) === char);
-      if (hit) return textOfMeaning(hit.radicals || hit.components || hit.radical || "");
+function paintSW() {
+  const ms=swElapsed+(swRunning?Date.now()-swStartAt:0);
+  const sec=Math.floor(ms/1000),tenths=Math.floor(ms%1000/100);
+  $("stopwatchDisplay").textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")+"."+tenths;
+}
+$("swStart").onclick=()=>{
+  if(swRunning){swElapsed+=Date.now()-swStartAt;swRunning=false;clearInterval(swInterval);$("swStart").textContent="Resume";}
+  else{swRunning=true;swStartAt=Date.now();swInterval=setInterval(paintSW,100);$("swStart").textContent="Ⅱ Pause";}
+  paintSW();
+};
+$("swLap").onclick=()=>{
+  const ms=swElapsed+(swRunning?Date.now()-swStartAt:0);
+  if(ms<=0){toast("Start the stopwatch first.");return;}
+  laps.unshift(ms);laps=laps.slice(0,5);renderLaps();
+};
+function renderLaps(){
+  $("laps").innerHTML="";
+  laps.forEach((ms,i)=>{
+    const el=document.createElement("div");el.className="history-item";
+    const a=document.createElement("span");a.textContent="Lap "+(laps.length-i);
+    const b=document.createElement("strong");b.textContent=(ms/1000).toFixed(2)+" s";
+    el.append(a,b);$("laps").append(el);
+  });
+}
+$("swReset").onclick=()=>{
+  swRunning=false;clearInterval(swInterval);swElapsed=0;swStartAt=0;laps=[];
+  $("swStart").textContent="▶ Start";paintSW();renderLaps();
+};
+
+function calculate(expr) {
+  if(!expr||!/^[0-9+\-*/().\s]+$/.test(expr))throw new Error("Invalid");
+  const result=Function('"use strict";return ('+expr+')')();
+  if(!Number.isFinite(result))throw new Error("Invalid");
+  return String(Number(result.toPrecision(10)));
+}
+$("calcKeys").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  const key=b.dataset.key,display=$("calcDisplay");
+  if(key==="C")calcExpression="";
+  else if(key==="DEL")calcExpression=calcExpression.slice(0,-1);
+  else if(key==="="){
+    try{calcExpression=calculate(calcExpression);}catch{calcExpression="";display.value="Error";return;}
+  } else {
+    if(calcExpression.length>45)return;
+    calcExpression+=key;
+  }
+  display.value=calcExpression||"0";
+});
+
+function checkAlarm() {
+  if(!alarmTimeout)return;
+  if(Date.now()>=alarmTimeout){
+    const msg=$("alarmMessage").value.trim()||"Time to study!";
+    toast("⏰ "+msg);
+    if("Notification" in window && Notification.permission==="granted"){
+      new Notification("StudyFlow reminder",{body:msg});
     }
-    return "";
-  }
-
-  findExamples(char, limit) {
-    const hits = [];
-    for (const s of this.sentences) {
-      const e = examplesForSentence(s);
-      if (e.jp && e.jp.includes(char)) hits.push(e);
-      if (hits.length >= limit) break;
-    }
-    return hits;
-  }
-
-  renderWords() {
-    if (!this.words) return;
-    const query = document.getElementById("wordSearch").value.trim().toLowerCase();
-    const levels=["ALL","N5","N4","N3","N2","N1"];
-    document.getElementById("wordFilters").innerHTML = levels.map(l =>
-      `<button class="chip ${this.wordFilter===l?"active":""}" data-l="${l}">${l==="ALL"?"All":l}</button>`
-    ).join("");
-    document.querySelectorAll("#wordFilters .chip").forEach(b => b.onclick=()=>{
-      this.wordFilter=b.dataset.l;this.wordsShown=60;this.renderWords();
-    });
-
-    let data=this.words;
-    if(this.wordFilter!=="ALL") data=data.filter(w=>getLevel(w)===this.wordFilter);
-    if(query)data=data.filter(w=>`${wordJapanese(w)} ${wordKana(w)} ${wordMeaning(w)}`.toLowerCase().includes(query));
-
-    document.getElementById("wordCount").textContent=`${data.length.toLocaleString()} results`;
-    document.getElementById("wordList").innerHTML=data.slice(0,this.wordsShown).map(w=>{
-      const jp=wordJapanese(w), kana=wordKana(w), meaning=wordMeaning(w), level=getLevel(w);
-      return `<button class="word-row" data-word="${esc(jp)}">
-        <div class="word-main"><div><div class="jp">${esc(jp||"—")}</div><div class="kana">${esc(kana||"—")}</div><div class="meaning">${esc(meaning||"—")}</div></div>${level?`<span class="level-pill">${esc(level)}</span>`:""}</div>
-      </button>`;
-    }).join("");
-    document.querySelectorAll("#wordList .word-row").forEach(b=>b.onclick=()=>{
-      const w=data.find(x=>wordJapanese(x)===b.dataset.word);
-      if(w)this.openWord(w);
-    });
-    document.getElementById("wordMore").disabled=this.wordsShown>=data.length;
-  }
-
-  openWord(w) {
-    const jp=wordJapanese(w), kana=wordKana(w), meaning=wordMeaning(w);
-    const body=`<div class="detail-center"><div class="jp" style="font-size:55px">${esc(jp||"—")}</div><div class="kana">${esc(kana||"—")}</div><p>${esc(meaning||"—")}</p><button class="btn primary" id="speakWord">🔊 Listen</button></div>`;
-    this.openModal("Vocabulary",body);
-    document.getElementById("speakWord").onclick=()=>this.speak(jp||kana);
-  }
-
-  renderGrammar() {
-    if(!this.grammar) return;
-    const q=document.getElementById("grammarSearch").value.trim().toLowerCase();
-    let data=this.grammar;
-    if(q)data=data.filter(g=>JSON.stringify(g).toLowerCase().includes(q));
-    document.getElementById("grammarCount").textContent=`${data.length.toLocaleString()} grammar points`;
-    document.getElementById("grammarList").innerHTML=data.slice(0,200).map(g=>{
-      const title=g.pattern||g.title||g.name||g.expression||g.id||"Grammar point";
-      const meaning=textOfMeaning(g.meaning||g.meanings||g.explanation||g.description||"");
-      const level=getLevel(g);
-      return `<button class="grammar-row" data-id="${esc(g.id||title)}"><div class="word-main"><div><b style="font-size:20px">${esc(title)}</b><div class="meaning">${esc(meaning)}</div></div>${level?`<span class="level-pill">${esc(level)}</span>`:""}</div></button>`;
-    }).join("");
-    document.querySelectorAll("#grammarList .grammar-row").forEach(b=>b.onclick=()=>{
-      const g=data.find(x=>String(x.id||x.pattern||x.title||x.name)===b.dataset.id);
-      if(g)this.openGrammar(g);
-    });
-  }
-
-  openGrammar(g) {
-    const title=g.pattern||g.title||g.name||g.expression||"Grammar";
-    const body=`<h2>${esc(title)}</h2><p>${esc(textOfMeaning(g.meaning||g.meanings||g.explanation||g.description||""))}</p>
-    <div class="info-grid"><div class="info-box"><small>JLPT</small><b>${esc(getLevel(g)||"—")}</b></div><div class="info-box"><small>Status</small><b>${esc(g.review_status||g.reviewStatus||"dataset")}</b></div></div>
-    <h3>Pattern / details</h3><pre style="white-space:pre-wrap;font:inherit;color:var(--muted)">${esc(JSON.stringify(g,null,2))}</pre>`;
-    this.openModal("Grammar",body);
-  }
-
-  buildReviewQueue() {
-    const now=Date.now();
-    const due=[];
-    const fresh=[];
-    for(const k of this.kanji){
-      const c=getChar(k);
-      const s=this.state.srs[c];
-      if(s?.due && s.due<=now)due.push(k);
-      else if(!s)fresh.push(k);
-    }
-    this.reviewQueue=[...due,...fresh].slice(0,50);
-    this.reviewIndex=Math.min(this.reviewIndex,Math.max(0,this.reviewQueue.length-1));
-  }
-
-  renderReview() {
-    this.buildReviewQueue();
-    const card=document.getElementById("reviewCard");
-    if(!this.reviewQueue.length){
-      card.innerHTML=`<div class="review-inner"><div class="review-char">🎉</div><h2>All caught up</h2><p class="muted">Come back later for another review.</p></div>`;
-      document.getElementById("reviewMeta").textContent="Nothing due right now";
-      return;
-    }
-    const k=this.reviewQueue[this.reviewIndex], c=getChar(k);
-    document.getElementById("reviewMeta").textContent=`${this.reviewIndex+1} / ${this.reviewQueue.length}`;
-    card.innerHTML=`<div class="review-inner"><div class="review-char">${esc(c)}</div><div class="review-reading">${esc(getOn(k)||getKun(k)||"")}</div><div class="review-meaning">${esc(getMean(k)||"")}</div><div class="review-extra">${esc(getLevel(k)||"")} · ${esc(getStrokes(k)||"")} strokes</div><button class="btn outline" id="reviewSpeak" style="margin-top:20px">🔊 Japanese</button></div>`;
-    document.getElementById("reviewSpeak").onclick=()=>this.speak(c);
-  }
-
-  rate(rating) {
-    if(!this.reviewQueue.length)return;
-    const k=this.reviewQueue[this.reviewIndex], c=getChar(k);
-    const old=this.state.srs[c]||{interval:0,ease:2.5,reps:0,lapses:0};
-    let interval=old.interval||0, ease=old.ease||2.5, reps=old.reps||0;
-    if(rating==="again"){interval=0;ease=Math.max(1.3,ease-.2);reps=0;old.lapses=(old.lapses||0)+1;}
-    if(rating==="hard"){interval=Math.max(1,Math.round((interval||1)*1.2));ease=Math.max(1.3,ease-.15);reps++;}
-    if(rating==="good"){interval=interval<1?1:Math.max(2,Math.round(interval*ease));reps++;}
-    if(rating==="easy"){interval=interval<1?4:Math.max(4,Math.round(interval*ease*1.3));ease+=.15;reps++;}
-    const day=24*60*60*1000;
-    old.interval=interval;old.ease=ease;old.reps=reps;old.due=Date.now()+interval*day;old.last=Date.now();
-    this.state.srs[c]=old;
-    if(!this.state.studied.includes(c))this.state.studied.push(c);
-    if((rating==="good"||rating==="easy") && reps>=2 && !this.state.mastered.includes(c))this.state.mastered.push(c);
-    this.state.reviews++;
-    this.markStudy();
-    this.reviewIndex++;
-    if(this.reviewIndex>=this.reviewQueue.length)this.reviewIndex=0;
-    this.renderReview();this.renderHome();this.renderProgress();
-  }
-
-  markStudy() {
-    const today=new Date().toISOString().slice(0,10);
-    if(this.state.lastStudy!==today){
-      if(!this.state.lastStudy)this.state.streak=1;
-      else{
-        const a=new Date(this.state.lastStudy),b=new Date(today);
-        const d=Math.round((b-a)/86400000);
-        this.state.streak=d===1?this.state.streak+1:1;
-      }
-      this.state.lastStudy=today;
-    }
-    localStorage.setItem(STORAGE,JSON.stringify(this.state));
-  }
-
-  renderProgress() {
-    const total=this.kanji.length, mastered=this.state.mastered.length;
-    const pct=total?Math.round(mastered/total*100):0;
-    document.getElementById("overallPercent").textContent=`${pct}%`;
-    document.getElementById("overallRing").style.background=`conic-gradient(var(--primary) ${pct*3.6}deg, #e9e9f0 ${pct*3.6}deg)`;
-    document.getElementById("progressTitle").textContent=pct?`${pct}% of loaded kanji mastered`:"Start your first review";
-    document.getElementById("progressText").textContent=`${mastered.toLocaleString()} of ${total.toLocaleString()} kanji marked mastered.`;
-    document.getElementById("progressLevels").innerHTML=["N5","N4","N3","N2","N1"].map(l=>{
-      const t=this.kanji.filter(k=>getLevel(k)===l).length;
-      const m=this.state.mastered.filter(c=>getLevel(this.kanjiByChar.get(c))===l).length;
-      const p=t?Math.round(m/t*100):0;
-      return `<div class="card"><div class="word-main"><b>${l}</b><span>${m.toLocaleString()} / ${t.toLocaleString()}</span></div><div class="bar"><i style="width:${p}%"></i></div></div>`;
-    }).join("");
-  }
-
-  currentWritingChar(){return getChar(this.kanji[this.writingIndex]||this.kanji[0])}
-
-  renderWritingTarget() {
-    const k=this.kanji[this.writingIndex]||this.kanji[0]; if(!k)return;
-    document.getElementById("writingChar").textContent=getChar(k);
-    document.getElementById("writingMeaning").textContent=getMean(k)||"Kanji";
-    document.getElementById("writingReading").textContent=`${getOn(k)||"—"} · ${getKun(k)||"—"}`;
-    this.clearCanvas();
-    document.getElementById("strokeBox").innerHTML=`<div class="stroke-placeholder">Tap “Show stroke order”.</div>`;
-  }
-
-  async showStroke() {
-    const c=this.currentWritingChar();
-    const svg=await this.loader.strokeSVG(c,this.strokeIndex);
-    const box=document.getElementById("strokeBox");
-    if(svg){
-      box.innerHTML=svg;
-      const s=box.querySelector("svg");
-      if(s){s.style.width="270px";s.style.height="270px";s.style.maxWidth="100%";}
-    }else box.innerHTML=`<div class="stroke-placeholder">No KanjiVG SVG is available for this character.</div>`;
-  }
-
-  nextWriting() {
-    this.writingIndex=(this.writingIndex+1)%this.kanji.length;
-    this.renderWritingTarget();
-  }
-
-  setupCanvas() {
-    this.canvas=document.getElementById("drawCanvas");
-    if(!this.canvas)return;
-    this.resizeCanvas();
-    const start=e=>{
-      this.drawing=true;const p=this.point(e);this.ctx.beginPath();this.ctx.moveTo(p.x,p.y);
-    };
-    const move=e=>{
-      if(!this.drawing)return;const p=this.point(e);this.ctx.lineTo(p.x,p.y);this.ctx.stroke();
-    };
-    const end=()=>this.drawing=false;
-    this.canvas.onpointerdown=start;this.canvas.onpointermove=move;this.canvas.onpointerup=end;this.canvas.onpointerleave=end;
-  }
-
-  resizeCanvas() {
-    if(!this.canvas)return;
-    const r=this.canvas.getBoundingClientRect(), d=window.devicePixelRatio||1;
-    const old=document.createElement("canvas");
-    if(this.canvas.width && this.canvas.height) old.getContext("2d").drawImage(this.canvas,0,0);
-    this.canvas.width=r.width*d;this.canvas.height=300*d;
-    this.ctx=this.canvas.getContext("2d");this.ctx.scale(d,d);
-    this.ctx.lineWidth=4;this.ctx.lineCap="round";this.ctx.lineJoin="round";
-  }
-
-  point(e){const r=this.canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
-  clearCanvas(){if(this.ctx)this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height)}
-
-  speak(text){
-    if(!("speechSynthesis" in window)){this.toast("Speech is not supported");return;}
-    speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="ja-JP";u.rate=.8;speechSynthesis.speak(u);
-  }
-
-  toggleFavorite(c){
-    if(this.state.favorites.includes(c))this.state.favorites=this.state.favorites.filter(x=>x!==c);
-    else this.state.favorites.push(c);
-    localStorage.setItem(STORAGE,JSON.stringify(this.state));
-  }
-
-  openModal(title,body){
-    document.getElementById("modalTitle").textContent=title;
-    document.getElementById("modalBody").innerHTML=body;
-    document.getElementById("modal").classList.add("show");
-    document.getElementById("modal").setAttribute("aria-hidden","false");
-  }
-  closeModal(){
-    document.getElementById("modal").classList.remove("show");
-    document.getElementById("modal").setAttribute("aria-hidden","true");
-  }
-
-  exportProgress(){
-    const blob=new Blob([JSON.stringify(this.state,null,2)],{type:"application/json"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="kotoba-progress.json";a.click();URL.revokeObjectURL(a.href);
-  }
-
-  async importProgress(file){
-    if(!file)return;
-    try{
-      const incoming=JSON.parse(await file.text());
-      if(!incoming || typeof incoming!=="object")throw new Error();
-      this.state={...defaultState(),...incoming,settings:{...defaultState().settings,...(incoming.settings||{})}};
-      localStorage.setItem(STORAGE,JSON.stringify(this.state));
-      location.reload();
-    }catch{this.toast("Invalid progress file");}
-  }
-
-  resetProgress(){
-    if(!confirm("Reset all Kotoba progress on this device?"))return;
-    localStorage.removeItem(STORAGE);location.reload();
-  }
-
-  toast(message){
-    const t=document.getElementById("toast");t.textContent=message;t.classList.add("show");clearTimeout(this.toastTimer);this.toastTimer=setTimeout(()=>t.classList.remove("show"),1800);
+    try{const a=new AudioContext();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=800;o.start();o.stop(a.currentTime+.5);}catch(e){}
+    alarmTimeout=null;clearInterval(alarmPoll);alarmPoll=null;$("alarmStatus").textContent="Alarm completed.";
   }
 }
+$("setAlarm").onclick=()=>{
+  const value=$("alarmTime").value;if(!value){toast("Choose an alarm time.");return;}
+  const [h,m]=value.split(":").map(Number),now=new Date(),target=new Date();
+  target.setHours(h,m,0,0);if(target<=now)target.setDate(target.getDate()+1);
+  alarmTimeout=target.getTime();clearInterval(alarmPoll);alarmPoll=setInterval(checkAlarm,1000);
+  $("alarmStatus").textContent="Alarm set for "+target.toLocaleString();
+  toast("Alarm set. Keep this page open.");
+};
+$("cancelAlarm").onclick=()=>{
+  alarmTimeout=null;clearInterval(alarmPoll);alarmPoll=null;$("alarmStatus").textContent="No alarm set.";toast("Alarm cancelled.");
+};
 
+function renderRevisions() {
+  const box=$("revisionList");box.innerHTML="";
+  if(!revisions.length){box.innerHTML='<div class="muted" style="font-size:12px">No revisions planned yet.</div>';return;}
+  revisions.sort((a,b)=>a.date.localeCompare(b.date));
+  revisions.forEach((r,i)=>{
+    const row=document.createElement("div");row.className="task";
+    const info=document.createElement("div");info.className="task-text";
+    const title=document.createElement("div");title.textContent=r.topic;
+    const meta=document.createElement("div");meta.className="task-meta";meta.textContent=r.date+" · "+r.stage;
+    info.append(title,meta);
+    const due=document.createElement("span");due.className="badge";
+    due.textContent=r.date<DAY()?"OVERDUE":r.date===DAY()?"TODAY":"UPCOMING";
+    const del=document.createElement("button");del.className="delete";del.textContent="×";del.setAttribute("aria-label","Delete revision");
+    del.onclick=()=>{revisions.splice(i,1);save("revisions",revisions);renderRevisions();};
+    row.append(info,due,del);box.append(row);
+  });
+}
+$("revisionDate").value=DAY();
+$("revisionForm").onsubmit=e=>{
+  e.preventDefault();
+  revisions.push({topic:$("revisionTopic").value.trim(),date:$("revisionDate").value,stage:$("revisionStage").value});
+  save("revisions",revisions);$("revisionTopic").value="";renderRevisions();toast("Revision added.");
+};
 
-const loader = new DataLoader();
-const app = new KotobaApp(loader);
-app.init().catch(err => {
-  console.error(err);
-  const el = document.getElementById("loadingText");
-  if (el) el.textContent = "Data could not be loaded. Please refresh and try again.";
+$("exportBtn").onclick=()=>{
+  const backup={data,goal,tasks,subjects,cards,revisions,notes:$("notes").value,lengths:focusMinutes};
+  downloadFile("studyflow-backup.json",JSON.stringify(backup,null,2),"application/json");
+};
+renderStats();renderTasks();renderSubjects();renderRevisions();paintTimer();paintSW();
+
+window.addEventListener("beforeunload",()=>{
+  if(timerRunning) {
+    // Keep remaining time for this browser session.
+    save("timerState",{mode:timerMode,remaining:Math.max(0,Math.ceil((timerEnd-Date.now())/1000)),savedAt:Date.now()});
+  }
 });
+})();
 </script>
 </body>
 </html>
