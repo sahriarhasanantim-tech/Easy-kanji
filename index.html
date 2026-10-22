@@ -1,833 +1,432 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StudyFlow — Smart Study Space</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1020">
+<title>NEXORA — Creator & Productivity Hub</title>
 <style>
-:root {
-  --bg:#f4f5fb;
-  --panel:#ffffff;
-  --text:#20213a;
-  --muted:#8589a2;
-  --primary:#7057f5;
-  --border:#e8e9f2;
-  --green:#24a879;
-  --red:#e45d72;
-  --shadow:0 8px 28px #27254b08;
+:root{--bg:#0a0d19;--panel:#11172a;--panel2:#171e34;--text:#f5f6ff;--muted:#9ca7c4;--line:#29314c;--a:#a78bfa;--b:#67e8d0;--danger:#ff8c9b;--shadow:0 18px 50px #0003}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 80% -10%,#30235b 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.app{display:grid;grid-template-columns:245px minmax(0,1fr);min-height:100vh}
+aside{border-right:1px solid var(--line);padding:24px 15px;background:#0b1020;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font-size:25px;font-weight:950;letter-spacing:-1.3px;padding:0 10px 25px}
+.brand span{color:var(--a)}
+.brand small{display:block;font-size:10px;color:var(--muted);letter-spacing:2px;font-weight:700}
+.navlabel{color:#75809e;font-size:10px;font-weight:800;letter-spacing:1.8px;padding:15px 10px 7px}
+.nav{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:11px 12px;border-radius:11px;border:1px solid transparent;background:none;color:var(--muted);margin:3px 0}
+.nav:hover,.nav.active{background:#1b2040;color:#fff;border-color:#35345f}
+.nav.active{box-shadow:inset 3px 0 var(--a)}
+.sidebarfoot{margin:30px 8px 5px;border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:13px;font-size:12px;color:var(--muted)}
+main{min-width:0;padding:0 30px 55px}
+.topbar{height:75px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.status{font-size:12px;color:var(--b);border:1px solid #24554d;padding:5px 10px;border-radius:30px}
+.avatar{width:37px;height:37px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(140deg,#bba4ff,#5de6d1);color:#111;font-weight:900}
+.topright{display:flex;align-items:center;gap:10px}
+.view{display:none;padding-top:25px;animation:appear .2s ease}
+.view.active{display:block}
+@keyframes appear{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}
+h1{font-size:clamp(29px,4vw,43px);line-height:1.15;letter-spacing:-1.5px;margin:8px 0 12px}
+h2{font-size:21px;margin:0 0 12px;letter-spacing:-.4px}
+h3{font-size:16px;margin:0 0 9px}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.eyebrow{font-size:11px;letter-spacing:2px;color:var(--b);font-weight:800}
+.hero{border:1px solid #37305c;border-radius:24px;padding:clamp(23px,5vw,44px);background:linear-gradient(115deg,#211b40,#17172f 55%,#10313b);position:relative;overflow:hidden}
+.hero:after{content:"✳";position:absolute;right:5%;top:5%;font-size:100px;color:#fff08;opacity:.1}
+.hero p{color:#c4c8de;max-width:620px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(120deg,#c0a9ff,#8c7aff);color:#120f25;border:0;border-radius:10px;padding:11px 16px;font-weight:800;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}
+.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.btn.danger{background:#4b2332;color:#ffdce3}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:25px 0 13px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:linear-gradient(145deg,var(--panel),#101426);border:1px solid var(--line);border-radius:17px;padding:19px;min-width:0}
+.toolcard{cursor:pointer;transition:transform .18s,border-color .18s}
+.toolcard:hover{transform:translateY(-3px);border-color:#8471ca}
+.toolicon{font-size:26px}
+.toolcard h3{margin:12px 0 5px}
+.toolcard p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}
+.stat{padding:17px;border-radius:15px;background:var(--panel);border:1px solid var(--line)}
+.stat strong{font-size:27px;display:block;letter-spacing:-1px}
+.stat span{font-size:12px;color:var(--muted)}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.field{min-width:0;margin-bottom:14px}
+.field.full{grid-column:1/-1}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
+input,textarea,select{width:100%;min-width:0;background:#0b1020;border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text)}
+textarea{resize:vertical;min-height:130px;line-height:1.7}
+input[type=checkbox],input[type=radio]{width:auto}
+input[type=range]{padding:0;accent-color:var(--a)}
+.output{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b1020;border:1px solid var(--line);border-radius:12px;padding:15px;min-height:48px;margin-top:12px}
+.pills{display:flex;gap:7px;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:#1a2036;color:#dfe4ff;border-radius:30px;padding:6px 10px;font-size:12px}
+.list{display:grid;gap:9px}
+.item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:11px;background:#0d1222;border:1px solid var(--line)}
+.item input[type=checkbox]{margin-top:5px}
+.item .grow{flex:1;min-width:0;overflow-wrap:anywhere}
+.item.done .grow{text-decoration:line-through;color:var(--muted)}
+.right{margin-left:auto}
+.swatches{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.swatch{height:110px;border-radius:11px;display:flex;align-items:end;padding:8px;font-size:11px;font-weight:800;text-shadow:0 1px 4px #000;cursor:pointer}
+.timer{font-size:clamp(54px,12vw,90px);font-weight:900;letter-spacing:-4px;text-align:center;line-height:1.3;font-variant-numeric:tabular-nums}
+.timerpanel{max-width:600px;margin:auto}
+.progress{height:6px;background:#252b40;border-radius:9px;overflow:hidden;margin:18px 0}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b));transition:width .2s}
+#toast{position:fixed;z-index:20;bottom:20px;left:50%;transform:translateX(-50%);background:var(--b);color:#08231e;padding:11px 17px;border-radius:12px;font-weight:800;display:none;box-shadow:var(--shadow)}
+footer{padding:35px 0;text-align:center;color:var(--muted);font-size:12px}
+.mobilebrand{display:none}
+hr{border:0;border-top:1px solid var(--line);margin:23px 0}
+@media(max-width:950px){.app{grid-template-columns:200px minmax(0,1fr)}main{padding:0 20px 40px}.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){
+ .app{display:block}aside{height:auto;position:sticky;top:0;z-index:10;padding:9px 10px;border-right:0;border-bottom:1px solid var(--line)}
+ .brand{font-size:20px;padding:2px 8px 9px}.brand small{display:none}
+ .navlabel,.sidebarfoot{display:none}.navwrap{display:flex;overflow-x:auto;gap:5px;padding-bottom:2px}
+ .nav{white-space:nowrap;width:auto;flex:0 0 auto;margin:0;padding:8px 10px;font-size:12px}
+ .nav.active{box-shadow:inset 0 -2px var(--a)}
+ main{padding:0 14px 35px}.topbar{height:54px}.grid,.grid.two,.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .card{padding:14px}.toolcard{min-height:140px}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}
+ .swatches{grid-template-columns:repeat(3,minmax(0,1fr))}.hero:after{font-size:60px}
 }
-body.dark {
-  --bg:#141522;
-  --panel:#202132;
-  --text:#f1f0ff;
-  --muted:#a2a5bd;
-  --border:#34354b;
-  --shadow:0 8px 28px #0002;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
-  transition:background .2s,color .2s;
-}
-button,input,textarea,select { font:inherit; }
-button { cursor:pointer; }
-button:focus-visible,input:focus-visible,textarea:focus-visible {
-  outline:3px solid #7057f566;outline-offset:2px;
-}
-.app { max-width:1400px;margin:auto;padding:22px; }
-header {
-  display:flex;align-items:center;justify-content:space-between;
-  gap:15px;flex-wrap:wrap;margin-bottom:28px;
-}
-.brand { display:flex;align-items:center;gap:12px; }
-.logo {
-  width:46px;height:46px;border-radius:15px;background:var(--primary);
-  color:white;display:grid;place-items:center;font-size:24px;
-  box-shadow:0 7px 20px #7057f540;
-}
-.brand h2 { margin:0;font-size:22px;letter-spacing:-1px; }
-.brand small { color:var(--muted);font-size:10px;letter-spacing:1.5px; }
-.header-actions { display:flex;align-items:center;gap:9px;flex-wrap:wrap; }
-.clock { font-size:13px;font-weight:800;background:var(--panel);
-  border:1px solid var(--border);border-radius:12px;padding:11px 14px; }
-.btn {
-  border:0;border-radius:11px;padding:10px 14px;
-  background:var(--primary);color:white;font-weight:750;font-size:12px;
-}
-.btn.secondary { background:var(--bg);color:var(--text);border:1px solid var(--border); }
-.btn.green { background:var(--green); }
-.btn.red { background:var(--red); }
-.btn.small { padding:7px 10px;font-size:11px; }
-h1 { margin:0;font-size:clamp(27px,4vw,38px);letter-spacing:-1.5px; }
-.subtitle { color:var(--muted);font-size:13px;margin-top:8px; }
-.hero {
-  display:flex;align-items:flex-end;justify-content:space-between;
-  gap:20px;margin-bottom:23px;flex-wrap:wrap;
-}
-.eyebrow { color:var(--primary);font-size:10px;font-weight:850;letter-spacing:2px;margin-bottom:9px; }
-.goal-box { background:var(--panel);border:1px solid var(--border);
-  padding:15px 18px;border-radius:17px;min-width:210px;box-shadow:var(--shadow); }
-.goal-top { display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:800; }
-.muted { color:var(--muted); }
-.progress { height:7px;background:var(--bg);border-radius:20px;overflow:hidden;margin-top:12px; }
-.progress div { height:100%;width:0;background:var(--primary);border-radius:20px;transition:width .3s; }
-.grid { display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:17px; }
-.card {
-  min-width:0;background:var(--panel);border:1px solid var(--border);
-  border-radius:20px;padding:20px;box-shadow:var(--shadow);
-}
-.span-12 { grid-column:span 12; }
-.span-8 { grid-column:span 8; }
-.span-7 { grid-column:span 7; }
-.span-6 { grid-column:span 6; }
-.span-5 { grid-column:span 5; }
-.span-4 { grid-column:span 4; }
-.card-head { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px; }
-.card h3 { font-size:14px;margin:0;font-weight:850; }
-.card-desc { color:var(--muted);font-size:11px;margin-top:5px; }
-.tabs { display:flex;gap:5px;padding:4px;background:var(--bg);border-radius:12px; }
-.tabs button {
-  border:0;background:transparent;color:var(--muted);font-size:11px;
-  font-weight:800;padding:9px 10px;border-radius:9px;
-}
-.tabs button.active { background:var(--panel);color:var(--primary);box-shadow:var(--shadow); }
-.timer-wrap { display:flex;flex-direction:column;align-items:center;padding:10px 0 5px; }
-.ring { width:min(230px,65vw);aspect-ratio:1;position:relative;display:grid;place-items:center; }
-.ring svg { position:absolute;width:100%;height:100%;transform:rotate(-90deg); }
-.ring circle { fill:none;stroke-width:8; }
-.ring .track { stroke:var(--bg); }
-.ring .arc { stroke:var(--primary);stroke-linecap:round;stroke-dasharray:565.49;stroke-dashoffset:0;transition:stroke-dashoffset .25s; }
-.time { font-size:clamp(38px,7vw,54px);font-weight:850;letter-spacing:-3px;font-variant-numeric:tabular-nums; }
-.timer-status { font-size:10px;color:var(--muted);font-weight:800;margin-top:7px; }
-.timer-controls { display:flex;gap:9px;margin-top:19px;align-items:center;flex-wrap:wrap;justify-content:center; }
-.timer-controls .btn { min-width:95px; }
-.timer-options { display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap;justify-content:center;font-size:11px;color:var(--muted); }
-.timer-options input { width:52px;padding:6px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text); }
-.stats { display:grid;grid-template-columns:repeat(3,1fr);gap:9px; }
-.stat { background:var(--bg);padding:13px;border-radius:14px;min-width:0; }
-.stat-icon { font-size:18px;margin-bottom:8px; }
-.stat-number { font-size:23px;font-weight:850;letter-spacing:-1px;overflow-wrap:anywhere; }
-.stat-label { font-size:9px;font-weight:800;color:var(--muted);margin-top:4px; }
-.field {
-  width:100%;border:1px solid var(--border);border-radius:11px;padding:11px 12px;
-  background:var(--bg);color:var(--text);font-size:12px;min-width:0;
-}
-textarea.field { resize:vertical;line-height:1.6; }
-.row { display:flex;gap:8px;align-items:center; }
-.row > .field { flex:1; }
-.stack { display:grid;gap:9px; }
-.list { display:grid;gap:8px; }
-.task {
-  display:flex;align-items:center;gap:9px;padding:11px;
-  border:1px solid var(--border);border-radius:12px;min-width:0;
-}
-.task input[type=checkbox] { accent-color:var(--primary);width:17px;height:17px;flex-shrink:0; }
-.task-text { flex:1;min-width:0;overflow-wrap:anywhere;font-size:12px;font-weight:700; }
-.task.done .task-text { text-decoration:line-through;color:var(--muted); }
-.task-meta { color:var(--muted);font-size:10px; }
-.delete { background:transparent;border:0;color:var(--muted);font-size:17px; }
-.badge { background:#eeeaff;color:var(--primary);border-radius:7px;padding:5px 7px;font-size:9px;font-weight:850;white-space:nowrap; }
-body.dark .badge { background:#383052; }
-.subject-item { display:grid;grid-template-columns:1fr auto;gap:6px;font-size:12px; }
-.subject-item .progress { grid-column:span 2;margin-top:0; }
-.subject-item strong { font-size:12px; }
-.flashcard {
-  min-height:155px;border:1px dashed #b7abff;border-radius:16px;
-  display:grid;place-items:center;text-align:center;padding:20px;
-  cursor:pointer;background:var(--bg);
-}
-.flashcard .fc-label { color:var(--primary);font-size:10px;font-weight:850;letter-spacing:1px; }
-.flashcard .fc-main { font-size:22px;font-weight:850;margin-top:12px;overflow-wrap:anywhere; }
-.flashcard .fc-hint { color:var(--muted);font-size:10px;margin-top:12px; }
-.quiz-question { font-size:14px;font-weight:800;line-height:1.6;margin-bottom:12px; }
-.quiz-option {
-  display:block;width:100%;text-align:left;border:1px solid var(--border);
-  border-radius:11px;padding:11px;margin:7px 0;background:var(--bg);color:var(--text);font-size:12px;
-}
-.quiz-option.correct { border-color:var(--green);background:#24a87918; }
-.quiz-option.wrong { border-color:var(--red);background:#e45d7218; }
-.note-status { color:var(--green);font-size:10px;font-weight:800; }
-.stopwatch-display { font-size:38px;font-weight:850;letter-spacing:-1.5px;font-variant-numeric:tabular-nums;margin:15px 0; }
-.calc-display {
-  width:100%;text-align:right;font-size:27px;font-weight:800;padding:16px;
-  border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);
-  margin-bottom:10px;
-}
-.calc-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:6px; }
-.calc-grid button { border:0;border-radius:10px;padding:14px 4px;background:var(--bg);color:var(--text);font-weight:800; }
-.calc-grid button.op { color:var(--primary); }
-.calc-grid button.eq { background:var(--primary);color:white; }
-.history { display:grid;gap:8px; }
-.history-item { display:flex;justify-content:space-between;gap:10px;padding:10px;border-radius:10px;background:var(--bg);font-size:11px; }
-.history-item strong { overflow-wrap:anywhere; }
-.day-grid { display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px; }
-.day { text-align:center;padding:10px 2px;border-radius:10px;background:var(--bg);font-size:9px;color:var(--muted); }
-.day b { display:block;color:var(--text);font-size:12px;margin-top:6px; }
-.day.today { background:#eeeaff;color:var(--primary); }
-body.dark .day.today { background:#383052; }
-footer { text-align:center;color:var(--muted);font-size:10px;padding:24px 0 8px; }
-.toast {
-  position:fixed;bottom:20px;left:50%;transform:translate(-50%,15px);
-  background:var(--text);color:var(--panel);padding:12px 16px;border-radius:11px;
-  font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:10;max-width:90%;
-}
-.toast.show { opacity:1;transform:translate(-50%,0); }
-.hidden { display:none!important; }
-@media(max-width:850px) {
-  .span-8,.span-7,.span-6,.span-5,.span-4 { grid-column:span 6; }
-  .span-12 { grid-column:span 12; }
-}
-@media(max-width:560px) {
-  .app { padding:13px; }
-  .span-8,.span-7,.span-6,.span-5,.span-4,.span-12 { grid-column:span 12; }
-  .card { padding:16px;border-radius:17px; }
-  .header-actions { width:100%; }
-  .clock { flex:1;text-align:center; }
-  .stats { gap:6px; }
-  .stat { padding:10px; }
-  .stat-number { font-size:20px; }
-  .timer-options { gap:8px; }
-}
+@media(max-width:390px){.grid,.grid.two,.grid.four{grid-template-columns:1fr}.status{display:none}}
 </style>
 </head>
 <body>
 <div class="app">
-<header>
-  <div class="brand">
-    <div class="logo">✦</div>
-    <div><h2>StudyFlow<span style="color:var(--primary)">.</span></h2>
-      <small>YOUR PERSONAL STUDY SPACE</small></div>
+<aside>
+  <div class="brand">NEXORA<span>✦</span><small>CREATE · ORGANIZE · GROW</small></div>
+  <div class="navlabel">WORKSPACE</div>
+  <div class="navwrap">
+    <button class="nav active" data-view="home">⌂ &nbsp; Dashboard</button>
+    <button class="nav" data-view="creator">✍️ &nbsp; Creator Studio</button>
+    <button class="nav" data-view="career">💼 &nbsp; Career Lab</button>
+    <button class="nav" data-view="tasks">☑ &nbsp; My Tasks</button>
+    <button class="nav" data-view="notes">📝 &nbsp; Notes</button>
+    <button class="nav" data-view="focus">◷ &nbsp; Focus Room</button>
+    <button class="nav" data-view="money">৳ &nbsp; Money Tools</button>
+    <button class="nav" data-view="toolbox">✦ &nbsp; Smart Toolbox</button>
   </div>
-  <div class="header-actions">
-    <div class="clock" id="clock">00:00:00</div>
-    <button class="btn secondary" id="themeBtn">☾ Theme</button>
-    <button class="btn secondary" id="exportBtn">↧ Export data</button>
-  </div>
+  <div class="sidebarfoot">✦ <b>Make your next move.</b><br><br>Save time. Create better. Keep growing.<br><br><span style="color:var(--b)">● Local workspace enabled</span></div>
+</aside>
+<main>
+<header class="topbar">
+  <div class="muted small" id="today"></div>
+  <div class="topright"><span class="status">● Workspace ready</span><div class="avatar">N</div></div>
 </header>
 
-<section class="hero">
-  <div><div class="eyebrow">SMALL STEPS. BIG PROGRESS.</div>
-    <h1 id="greeting">Ready to focus?</h1>
-    <div class="subtitle" id="dateText">Make today count, one session at a time.</div></div>
-  <div class="goal-box">
-    <div class="goal-top"><span>Daily study goal</span><span id="goalText">0 / 120 min</span></div>
-    <div class="progress"><div id="goalBar"></div></div>
-    <div class="row" style="margin-top:12px">
-      <input class="field" id="goalInput" type="number" min="1" max="1440" value="120" aria-label="Daily goal in minutes">
-      <button class="btn small" id="saveGoal">Set goal</button>
+<section class="view active" id="home">
+  <div class="hero">
+    <div class="eyebrow">YOUR PERSONAL DIGITAL WORKSPACE</div>
+    <h1>Create more.<br>Achieve <span style="color:var(--b)">anything.</span></h1>
+    <p>One place for content ideas, career tools, personal organization and everyday utilities. Built to help you do more with less friction.</p>
+    <div class="actions"><button class="btn" onclick="go('creator')">✦ Open Creator Studio</button><button class="btn secondary" onclick="go('toolbox')">Explore all tools →</button></div>
+  </div>
+  <div class="sectionhead"><h2>Your workspace</h2><span class="muted small">Saved on this device</span></div>
+  <div class="grid four">
+    <div class="stat"><strong id="taskStat">0</strong><span>Tasks completed</span></div>
+    <div class="stat"><strong id="noteStat">0</strong><span>Saved notes</span></div>
+    <div class="stat"><strong id="sessionStat">0</strong><span>Focus sessions</span></div>
+    <div class="stat"><strong id="ideaStat">0</strong><span>Ideas generated</span></div>
+  </div>
+  <div class="sectionhead"><h2>Jump back in</h2></div>
+  <div class="grid">
+    <div class="card toolcard" onclick="go('creator')"><div class="toolicon">🚀</div><h3>Creator Studio</h3><p>Generate caption ideas, bios, hooks and hashtags.</p></div>
+    <div class="card toolcard" onclick="go('career')"><div class="toolicon">💼</div><h3>Career Lab</h3><p>Create a CV preview and a professional introduction.</p></div>
+    <div class="card toolcard" onclick="go('focus')"><div class="toolicon">🎯</div><h3>Focus Room</h3><p>Use a focus timer to work without distractions.</p></div>
+  </div>
+  <div class="sectionhead"><h2>Daily inspiration</h2></div>
+  <div class="card"><div class="eyebrow">A SMALL REMINDER</div><h2 id="quote" style="margin-top:10px">Progress is built one small step at a time.</h2><p class="muted small">Your next action matters more than a perfect plan.</p><button class="btn secondary" onclick="newQuote()">Another thought ↻</button></div>
+</section>
+
+<section class="view" id="creator">
+  <div class="eyebrow">CONTENT WORKSHOP</div><h1>Creator Studio ✦</h1><p class="muted">Generate useful starting points for social posts, profile bios and content ideas. Review and personalize before publishing.</p>
+  <div class="grid two">
+    <div class="card">
+      <h2>Caption Maker</h2>
+      <div class="field"><label>What is your post about?</label><input id="capTopic" placeholder="e.g. new clothing brand, travel, study tips"></div>
+      <div class="field"><label>Language</label><select id="capLang"><option value="bn">বাংলা</option><option value="en">English</option><option value="mix">Banglish</option></select></div>
+      <div class="field"><label>Platform</label><select id="capPlatform"><option>Facebook</option><option>Instagram</option><option>TikTok</option><option>LinkedIn</option><option>YouTube</option></select></div>
+      <div class="field"><label>Tone</label><select id="capTone"><option value="friendly">Friendly</option><option value="professional">Professional</option><option value="fun">Funny</option><option value="inspiring">Inspiring</option><option value="minimal">Minimal</option></select></div>
+      <button class="btn" onclick="makeCaption()">Generate captions ✦</button>
+      <div id="capOut" class="output">Your caption ideas will appear here.</div><div class="actions"><button class="btn secondary" onclick="copy('capOut')">Copy captions</button><button class="btn ghost" onclick="saveOutput('Caption', 'capOut')">Save to notes</button></div>
+    </div>
+    <div class="card">
+      <h2>Hashtag Studio</h2>
+      <div class="field"><label>Topic / niche</label><input id="hashTopic" placeholder="e.g. street photography"></div>
+      <div class="field"><label>How many?</label><select id="hashCount"><option>10</option><option selected>15</option><option>20</option><option>25</option></select></div>
+      <button class="btn" onclick="makeHashtags()">Create hashtags</button>
+      <div id="hashOut" class="output">Your hashtags will appear here.</div><div class="actions"><button class="btn secondary" onclick="copy('hashOut')">Copy hashtags</button></div>
+      <hr>
+      <h2>Content Idea Generator</h2>
+      <div class="field"><label>Your niche</label><input id="ideaTopic" placeholder="e.g. tech, fashion, education"></div>
+      <button class="btn" onclick="makeIdeas()">Generate ideas</button>
+      <div id="ideasOut" class="output">Fresh content prompts will appear here.</div><div class="actions"><button class="btn secondary" onclick="saveOutput('Content ideas','ideasOut')">Save ideas</button></div>
+    </div>
+    <div class="card">
+      <h2>Profile Bio Maker</h2>
+      <div class="field"><label>Your name or brand</label><input id="bioName" placeholder="Your name"></div>
+      <div class="field"><label>What do you do?</label><input id="bioWork" placeholder="e.g. student, designer, creator"></div>
+      <div class="field"><label>One interest or goal</label><input id="bioInterest" placeholder="e.g. design, technology, learning"></div>
+      <button class="btn" onclick="makeBio()">Generate bios</button><div id="bioOut" class="output">Your bio options will appear here.</div>
+      <div class="actions"><button class="btn secondary" onclick="copy('bioOut')">Copy bio</button></div>
+    </div>
+    <div class="card">
+      <h2>Hook Generator</h2>
+      <div class="field"><label>Video / post topic</label><input id="hookTopic" placeholder="What is your content about?"></div>
+      <button class="btn" onclick="makeHooks()">Create opening hooks</button><div id="hookOut" class="output">Attention-grabbing opening ideas will appear here.</div>
+      <div class="actions"><button class="btn secondary" onclick="copy('hookOut')">Copy hooks</button></div>
+    </div>
+  </div>
+  <p class="muted small" style="margin-top:15px">These generators use built-in templates, not a live AI model. Connect an AI API on a secure backend to generate more context-aware results.</p>
+</section>
+
+<section class="view" id="career">
+  <div class="eyebrow">CAREER LAB</div><h1>Present yourself better.</h1><p class="muted">Create a clean CV draft, professional summary and interview practice prompts.</p>
+  <div class="grid two">
+    <div class="card">
+      <h2>CV Builder</h2>
+      <div class="fields">
+        <div class="field"><label>Full name</label><input id="cvName" placeholder="Your name"></div>
+        <div class="field"><label>Email</label><input id="cvEmail" type="email" placeholder="you@example.com"></div>
+        <div class="field"><label>Phone (optional)</label><input id="cvPhone" placeholder="Phone number"></div>
+        <div class="field"><label>Location</label><input id="cvLocation" placeholder="City, country"></div>
+        <div class="field full"><label>Professional summary</label><textarea id="cvSummary" placeholder="Write 2–3 lines about your goals and strengths"></textarea></div>
+        <div class="field full"><label>Education</label><textarea id="cvEducation" placeholder="Institution, qualification, years"></textarea></div>
+        <div class="field full"><label>Skills</label><textarea id="cvSkills" placeholder="Communication, teamwork, tools..."></textarea></div>
+        <div class="field full"><label>Experience / projects</label><textarea id="cvExperience" placeholder="Projects, volunteering or experience"></textarea></div>
+      </div>
+      <div class="actions"><button class="btn" onclick="buildCV()">Build CV preview</button><button class="btn secondary" onclick="printCV()">Print / Save PDF</button></div>
+    </div>
+    <div class="card">
+      <h2>CV Preview</h2><div class="output" id="cvOut">Fill in your details, then build your CV.</div>
+      <div class="actions"><button class="btn secondary" onclick="copy('cvOut')">Copy CV text</button></div>
+      <hr><h2>Interview Practice</h2><p class="muted small">Pick a practice question and write your answer aloud or in a notebook.</p>
+      <div class="output" id="interviewQ">Tell me about yourself and one skill you are currently improving.</div>
+      <div class="actions"><button class="btn secondary" onclick="nextQuestion()">Next question ↻</button></div>
+    </div>
+    <div class="card">
+      <h2>Professional Introduction</h2>
+      <div class="field"><label>Role or goal</label><input id="introRole" placeholder="e.g. junior web developer"></div>
+      <div class="field"><label>Top skills</label><input id="introSkills" placeholder="e.g. HTML, teamwork, communication"></div>
+      <div class="field"><label>What are you looking for?</label><input id="introGoal" placeholder="e.g. internship or first opportunity"></div>
+      <button class="btn" onclick="makeIntro()">Draft introduction</button><div class="output" id="introOut">Your introduction will appear here.</div><div class="actions"><button class="btn secondary" onclick="copy('introOut')">Copy</button></div>
     </div>
   </div>
 </section>
 
-<main class="grid">
-  <section class="card span-7">
-    <div class="card-head">
-      <div><h3>⏱ Focus timer</h3><div class="card-desc">Stay present. One task at a time.</div></div>
-      <div class="tabs" id="timerTabs">
-        <button class="active" data-mode="focus">Focus</button>
-        <button data-mode="short">Short</button>
-        <button data-mode="long">Long</button>
-      </div>
+<section class="view" id="tasks">
+  <div class="eyebrow">PERSONAL ORGANIZATION</div><h1>My Tasks ☑</h1><p class="muted">Plan your next move. Your tasks are saved in this browser.</p>
+  <div class="card">
+    <div class="fields">
+      <div class="field"><label>Task</label><input id="taskInput" placeholder="What do you need to do?"></div>
+      <div class="field"><label>Category</label><select id="taskCategory"><option>Personal</option><option>Study</option><option>Work</option><option>Creator</option></select></div>
     </div>
-    <div class="timer-wrap">
-      <div class="ring">
-        <svg viewBox="0 0 200 200" aria-hidden="true">
-          <circle class="track" cx="100" cy="100" r="90"/>
-          <circle class="arc" id="timerArc" cx="100" cy="100" r="90"/>
-        </svg>
-        <div style="text-align:center">
-          <div class="time" id="timerDisplay">25:00</div>
-          <div class="timer-status" id="timerStatus">READY WHEN YOU ARE</div>
-        </div>
-      </div>
-      <div class="timer-controls">
-        <button class="btn secondary" id="resetTimer">↺ Reset</button>
-        <button class="btn" id="startTimer">▶ Start</button>
-        <button class="btn secondary" id="skipTimer">Skip ↠</button>
-      </div>
-      <div class="timer-options">
-        <label>Focus <input id="focusLen" type="number" min="1" max="180" value="25"></label>
-        <label>Short break <input id="shortLen" type="number" min="1" max="60" value="5"></label>
-        <label>Long break <input id="longLen" type="number" min="1" max="120" value="15"></label>
-        <button class="btn small secondary" id="applyLengths">Apply</button>
-      </div>
-    </div>
-  </section>
+    <button class="btn" onclick="addTask()">+ Add task</button>
+  </div>
+  <div class="sectionhead"><h2>Task list</h2><button class="btn ghost" onclick="clearCompleted()">Clear completed</button></div>
+  <div id="taskList" class="list"></div>
+</section>
 
-  <section class="card span-5">
-    <div class="card-head"><div><h3>📊 Today's progress</h3><div class="card-desc">Every minute counts.</div></div></div>
-    <div class="stats">
-      <div class="stat"><div class="stat-icon">⌛</div><div class="stat-number" id="minutesStat">0</div><div class="stat-label">STUDY MIN</div></div>
-      <div class="stat"><div class="stat-icon">✓</div><div class="stat-number" id="tasksStat">0/0</div><div class="stat-label">TASKS DONE</div></div>
-      <div class="stat"><div class="stat-icon">⚡</div><div class="stat-number" id="sessionsStat">0</div><div class="stat-label">SESSIONS</div></div>
-    </div>
-    <div style="margin-top:22px">
-      <div class="row" style="justify-content:space-between;margin-bottom:9px">
-        <strong style="font-size:12px">Weekly activity</strong>
-        <span class="muted" style="font-size:10px">Last 7 days</span>
-      </div>
-      <div class="day-grid" id="weekGrid"></div>
-    </div>
-    <div style="margin-top:18px" class="row">
-      <button class="btn secondary" id="manualLog" style="flex:1">+ Log study time</button>
-      <button class="btn secondary" id="notifyBtn" title="Allow timer notifications">🔔 Alerts</button>
-    </div>
-  </section>
+<section class="view" id="notes">
+  <div class="eyebrow">YOUR IDEAS, IN ONE PLACE</div><h1>Notes & Ideas 📝</h1><p class="muted">Create, edit, search and download your notes.</p>
+  <div class="card">
+    <div class="field"><label>Note title</label><input id="noteTitle" placeholder="Give your note a title"></div>
+    <div class="field"><label>Note content</label><textarea id="noteBody" placeholder="Write your thoughts, plans, links or ideas..."></textarea></div>
+    <div class="actions"><button class="btn" onclick="saveNote()">Save note</button><button class="btn secondary" onclick="clearNoteEditor()">New note</button><button class="btn ghost" onclick="downloadNote()">Download current note</button></div>
+  </div>
+  <div class="sectionhead"><h2>Your saved notes</h2><span id="noteCount" class="muted small">0 notes</span></div>
+  <div class="field"><input id="noteSearch" placeholder="Search saved notes..." oninput="renderNotes()"></div>
+  <div id="noteList" class="grid two"></div>
+</section>
 
-  <section class="card span-6">
-    <div class="card-head">
-      <div><h3>☑ My tasks</h3><div class="card-desc">Turn your plans into progress.</div></div>
-      <span class="badge" id="taskBadge">0 TASKS</span>
-    </div>
-    <form id="taskForm" class="stack">
-      <input class="field" id="taskInput" placeholder="What do you need to study?" maxlength="150" required>
-      <div class="row">
-        <select class="field" id="taskSubject" aria-label="Task subject">
-          <option>General</option><option>Japanese</option><option>English</option>
-          <option>Math</option><option>Science</option><option>Other</option>
-        </select>
-        <select class="field" id="taskPriority" aria-label="Task priority">
-          <option value="Normal">Normal priority</option>
-          <option value="High">High priority</option>
-          <option value="Low">Low priority</option>
-        </select>
-        <button class="btn" type="submit">Add</button>
-      </div>
-    </form>
-    <div class="list" id="taskList" style="margin-top:14px"></div>
-    <div class="row" style="margin-top:12px;justify-content:space-between">
-      <span class="muted" style="font-size:10px">Completed tasks stay saved.</span>
-      <button class="btn small secondary" id="clearDone">Clear completed</button>
-    </div>
-  </section>
+<section class="view" id="focus">
+  <div class="eyebrow">DEEP WORK ZONE</div><h1>Focus Room ◷</h1><p class="muted">Set a timer, choose a goal and give one task your attention.</p>
+  <div class="card timerpanel">
+    <div class="pills" style="justify-content:center;margin-bottom:22px"><button class="pill" onclick="setTimer(25)">Focus · 25m</button><button class="pill" onclick="setTimer(5)">Short break · 5m</button><button class="pill" onclick="setTimer(15)">Long break · 15m</button></div>
+    <div class="field"><label>What are you focusing on?</label><input id="focusGoal" placeholder="e.g. Finish my assignment"></div>
+    <div class="timer" id="timer">25:00</div><div class="progress"><span id="timerProgress"></span></div>
+    <div class="actions" style="justify-content:center"><button class="btn" id="timerStart" onclick="toggleTimer()">▶ Start focus</button><button class="btn secondary" onclick="resetTimer()">↺ Reset</button></div>
+    <p class="muted small" id="timerStatus" style="text-align:center;margin-top:18px">Choose a goal and start when you're ready.</p>
+  </div>
+  <div class="sectionhead"><h2>Focus tips</h2></div>
+  <div class="grid"><div class="card"><div class="toolicon">📵</div><h3>Remove distractions</h3><p class="muted small">Silence unnecessary notifications and keep only the tools you need open.</p></div><div class="card"><div class="toolicon">🎯</div><h3>One clear goal</h3><p class="muted small">Choose one realistic task before each session.</p></div><div class="card"><div class="toolicon">🌿</div><h3>Take a break</h3><p class="muted small">Stretch, drink water and rest your eyes between sessions.</p></div></div>
+</section>
 
-  <section class="card span-6">
-    <div class="card-head">
-      <div><h3>📚 Subject tracker</h3><div class="card-desc">Log time for each subject.</div></div>
+<section class="view" id="money">
+  <div class="eyebrow">EVERYDAY FINANCE UTILITIES</div><h1>Money Tools ৳</h1><p class="muted">Split shared expenses and calculate a simple budget.</p>
+  <div class="grid two">
+    <div class="card">
+      <h2>Split the Bill</h2>
+      <div class="field"><label>Total amount (৳)</label><input id="billTotal" type="number" min="0" step=".01" placeholder="1500"></div>
+      <div class="field"><label>People</label><input id="billPeople" type="number" min="1" max="1000" value="3"></div>
+      <div class="field"><label>Tip / extra (%)</label><input id="billTip" type="number" min="0" max="100" value="0"></div>
+      <button class="btn" onclick="splitBill()">Calculate shares</button><div class="output" id="billOut">Each person's share appears here.</div>
     </div>
-    <div class="row">
-      <select class="field" id="subjectSelect" aria-label="Subject">
-        <option>Japanese</option><option>English</option><option>Math</option>
-        <option>Science</option><option>History</option><option>Other</option>
-      </select>
-      <input class="field" id="subjectMinutes" type="number" min="1" max="1440" value="25" aria-label="Minutes">
-      <button class="btn" id="addSubject">Log</button>
+    <div class="card">
+      <h2>Monthly Budget Planner</h2>
+      <div class="field"><label>Monthly income (৳)</label><input id="budgetIncome" type="number" min="0" placeholder="20000"></div>
+      <div class="field"><label>Needs / essentials (৳)</label><input id="budgetNeeds" type="number" min="0" placeholder="10000"></div>
+      <div class="field"><label>Wants / lifestyle (৳)</label><input id="budgetWants" type="number" min="0" placeholder="4000"></div>
+      <div class="field"><label>Savings (৳)</label><input id="budgetSave" type="number" min="0" placeholder="3000"></div>
+      <button class="btn" onclick="budgetCalc()">Review budget</button><div class="output" id="budgetOut">Your budget summary appears here.</div>
     </div>
-    <div class="stack" id="subjectList" style="margin-top:17px"></div>
-  </section>
+  </div>
+  <p class="muted small" style="margin-top:14px">These are basic planning calculators, not financial advice.</p>
+</section>
 
-  <section class="card span-6">
-    <div class="card-head">
-      <div><h3>📝 Smart notes</h3><div class="card-desc">Your notes save automatically on this device.</div></div>
-      <span class="note-status" id="noteStatus">● Saved</span>
+<section class="view" id="toolbox">
+  <div class="eyebrow">EVERYDAY UTILITY SUITE</div><h1>Smart Toolbox ✦</h1><p class="muted">Practical utilities for your daily work.</p>
+  <div class="grid two">
+    <div class="card">
+      <h2>QR Code Generator</h2><div class="field"><label>Text or website link</label><input id="qrText" placeholder="https://example.com"></div>
+      <div class="actions"><button class="btn" onclick="makeQR()">Generate QR</button><button class="btn secondary" onclick="downloadQR()">Download PNG</button></div>
+      <div id="qrArea" style="margin-top:15px"></div><p class="muted small" id="qrStatus">Internet connection is needed to load the QR library.</p>
     </div>
-    <textarea class="field" id="notes" rows="9" placeholder="Write what you learned, important formulas, new words, or tomorrow's plan..."></textarea>
-    <div class="row" style="justify-content:space-between;margin-top:10px">
-      <span class="muted" style="font-size:10px" id="wordCount">0 words · 0 characters</span>
-      <button class="btn small secondary" id="downloadNotes">Download notes</button>
+    <div class="card">
+      <h2>Image Compressor</h2><div class="field"><label>Select image</label><input id="imgFile" type="file" accept="image/*"></div>
+      <div class="field"><label>Quality <span id="qualityText">75%</span></label><input id="imgQuality" type="range" min="20" max="95" value="75"></div>
+      <div class="field"><label>Format</label><select id="imgFormat"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option></select></div>
+      <button class="btn" onclick="compressImage()">Compress image</button><div id="imgResult" class="output">Choose an image to get started.</div>
+      <div class="actions"><a class="btn secondary" id="imgDownload" hidden download="nexora-image.webp">Download result</a></div>
     </div>
-  </section>
+    <div class="card">
+      <h2>Color Palette Lab</h2><p class="muted small">Generate colors for a design or brand. Tap a swatch to copy its HEX code.</p>
+      <div class="swatches" id="swatches"></div><div class="actions"><button class="btn" onclick="newPalette()">New palette ↻</button><button class="btn secondary" onclick="copyPalette()">Copy palette</button></div>
+    </div>
+    <div class="card">
+      <h2>JSON Formatter</h2><div class="field"><label>Paste JSON</label><textarea id="jsonIn" placeholder='{"name":"Nexora","active":true}'></textarea></div>
+      <div class="actions"><button class="btn" onclick="formatJSON()">Format</button><button class="btn secondary" onclick="minifyJSON()">Minify</button><button class="btn ghost" onclick="copy('jsonOut')">Copy</button></div><div id="jsonOut" class="output">JSON result appears here.</div>
+    </div>
+    <div class="card">
+      <h2>Text Lab</h2><div class="field"><label>Your text</label><textarea id="textIn" placeholder="Type or paste your text..."></textarea></div>
+      <div class="pills"><span class="pill">Words: <b id="wordCount">0</b></span><span class="pill">Characters: <b id="charCount">0</b></span><span class="pill">Reading time: <b id="readCount">0</b> min</span></div>
+      <div class="actions"><button class="btn secondary" onclick="transform('upper')">UPPERCASE</button><button class="btn secondary" onclick="transform('lower')">lowercase</button><button class="btn secondary" onclick="transform('title')">Title Case</button><button class="btn ghost" onclick="transform('clean')">Clean spaces</button><button class="btn" onclick="copy('textIn')">Copy text</button></div>
+    </div>
+    <div class="card">
+      <h2>Quick Calculator</h2><div class="field"><label>Expression</label><input id="calcIn" placeholder="(125 + 75) * 2 / 4"></div>
+      <button class="btn" onclick="calculate()">Calculate</button><div id="calcOut" class="output">Result appears here.</div>
+      <p class="muted small">Supported: numbers, brackets and + − × ÷ %.</p>
+    </div>
+    <div class="card">
+      <h2>Random Decision Picker</h2><p class="muted small">Can't choose? Add options and pick one at random.</p>
+      <div class="field"><label>One option per line</label><textarea id="choices" placeholder="Learn a skill&#10;Work on a project&#10;Take a break"></textarea></div>
+      <button class="btn" onclick="pickChoice()">Pick an option</button><div id="choiceOut" class="output">Your result will appear here.</div>
+    </div>
+    <div class="card">
+      <h2>Secure Password Generator</h2><div class="field"><label>Length (8–64)</label><input id="passLen" type="number" min="8" max="64" value="18"></div>
+      <div class="field"><label>Character set</label><select id="passType"><option value="all">Letters, numbers & symbols</option><option value="alnum">Letters & numbers</option><option value="letters">Letters only</option><option value="numbers">Numbers only</option></select></div>
+      <button class="btn" onclick="makePassword()">Generate</button><div id="passOut" class="output">Your password appears here.</div><div class="actions"><button class="btn secondary" onclick="copy('passOut')">Copy password</button></div>
+    </div>
+  </div>
+  <hr>
+  <div class="card"><h2>Your data & privacy</h2><p class="muted small">Your notes and tasks are stored in this browser. Export a backup before clearing browser data or switching devices.</p><div class="actions"><button class="btn" onclick="exportData()">Export workspace backup</button><label class="btn secondary" style="cursor:pointer">Import backup <input type="file" id="importFile" accept=".json,application/json" hidden onchange="importData(event)"></label><button class="btn danger" onclick="clearWorkspace()">Clear all workspace data</button></div></div>
+</section>
 
-  <section class="card span-6">
-    <div class="card-head">
-      <div><h3>🃏 Flashcards</h3><div class="card-desc">Remember more with active recall.</div></div>
-      <span class="badge" id="flashCount">0 CARDS</span>
-    </div>
-    <div class="row" style="margin-bottom:10px">
-      <input class="field" id="flashFront" placeholder="Question / Japanese word">
-      <input class="field" id="flashBack" placeholder="Answer / meaning">
-    </div>
-    <button class="btn" id="addFlash">+ Create flashcard</button>
-    <div class="flashcard" id="flashCard" tabindex="0" role="button" aria-label="Flip flashcard" style="margin-top:15px">
-      <div><div class="fc-label" id="flashLabel">YOUR FLASHCARDS</div><div class="fc-main" id="flashMain">Add a card to begin</div><div class="fc-hint" id="flashHint">Create your own study cards above.</div></div>
-    </div>
-    <div class="row" style="justify-content:center;margin-top:12px;flex-wrap:wrap">
-      <button class="btn secondary" id="prevFlash">← Previous</button>
-      <button class="btn secondary" id="flipFlash">Flip card</button>
-      <button class="btn secondary" id="nextFlash">Next →</button>
-      <button class="btn secondary" id="deleteFlash">Delete</button>
-    </div>
-  </section>
-
-  <section class="card span-6">
-    <div class="card-head">
-      <div><h3>🧠 Quick quiz</h3><div class="card-desc">Test yourself and learn from mistakes.</div></div>
-      <span class="badge" id="quizScore">SCORE: 0</span>
-    </div>
-    <div id="quizArea">
-      <div class="quiz-question" id="quizQuestion">Ready for a quick brain check?</div>
-      <div id="quizOptions"></div>
-      <div class="muted" style="font-size:11px;margin-top:10px" id="quizFeedback">Choose an answer to begin.</div>
-    </div>
-    <button class="btn" id="nextQuiz" style="margin-top:12px">New question ↻</button>
-  </section>
-
-  <section class="card span-4">
-    <div class="card-head"><div><h3>⏱ Stopwatch</h3><div class="card-desc">Track any activity.</div></div></div>
-    <div class="stopwatch-display" id="stopwatchDisplay">00:00.0</div>
-    <div class="row">
-      <button class="btn" id="swStart">▶ Start</button>
-      <button class="btn secondary" id="swLap">Lap</button>
-      <button class="btn secondary" id="swReset">Reset</button>
-    </div>
-    <div class="history" id="laps" style="margin-top:12px"></div>
-  </section>
-
-  <section class="card span-4">
-    <div class="card-head"><div><h3>🧮 Calculator</h3><div class="card-desc">Quick calculations, no app switching.</div></div></div>
-    <input class="calc-display" id="calcDisplay" value="0" aria-label="Calculator display" readonly>
-    <div class="calc-grid" id="calcKeys">
-      <button data-key="C" class="op">AC</button><button data-key="(">(</button><button data-key=")">)</button><button data-key="/" class="op">÷</button>
-      <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button data-key="*" class="op">×</button>
-      <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button data-key="-" class="op">−</button>
-      <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button data-key="+" class="op">+</button>
-      <button data-key="0">0</button><button data-key=".">.</button><button data-key="DEL">⌫</button><button data-key="=" class="eq">=</button>
-    </div>
-  </section>
-
-  <section class="card span-4">
-    <div class="card-head"><div><h3>⏰ Study alarm</h3><div class="card-desc">Set a reminder for your next session.</div></div></div>
-    <div class="stack">
-      <label class="muted" for="alarmTime" style="font-size:11px">Reminder time</label>
-      <input class="field" type="time" id="alarmTime">
-      <input class="field" id="alarmMessage" placeholder="Reminder message" value="Time to study!">
-      <div class="row">
-        <button class="btn" id="setAlarm">Set alarm</button>
-        <button class="btn secondary" id="cancelAlarm">Cancel</button>
-      </div>
-      <div class="muted" id="alarmStatus" style="font-size:11px">No alarm set.</div>
-    </div>
-  </section>
-
-  <section class="card span-12">
-    <div class="card-head">
-      <div><h3>📅 Revision planner</h3><div class="card-desc">Plan when you will revisit important topics.</div></div>
-    </div>
-    <form id="revisionForm" class="row" style="flex-wrap:wrap">
-      <input class="field" id="revisionTopic" placeholder="Topic to revise" required style="flex:2">
-      <input class="field" id="revisionDate" type="date" required style="flex:1">
-      <select class="field" id="revisionStage" style="flex:1" aria-label="Revision stage">
-        <option>First review</option><option>Second review</option><option>Final review</option>
-      </select>
-      <button class="btn" type="submit">Add revision</button>
-    </form>
-    <div class="list" id="revisionList" style="margin-top:13px"></div>
-  </section>
+<footer>NEXORA ✦ Made for ideas, productivity and creativity.<br><br>Local-first workspace · No account required</footer>
 </main>
-<footer>StudyFlow · Focus on learning, not perfection. Your saved data stays in this browser.</footer>
 </div>
-<div class="toast" id="toast" role="status"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
-(() => {
-"use strict";
-const $ = id => document.getElementById(id);
-const DAY = () => new Date().toLocaleDateString("en-CA");
-const read = (key, fallback) => {
-  try { const x = localStorage.getItem("studyflow:"+key); return x === null ? fallback : JSON.parse(x); }
-  catch { return fallback; }
-};
-const save = (key, value) => {
-  try { localStorage.setItem("studyflow:"+key, JSON.stringify(value)); }
-  catch { toast("Could not save data. Check your browser storage."); }
-};
-const todayKey = DAY();
-let data = read("data", {});
-if (data.date !== todayKey) {
-  data = {...data,date:todayKey,minutes:0,sessions:0,subjects:{},quizScore:0};
-  save("data",data);
+const $=id=>document.getElementById(id);
+const KEY='nexora_workspace_v1';
+const defaults={tasks:[],notes:[],sessions:0,ideas:0};
+let db=loadDB(),editingNote=null,toastTimer=null;
+function loadDB(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{return {...defaults}}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(db));updateStats()}catch{notify('Storage is full. Export a backup or remove some data.')}}
+function notify(s){$('toast').textContent=s;$('toast').style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.display='none',2300)}
+function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='tasks')renderTasks();if(id==='notes')renderNotes();if(id==='home')updateStats()}
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>go(b.dataset.view)));
+$('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+function updateStats(){$('taskStat').textContent=db.tasks.filter(t=>t.done).length;$('noteStat').textContent=db.notes.length;$('sessionStat').textContent=db.sessions;$('ideaStat').textContent=db.ideas;$('noteCount').textContent=db.notes.length+' notes'}
+const quotes=['Progress is built one small step at a time.','Make something useful before making something perfect.','Consistency turns small actions into real progress.','A good idea becomes valuable when you put it into action.','Learn a little. Build a little. Improve a little.'];
+function newQuote(){$('quote').textContent=quotes[Math.floor(Math.random()*quotes.length)]}
+function copy(id){let e=$(id),s=e.value!==undefined?e.value:e.innerText;copyText(s)}
+async function copyText(s){try{await navigator.clipboard.writeText(s);notify('Copied to clipboard!')}catch{let t=document.createElement('textarea');t.value=s;document.body.append(t);t.select();let ok=document.execCommand('copy');t.remove();notify(ok?'Copied!':'Copy failed')}}
+function saveOutput(title,id){let content=$(id).innerText.trim();if(!content||content.startsWith('Your ')){notify('Generate some content first');return}db.notes.unshift({id:Date.now(),title,body:content,updated:new Date().toISOString()});persist();notify('Saved to notes')}
+function addTask(){let title=$('taskInput').value.trim();if(!title){notify('Write a task first');return}db.tasks.unshift({id:Date.now(),title,category:$('taskCategory').value,done:false});$('taskInput').value='';persist();renderTasks();notify('Task added')}
+$('taskInput').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
+function renderTasks(){let el=$('taskList');if(!db.tasks.length){el.innerHTML='<div class="card muted">No tasks yet. Add your first task above.</div>';return}el.innerHTML=db.tasks.map(t=>`<div class="item ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} aria-label="Mark task complete" onchange="toggleTask(${t.id})"><div class="grow"><b>${escapeHTML(t.title)}</b><div class="muted small">${escapeHTML(t.category)}</div></div><button class="btn ghost" onclick="deleteTask(${t.id})" aria-label="Delete task">×</button></div>`).join('')}
+function toggleTask(id){let t=db.tasks.find(x=>x.id===id);if(t)t.done=!t.done;persist();renderTasks()}
+function deleteTask(id){db.tasks=db.tasks.filter(x=>x.id!==id);persist();renderTasks()}
+function clearCompleted(){db.tasks=db.tasks.filter(x=>!x.done);persist();renderTasks();notify('Completed tasks cleared')}
+function clearNoteEditor(){editingNote=null;$('noteTitle').value='';$('noteBody').value=''}
+function saveNote(){let title=$('noteTitle').value.trim(),body=$('noteBody').value.trim();if(!title&&!body){notify('Write something first');return}title=title||'Untitled note';if(editingNote){let n=db.notes.find(n=>n.id===editingNote);if(n){n.title=title;n.body=body;n.updated=new Date().toISOString()}}else db.notes.unshift({id:Date.now(),title,body,updated:new Date().toISOString()});persist();renderNotes();clearNoteEditor();notify('Note saved')}
+function renderNotes(){let q=$('noteSearch').value.toLowerCase(),arr=db.notes.filter(n=>(n.title+' '+n.body).toLowerCase().includes(q));$('noteCount').textContent=db.notes.length+' notes';$('noteList').innerHTML=arr.length?arr.map(n=>`<div class="card"><h3>${escapeHTML(n.title)}</h3><p class="muted small">${escapeHTML(new Date(n.updated||Date.now()).toLocaleString())}</p><p style="white-space:pre-wrap;overflow-wrap:anywhere">${escapeHTML(n.body.slice(0,380))}${n.body.length>380?'…':''}</p><div class="actions"><button class="btn secondary" onclick="editNote(${n.id})">Edit</button><button class="btn ghost" onclick="downloadSavedNote(${n.id})">Download</button><button class="btn danger" onclick="deleteNote(${n.id})">Delete</button></div></div>`).join(''):'<div class="card muted">No matching notes found.</div>'}
+function editNote(id){let n=db.notes.find(n=>n.id===id);if(!n)return;editingNote=id;$('noteTitle').value=n.title;$('noteBody').value=n.body;window.scrollTo({top:0,behavior:'smooth'})}
+function deleteNote(id){if(!confirm('Delete this note?'))return;db.notes=db.notes.filter(n=>n.id!==id);if(editingNote===id)clearNoteEditor();persist();renderNotes()}
+function downloadBlob(name,content,type='text/plain;charset=utf-8'){let u=URL.createObjectURL(new Blob([content],{type})),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function downloadNote(){let t=$('noteTitle').value.trim()||'note';downloadBlob(t.replace(/[^\p{L}\p{N}_-]+/gu,'_')+'.txt',$('noteBody').value)}
+function downloadSavedNote(id){let n=db.notes.find(n=>n.id===id);if(n)downloadBlob(n.title.replace(/[^\p{L}\p{N}_-]+/gu,'_')+'.txt',n.body)}
+function makeCaption(){
+ let t=$('capTopic').value.trim();if(!t){notify('Enter a topic first');return}
+ let lang=$('capLang').value,tone=$('capTone').value,platform=$('capPlatform').value;
+ let b={
+ bn:{friendly:[`✨ ${t} নিয়ে আজকের ছোট্ট শেয়ার। তোমাদের মতামত কী? 💬`,`নতুন কিছু, নতুন অভিজ্ঞতা—${t} নিয়ে তোমাদের সঙ্গে পথচলা। 💜`,`ভালো লাগলে শেয়ার করো, আর তোমার মতামত জানাও! ✨`],professional:[`${t} নিয়ে আমাদের নতুন আপডেট। আপনার মতামত ও পরামর্শ আমাদের কাছে গুরুত্বপূর্ণ।`,`প্রতিটি পদক্ষেপে উন্নতির লক্ষ্য। ${t} নিয়ে আরও জানতে সঙ্গে থাকুন।`],fun:[`${t} নিয়ে কথা বলতে গেলে পোস্ট ছোট রাখা কঠিন! 😂`,`আজকের mood: ${t} আর অনেক ভালো vibes! 😎`],inspiring:[`ছোট পদক্ষেপ থেকেই বড় পরিবর্তনের শুরু। আজকের ভাবনা: ${t} ✨`,`নিজের পথে এগিয়ে চলো। ${t} হোক নতুন শুরুর অনুপ্রেরণা। 💫`],minimal:[`${t}। নতুন ভাবনা, নতুন শুরু. ✨`,`কম কথা, স্পষ্ট লক্ষ্য: ${t}.`]},
+ en:{friendly:[`A little update about ${t} ✨ What do you think?`,`Sharing something new about ${t}. Drop your thoughts below!`,`Good ideas grow when we share them. Today's topic: ${t}.`],professional:[`An update on ${t}. Your feedback and perspective are always welcome.`,`Exploring new possibilities around ${t}. More to come.`],fun:[`POV: you said one thing about ${t} and made a whole post 😂`,`Current mood: ${t} and good vibes only.`],inspiring:[`Small steps create meaningful progress. Today, we're exploring ${t}. ✨`,`Keep learning, keep building. Let ${t} inspire your next step.`],minimal:[`${t}. A new perspective.`,`Less noise. More meaning. ${t}.`]},
+ mix:{friendly:[`${t} niye ajker little update ✨ Tomader thoughts ki?`,`New day, new idea — ${t}! Comment e bolo kemon laglo 💬`],professional:[`${t} niye amader new update. Tomader feedback is always welcome.`,`Keep learning, keep growing. Ajker focus: ${t}.`],fun:[`${t} niye bolte gele caption shesh hoy na 😂`,`Mood: ${t} + good vibes only 😎`],inspiring:[`Small steps, big dreams. Ajker inspiration: ${t} ✨`,`Nijer pace e agiye jao. ${t} hote pare next big thing.`],minimal:[`${t}. New energy. ✨`,`Less noise, more focus. ${t}.`]}
+ };
+ let out=(b[lang][tone]||b[lang].friendly).map((x,i)=>(i+1)+'. '+x).join('\n\n');
+ if(platform==='LinkedIn')out+='\n\nWhat has your experience with this been?';
+ if(platform==='YouTube')out+='\n\nSubscribe for more updates.';
+ $('capOut').textContent=out;db.ideas++;persist()
 }
-data.subjects ||= {};
-data.minutes ||= 0;
-data.sessions ||= 0;
-let goal = read("goal",120);
-let tasks = read("tasks",[]);
-let subjects = read("subjects",{});
-let cards = read("cards",[]);
-let revisions = read("revisions",[]);
-let focusMinutes = read("lengths",{focus:25,short:5,long:15});
-let timerMode = "focus", timerRunning = false, remaining = focusMinutes.focus*60;
-let timerEnd = 0, timerInterval = null, focusLast = Date.now();
-let swRunning = false, swStartAt = 0, swElapsed = 0, swInterval = null, laps = [];
-let flashIndex = 0, flashBack = false, quizCurrent = null, quizAnswered = false;
-let alarmTimeout = null, alarmPoll = null;
-let calcExpression = "";
-const circumference = 2*Math.PI*90;
-$("timerArc").style.strokeDasharray = circumference;
-$("goalInput").value = goal;
-$("focusLen").value = focusMinutes.focus;
-$("shortLen").value = focusMinutes.short;
-$("longLen").value = focusMinutes.long;
-
-function toast(msg) {
-  const el=$("toast");el.textContent=msg;el.classList.add("show");
-  clearTimeout(toast.timeout);toast.timeout=setTimeout(()=>el.classList.remove("show"),2400);
+const stopWords=new Set(['the','and','for','with','from','your','this','that','about','into','yourself','have','what','when','where','how','are','you','our','new','best','good','বাংলা','এবং','জন্য','নিয়ে','করে','একটি','আমার','তোমার']);
+function topicTags(s){return s.toLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}\s]/gu,' ').split(/\s+/).filter(x=>x.length>1&&!stopWords.has(x)).slice(0,5)}
+function makeHashtags(){let t=$('hashTopic').value.trim();if(!t){notify('Enter a topic');return}let base=topicTags(t),generic=['contentcreator','creativity','inspiration','community','explore','dailyupdate','learnsomething','digitalcreator','newideas','creativelife','shareyourstory','discover','trendingtopic','madebyme','nexora'];let tags=[...base.map(x=>x.replace(/\s/g,'')),...generic];let unique=[...new Set(tags)].slice(0,Number($('hashCount').value));$('hashOut').textContent=unique.map(x=>'#'+x).join(' ')}
+function makeIdeas(){let t=$('ideaTopic').value.trim();if(!t){notify('Enter a niche');return}let templates=[`5 things beginners should know about ${t}`,`The biggest mistake people make with ${t}`,`A beginner's guide to ${t}`,`What I wish I knew earlier about ${t}`,`Myth vs fact: ${t}`,`3 tools that can help with ${t}`,`A 30-second tip about ${t}`,`Answer a common question about ${t}`,`Compare two approaches to ${t}`,`A personal story or lesson from ${t}`,`A simple challenge related to ${t}`,`Behind the scenes: your ${t} process`];$('ideasOut').textContent=templates.sort(()=>Math.random()-.5).slice(0,8).map((x,i)=>(i+1)+'. '+x).join('\n\n');db.ideas++;persist()}
+function makeBio(){let n=$('bioName').value.trim(),w=$('bioWork').value.trim(),i=$('bioInterest').value.trim();if(!n&&!w&&!i){notify('Fill in at least one field');return}let who=w||'curious learner',goal=i||'new ideas';$('bioOut').textContent=[`${n||'Your Name'} ✨\n${who} | Exploring ${goal}\nLearning • Creating • Growing`,`✦ ${n||'Your Name'}\n${who}\nPassionate about ${goal}\n📩 Open to meaningful connections`,`Building my journey in ${who}.\nInterested in ${goal}.\nOne step at a time. 🚀`].join('\n\n────────────\n\n')}
+function makeHooks(){let t=$('hookTopic').value.trim();if(!t){notify('Enter a topic');return}$('hookOut').textContent=[`“Before you try ${t}, watch this.”`,`“Three things I wish I knew about ${t}.”`,`“Most people overlook this about ${t}.”`,`“Let's make ${t} simpler in 30 seconds.”`,`“Is ${t} really worth it? Let's break it down.”`,`“Here is one thing you can try today with ${t}.”`].join('\n\n')}
+const questions=['Tell me about yourself and one skill you are currently improving.','Describe a challenge you solved and what you learned.','Why are you interested in this role or field?','What is one strength you would bring to a team?','Tell me about a time you learned something quickly.','What would you like to achieve in your first 90 days?'];let qi=0;
+function nextQuestion(){qi=(qi+1)%questions.length;$('interviewQ').textContent=questions[qi]}
+function makeIntro(){let r=$('introRole').value.trim(),s=$('introSkills').value.trim(),g=$('introGoal').value.trim();if(!r&&!s&&!g){notify('Fill in a field first');return}$('introOut').textContent=`Hello, I'm working toward ${r||'my next professional goal'}. My key strengths include ${s||'learning, communication and teamwork'}. I'm currently looking for ${g||'opportunities to learn and contribute'}. I value continuous improvement and enjoy working on meaningful challenges.`}
+function buildCV(){
+ const v=id=>$(id).value.trim(),n=v('cvName')||'Your Name';
+ let sections=[n,[v('cvEmail'),v('cvPhone'),v('cvLocation')].filter(Boolean).join(' · '),'\nPROFESSIONAL SUMMARY\n'+(v('cvSummary')||'Add a concise professional summary.'),'\nEDUCATION\n'+(v('cvEducation')||'Add your education.'),'\nSKILLS\n'+(v('cvSkills')||'Add your skills.'),'\nEXPERIENCE & PROJECTS\n'+(v('cvExperience')||'Add projects or relevant experience.')];
+ $('cvOut').textContent=sections.join('\n');
 }
-function clockTick() {
-  const d=new Date();
-  $("clock").textContent=d.toLocaleTimeString([], {hour12:false});
-  $("dateText").textContent=d.toLocaleDateString([], {weekday:"long",year:"numeric",month:"long",day:"numeric"});
-  const h=d.getHours();
-  $("greeting").textContent=h<12?"Good morning.":h<17?"Ready to focus?":"Make tonight count.";
-}
-clockTick();setInterval(clockTick,1000);
-function saveData(){save("data",data);renderStats();}
-function renderStats() {
-  $("minutesStat").textContent=data.minutes||0;
-  $("tasksStat").textContent=tasks.filter(t=>t.done).length+"/"+tasks.length;
-  $("sessionsStat").textContent=data.sessions||0;
-  $("goalText").textContent=(data.minutes||0)+" / "+goal+" min";
-  $("goalBar").style.width=Math.min(100,(data.minutes||0)/Math.max(1,goal)*100)+"%";
-  $("taskBadge").textContent=tasks.length+" TASKS";
-  $("goalInput").value=goal;
-  renderWeek();
-}
-function renderWeek() {
-  const box=$("weekGrid");box.innerHTML="";
-  const history=read("history",{});
-  for(let i=6;i>=0;i--){
-    const d=new Date();d.setDate(d.getDate()-i);
-    const key=d.toLocaleDateString("en-CA");
-    const minutes=key===data.date?data.minutes:(history[key]?.minutes||0);
-    const el=document.createElement("div");
-    el.className="day"+(i===0?" today":"");
-    el.innerHTML="<span>"+d.toLocaleDateString("en",{weekday:"short"})+"</span><b>"+minutes+"m</b>";
-    box.append(el);
-  }
-}
-function recordMinutes(n) {
-  n=Math.max(0,Math.floor(n));if(!n)return;
-  const history=read("history",{});
-  history[data.date] ||= {minutes:0,sessions:0};
-  history[data.date].minutes+=n;data.minutes=(data.minutes||0)+n;
-  save("history",history);saveData();
-}
-$("saveGoal").onclick=()=>{
-  const n=Number($("goalInput").value);
-  if(!Number.isFinite(n)||n<1||n>1440){toast("Set a goal between 1 and 1440 minutes.");return;}
-  goal=Math.floor(n);save("goal",goal);renderStats();toast("Daily goal updated.");
-};
-$("themeBtn").onclick=()=>{
-  document.body.classList.toggle("dark");
-  const dark=document.body.classList.contains("dark");
-  save("dark",dark);$("themeBtn").textContent=dark?"☀ Light":"☾ Theme";
-};
-if(read("dark",false)){document.body.classList.add("dark");$("themeBtn").textContent="☀ Light";}
-
-function fmt(sec) {
-  sec=Math.max(0,Math.ceil(sec));
-  return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
-}
-function paintTimer() {
-  $("timerDisplay").textContent=fmt(remaining);
-  $("timerStatus").textContent=timerRunning?"SESSION IN PROGRESS":remaining===0?"SESSION COMPLETE":"READY WHEN YOU ARE";
-  $("startTimer").textContent=timerRunning?"Ⅱ Pause":"▶ Start";
-  $("timerArc").style.strokeDashoffset=circumference*(1-remaining/(focusMinutes[timerMode]*60));
-  $("timerArc").style.stroke=timerMode==="focus"?"#7057f5":timerMode==="short"?"#24a879":"#efa34d";
-  document.title=(timerRunning?fmt(remaining)+" — ":"")+"StudyFlow";
-}
-function stopTimer() {
-  timerRunning=false;clearInterval(timerInterval);timerInterval=null;paintTimer();
-}
-function setMode(mode) {
-  stopTimer();timerMode=mode;remaining=focusMinutes[mode]*60;
-  document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
-  paintTimer();
-}
-function timerTick() {
-  if(!timerRunning)return;
-  remaining=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));
-  paintTimer();
-  if(remaining===0) {
-    stopTimer();
-    if(timerMode==="focus"){
-      recordMinutes(focusMinutes.focus);
-      data.sessions=(data.sessions||0)+1;saveData();
-      toast("Focus session complete! Take a break.");
-    } else toast("Break finished. Ready to focus?");
-    if("Notification" in window && Notification.permission==="granted"){
-      new Notification("StudyFlow",{body:"Your timer has finished."});
-    }
-    try{const a=new AudioContext();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=700;g.gain.value=.07;o.start();o.stop(a.currentTime+.35);}catch(e){}
-  }
-}
-function startTimer() {
-  if(remaining<=0)remaining=focusMinutes[timerMode]*60;
-  timerRunning=true;timerEnd=Date.now()+remaining*1000;
-  timerInterval=setInterval(timerTick,200);paintTimer();
-}
-$("timerTabs").querySelectorAll("button").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
-$("startTimer").onclick=()=>{
-  if(timerRunning){remaining=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));stopTimer();}
-  else startTimer();
-};
-$("resetTimer").onclick=()=>{stopTimer();remaining=focusMinutes[timerMode]*60;paintTimer();};
-$("skipTimer").onclick=()=>{
-  const modes=["focus","short","long"];
-  setMode(modes[(modes.indexOf(timerMode)+1)%modes.length]);
-};
-$("applyLengths").onclick=()=>{
-  const vals={focus:Number($("focusLen").value),short:Number($("shortLen").value),long:Number($("longLen").value)};
-  if(Object.values(vals).some(n=>!Number.isInteger(n)||n<1||n>(n===vals.focus?180:120))){
-    toast("Enter valid timer lengths.");return;
-  }
-  stopTimer();focusMinutes=vals;save("lengths",vals);remaining=focusMinutes[timerMode]*60;paintTimer();toast("Timer lengths updated.");
-};
-$("notifyBtn").onclick=async()=>{
-  if(!("Notification" in window)){toast("This browser does not support notifications.");return;}
-  const p=await Notification.requestPermission();
-  toast(p==="granted"?"Timer notifications enabled.":"Notifications were not enabled.");
-};
-$("manualLog").onclick=()=>{
-  const n=prompt("How many study minutes would you like to log?");
-  if(n===null)return;
-  const v=Number(n);
-  if(!Number.isInteger(v)||v<1||v>1440){toast("Enter a whole number from 1 to 1440.");return;}
-  recordMinutes(v);toast(v+" study minutes logged.");
-};
-
-function renderTasks() {
-  const box=$("taskList");box.innerHTML="";
-  if(!tasks.length){box.textContent="No tasks yet. Add your first task above.";box.style.color="var(--muted)";box.style.fontSize="12px";}
-  tasks.forEach((t,i)=>{
-    const row=document.createElement("div");row.className="task"+(t.done?" done":"");
-    const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!t.done;cb.setAttribute("aria-label","Complete task");
-    cb.onchange=()=>{tasks[i].done=cb.checked;save("tasks",tasks);renderTasks();renderStats();};
-    const text=document.createElement("div");text.className="task-text";text.textContent=t.text;
-    const sub=document.createElement("span");sub.className="badge";sub.textContent=t.subject;
-    const pri=document.createElement("span");pri.className="task-meta";pri.textContent=t.priority==="High"?"! High":t.priority==="Low"?"Low":"";
-    const del=document.createElement("button");del.className="delete";del.textContent="×";del.setAttribute("aria-label","Delete task");
-    del.onclick=()=>{tasks.splice(i,1);save("tasks",tasks);renderTasks();renderStats();};
-    row.append(cb,text,sub,pri,del);box.append(row);
-  });
-}
-$("taskForm").onsubmit=e=>{
-  e.preventDefault();
-  const text=$("taskInput").value.trim();if(!text)return;
-  tasks.unshift({text,subject:$("taskSubject").value,priority:$("taskPriority").value,done:false});
-  save("tasks",tasks);$("taskInput").value="";renderTasks();renderStats();toast("Task added.");
-};
-$("clearDone").onclick=()=>{
-  tasks=tasks.filter(t=>!t.done);save("tasks",tasks);renderTasks();renderStats();toast("Completed tasks cleared.");
-};
-
-function renderSubjects() {
-  const box=$("subjectList");box.innerHTML="";
-  const entries=Object.entries(data.subjects||{}).sort((a,b)=>b[1]-a[1]);
-  if(!entries.length){box.innerHTML='<div class="muted" style="font-size:12px">No subject time logged yet.</div>';return;}
-  const max=Math.max(1,...entries.map(x=>x[1]));
-  entries.forEach(([name,mins])=>{
-    const wrap=document.createElement("div");wrap.className="subject-item";
-    const label=document.createElement("span");label.textContent=name;
-    const val=document.createElement("strong");val.textContent=mins+" min";
-    const prog=document.createElement("div");prog.className="progress";
-    const fill=document.createElement("div");fill.style.width=(mins/max*100)+"%";prog.append(fill);
-    wrap.append(label,val,prog);box.append(wrap);
-  });
-}
-$("addSubject").onclick=()=>{
-  const name=$("subjectSelect").value,n=Number($("subjectMinutes").value);
-  if(!Number.isInteger(n)||n<1||n>1440){toast("Enter minutes between 1 and 1440.");return;}
-  data.subjects[name]=(data.subjects[name]||0)+n;recordMinutes(n);saveData();renderSubjects();toast(name+": "+n+" minutes logged.");
-};
-
-function updateWordCount() {
-  const text=$("notes").value;
-  const words=text.trim()?text.trim().split(/\s+/).length:0;
-  $("wordCount").textContent=words+" words · "+text.length+" characters";
-}
-$("notes").value=read("notes","");
-let noteDebounce;
-$("notes").oninput=()=>{
-  $("noteStatus").textContent="Saving…";updateWordCount();clearTimeout(noteDebounce);
-  noteDebounce=setTimeout(()=>{save("notes",$("notes").value);$("noteStatus").textContent="● Saved";},300);
-};
-$("downloadNotes").onclick=()=>{
-  downloadFile("study-notes.txt",$("notes").value,"text/plain;charset=utf-8");
-};
-updateWordCount();
-function downloadFile(name,content,type) {
-  const blob=new Blob([content],{type});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");a.href=url;a.download=name;a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-function renderFlash() {
-  $("flashCount").textContent=cards.length+" CARDS";
-  if(!cards.length){
-    $("flashLabel").textContent="YOUR FLASHCARDS";
-    $("flashMain").textContent="Add a card to begin";
-    $("flashHint").textContent="Create your own study cards above.";return;
-  }
-  flashIndex=(flashIndex+cards.length)%cards.length;
-  const c=cards[flashIndex];
-  $("flashLabel").textContent=flashBack?"ANSWER":"QUESTION";
-  $("flashMain").textContent=flashBack?c.back:c.front;
-  $("flashHint").textContent=(flashIndex+1)+" / "+cards.length+" · Tap to flip";
-}
-function flipFlash(){if(!cards.length)return;flashBack=!flashBack;renderFlash();}
-$("addFlash").onclick=()=>{
-  const front=$("flashFront").value.trim(),back=$("flashBack").value.trim();
-  if(!front||!back){toast("Enter both the question and answer.");return;}
-  cards.push({front,back});save("cards",cards);flashIndex=cards.length-1;flashBack=false;
-  $("flashFront").value="";$("flashBack").value="";renderFlash();toast("Flashcard created.");
-};
-$("flashCard").onclick=flipFlash;
-$("flashCard").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipFlash();}};
-$("flipFlash").onclick=flipFlash;
-$("prevFlash").onclick=()=>{if(cards.length){flashIndex=(flashIndex-1+cards.length)%cards.length;flashBack=false;renderFlash();}};
-$("nextFlash").onclick=()=>{if(cards.length){flashIndex=(flashIndex+1)%cards.length;flashBack=false;renderFlash();}};
-$("deleteFlash").onclick=()=>{
-  if(!cards.length)return;
-  cards.splice(flashIndex,1);save("cards",cards);flashIndex=0;flashBack=false;renderFlash();
-};
-renderFlash();
-
-const quizBank=[
-  {q:"What is the main purpose of active recall?",a:["To practise retrieving information from memory","To read the same page repeatedly","To avoid testing yourself","To study without breaks"],correct:0,why:"Trying to retrieve information helps strengthen memory."},
-  {q:"Which is a good way to plan a large assignment?",a:["Wait until the last day","Break it into smaller tasks","Do everything at once","Avoid setting deadlines"],correct:1,why:"Small, manageable tasks make a large assignment easier to start and finish."},
-  {q:"What does the Japanese word 'ありがとう' mean?",a:["Good morning","Thank you","Good night","Excuse me"],correct:1,why:"ありがとう (arigatou) means 'thank you'."},
-  {q:"Which unit is used to measure electric current?",a:["Volt","Watt","Ampere","Ohm"],correct:2,why:"Electric current is measured in amperes (A)."},
-  {q:"What is 15% of 200?",a:["15","20","30","45"],correct:2,why:"0.15 × 200 = 30."},
-  {q:"Which sentence is in the past tense?",a:["I study every day.","I will study later.","I studied yesterday.","I am studying now."],correct:2,why:"'Studied' is the simple past form."},
-  {q:"What is the best first step when a topic feels difficult?",a:["Give up immediately","Identify what you do not understand","Memorise without understanding","Skip every related exercise"],correct:1,why:"Identifying the exact difficulty helps you choose the next step."},
-  {q:"Which is a prime number?",a:["21","27","29","33"],correct:2,why:"29 has exactly two positive divisors: 1 and 29."}
-];
-function newQuiz() {
-  quizCurrent=quizBank[Math.floor(Math.random()*quizBank.length)];quizAnswered=false;
-  $("quizQuestion").textContent=quizCurrent.q;$("quizOptions").innerHTML="";
-  $("quizFeedback").textContent="Choose the best answer.";
-  quizCurrent.a.forEach((answer,i)=>{
-    const b=document.createElement("button");b.className="quiz-option";b.textContent=String.fromCharCode(65+i)+". "+answer;
-    b.onclick=()=>{
-      if(quizAnswered)return;quizAnswered=true;
-      const correct=i===quizCurrent.correct;
-      if(correct){data.quizScore=(data.quizScore||0)+1;saveData();}
-      [...$("quizOptions").children].forEach((el,j)=>{
-        if(j===quizCurrent.correct)el.classList.add("correct");
-        else if(j===i)el.classList.add("wrong");
-      });
-      $("quizFeedback").textContent=(correct?"Correct! ":"Not quite. ")+quizCurrent.why;
-      $("quizScore").textContent="SCORE: "+(data.quizScore||0);
-    };
-    $("quizOptions").append(b);
-  });
-}
-$("nextQuiz").onclick=newQuiz;
-$("quizScore").textContent="SCORE: "+(data.quizScore||0);
-newQuiz();
-
-function paintSW() {
-  const ms=swElapsed+(swRunning?Date.now()-swStartAt:0);
-  const sec=Math.floor(ms/1000),tenths=Math.floor(ms%1000/100);
-  $("stopwatchDisplay").textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")+"."+tenths;
-}
-$("swStart").onclick=()=>{
-  if(swRunning){swElapsed+=Date.now()-swStartAt;swRunning=false;clearInterval(swInterval);$("swStart").textContent="Resume";}
-  else{swRunning=true;swStartAt=Date.now();swInterval=setInterval(paintSW,100);$("swStart").textContent="Ⅱ Pause";}
-  paintSW();
-};
-$("swLap").onclick=()=>{
-  const ms=swElapsed+(swRunning?Date.now()-swStartAt:0);
-  if(ms<=0){toast("Start the stopwatch first.");return;}
-  laps.unshift(ms);laps=laps.slice(0,5);renderLaps();
-};
-function renderLaps(){
-  $("laps").innerHTML="";
-  laps.forEach((ms,i)=>{
-    const el=document.createElement("div");el.className="history-item";
-    const a=document.createElement("span");a.textContent="Lap "+(laps.length-i);
-    const b=document.createElement("strong");b.textContent=(ms/1000).toFixed(2)+" s";
-    el.append(a,b);$("laps").append(el);
-  });
-}
-$("swReset").onclick=()=>{
-  swRunning=false;clearInterval(swInterval);swElapsed=0;swStartAt=0;laps=[];
-  $("swStart").textContent="▶ Start";paintSW();renderLaps();
-};
-
-function calculate(expr) {
-  if(!expr||!/^[0-9+\-*/().\s]+$/.test(expr))throw new Error("Invalid");
-  const result=Function('"use strict";return ('+expr+')')();
-  if(!Number.isFinite(result))throw new Error("Invalid");
-  return String(Number(result.toPrecision(10)));
-}
-$("calcKeys").querySelectorAll("button").forEach(b=>b.onclick=()=>{
-  const key=b.dataset.key,display=$("calcDisplay");
-  if(key==="C")calcExpression="";
-  else if(key==="DEL")calcExpression=calcExpression.slice(0,-1);
-  else if(key==="="){
-    try{calcExpression=calculate(calcExpression);}catch{calcExpression="";display.value="Error";return;}
-  } else {
-    if(calcExpression.length>45)return;
-    calcExpression+=key;
-  }
-  display.value=calcExpression||"0";
-});
-
-function checkAlarm() {
-  if(!alarmTimeout)return;
-  if(Date.now()>=alarmTimeout){
-    const msg=$("alarmMessage").value.trim()||"Time to study!";
-    toast("⏰ "+msg);
-    if("Notification" in window && Notification.permission==="granted"){
-      new Notification("StudyFlow reminder",{body:msg});
-    }
-    try{const a=new AudioContext();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=800;o.start();o.stop(a.currentTime+.5);}catch(e){}
-    alarmTimeout=null;clearInterval(alarmPoll);alarmPoll=null;$("alarmStatus").textContent="Alarm completed.";
-  }
-}
-$("setAlarm").onclick=()=>{
-  const value=$("alarmTime").value;if(!value){toast("Choose an alarm time.");return;}
-  const [h,m]=value.split(":").map(Number),now=new Date(),target=new Date();
-  target.setHours(h,m,0,0);if(target<=now)target.setDate(target.getDate()+1);
-  alarmTimeout=target.getTime();clearInterval(alarmPoll);alarmPoll=setInterval(checkAlarm,1000);
-  $("alarmStatus").textContent="Alarm set for "+target.toLocaleString();
-  toast("Alarm set. Keep this page open.");
-};
-$("cancelAlarm").onclick=()=>{
-  alarmTimeout=null;clearInterval(alarmPoll);alarmPoll=null;$("alarmStatus").textContent="No alarm set.";toast("Alarm cancelled.");
-};
-
-function renderRevisions() {
-  const box=$("revisionList");box.innerHTML="";
-  if(!revisions.length){box.innerHTML='<div class="muted" style="font-size:12px">No revisions planned yet.</div>';return;}
-  revisions.sort((a,b)=>a.date.localeCompare(b.date));
-  revisions.forEach((r,i)=>{
-    const row=document.createElement("div");row.className="task";
-    const info=document.createElement("div");info.className="task-text";
-    const title=document.createElement("div");title.textContent=r.topic;
-    const meta=document.createElement("div");meta.className="task-meta";meta.textContent=r.date+" · "+r.stage;
-    info.append(title,meta);
-    const due=document.createElement("span");due.className="badge";
-    due.textContent=r.date<DAY()?"OVERDUE":r.date===DAY()?"TODAY":"UPCOMING";
-    const del=document.createElement("button");del.className="delete";del.textContent="×";del.setAttribute("aria-label","Delete revision");
-    del.onclick=()=>{revisions.splice(i,1);save("revisions",revisions);renderRevisions();};
-    row.append(info,due,del);box.append(row);
-  });
-}
-$("revisionDate").value=DAY();
-$("revisionForm").onsubmit=e=>{
-  e.preventDefault();
-  revisions.push({topic:$("revisionTopic").value.trim(),date:$("revisionDate").value,stage:$("revisionStage").value});
-  save("revisions",revisions);$("revisionTopic").value="";renderRevisions();toast("Revision added.");
-};
-
-$("exportBtn").onclick=()=>{
-  const backup={data,goal,tasks,subjects,cards,revisions,notes:$("notes").value,lengths:focusMinutes};
-  downloadFile("studyflow-backup.json",JSON.stringify(backup,null,2),"application/json");
-};
-renderStats();renderTasks();renderSubjects();renderRevisions();paintTimer();paintSW();
-
-window.addEventListener("beforeunload",()=>{
-  if(timerRunning) {
-    // Keep remaining time for this browser session.
-    save("timerState",{mode:timerMode,remaining:Math.max(0,Math.ceil((timerEnd-Date.now())/1000)),savedAt:Date.now()});
-  }
-});
-})();
+function printCV(){buildCV();let cv=$('cvOut').textContent,w=window.open('','_blank');if(!w){notify('Allow pop-ups to print the CV');return}w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>CV</title><style>body{font:15px/1.65 Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;white-space:pre-wrap;color:#111}h1{font-size:30px}@media print{body{margin:10mm}}</style></head><body></body></html>');w.document.body.textContent=cv;w.document.close();w.focus();setTimeout(()=>w.print(),300)}
+function splitBill(){let total=Number($('billTotal').value),n=Number($('billPeople').value),tip=Number($('billTip').value),o=$('billOut');if(!Number.isFinite(total)||total<0||!Number.isInteger(n)||n<1||n>1000||!Number.isFinite(tip)||tip<0||tip>100){o.textContent='Enter a valid amount, people count and tip.';return}let t=total*(1+tip/100);o.textContent=`Subtotal: ৳${total.toFixed(2)}\nExtra: ৳${(t-total).toFixed(2)}\nTotal: ৳${t.toFixed(2)}\nPeople: ${n}\nEach share: ৳${(t/n).toFixed(2)}`}
+function budgetCalc(){let inc=Number($('budgetIncome').value),n=Number($('budgetNeeds').value),w=Number($('budgetWants').value),s=Number($('budgetSave').value);if([inc,n,w,s].some(x=>!Number.isFinite(x)||x<0)||inc<=0){$('budgetOut').textContent='Enter a positive income and valid expense amounts.';return}let rem=inc-n-w-s;$('budgetOut').textContent=`Income: ৳${inc.toFixed(2)}\nNeeds: ৳${n.toFixed(2)} (${(n/inc*100).toFixed(1)}%)\nWants: ৳${w.toFixed(2)} (${(w/inc*100).toFixed(1)}%)\nSavings: ৳${s.toFixed(2)} (${(s/inc*100).toFixed(1)}%)\n${rem>=0?'Remaining':'Over budget'}: ৳${Math.abs(rem).toFixed(2)}`}
+let palette=[];
+function secureRandom(n){let a=new Uint32Array(n);crypto.getRandomValues(a);return a}
+function newPalette(){palette=Array.from({length:5},()=> '#'+Array.from(secureRandom(3),x=>(x%256).toString(16).padStart(2,'0')).join('').toUpperCase());$('swatches').innerHTML=palette.map(c=>`<div class="swatch" style="background:${c}" onclick="copyText('${c}')" title="Copy ${c}">${c}</div>`).join('')}
+function copyPalette(){copyText(palette.join('\n'))}
+function makeQR(){let text=$('qrText').value.trim();if(!text){notify('Enter text or a URL');return}if(!window.QRCode){$('qrStatus').textContent='QR library unavailable. Check internet and reload.';return}$('qrArea').innerHTML='';new QRCode($('qrArea'),{text,width:220,height:220,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});$('qrStatus').textContent='Scan the code to test it before sharing.'}
+function downloadQR(){let c=$('qrArea').querySelector('canvas'),im=$('qrArea').querySelector('img');let url=c?c.toDataURL('image/png'):im?im.src:null;if(!url){notify('Generate a QR first');return}let a=document.createElement('a');a.href=url;a.download='nexora-qr.png';a.click()}
+$('imgQuality').addEventListener('input',e=>$('qualityText').textContent=e.target.value+'%');
+let imgURL=null;
+function compressImage(){let f=$('imgFile').files[0];if(!f||!f.type.startsWith('image/')){notify('Choose a valid image first');return}let r=new FileReader();r.onload=e=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;let ctx=c.getContext('2d');if($('imgFormat').value==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height)}ctx.drawImage(im,0,0);c.toBlob(b=>{if(!b){notify('Could not process image');return}if(imgURL)URL.revokeObjectURL(imgURL);imgURL=URL.createObjectURL(b);$('imgResult').textContent=`Original: ${(f.size/1024).toFixed(1)} KB\nCompressed: ${(b.size/1024).toFixed(1)} KB\n${b.size<f.size?'Saved '+((1-b.size/f.size)*100).toFixed(1)+'%':'Output is not smaller; try another format or quality.'}`;$('imgDownload').href=imgURL;$('imgDownload').download='nexora-image.'+($('imgFormat').value==='image/webp'?'webp':'jpg');$('imgDownload').hidden=false},$('imgFormat').value,Number($('imgQuality').value)/100)};im.onerror=()=>notify('Could not read image');im.src=e.target.result};r.readAsDataURL(f)}
+function formatJSON(){try{$('jsonOut').textContent=JSON.stringify(JSON.parse($('jsonIn').value),null,2)}catch(e){$('jsonOut').textContent='Invalid JSON: '+e.message}}
+function minifyJSON(){try{$('jsonOut').textContent=JSON.stringify(JSON.parse($('jsonIn').value))}catch(e){$('jsonOut').textContent='Invalid JSON: '+e.message}}
+$('textIn').addEventListener('input',()=>{let s=$('textIn').value;$('charCount').textContent=s.length;$('wordCount').textContent=s.trim()?s.trim().split(/\s+/).length:0;$('readCount').textContent=s.trim()?Math.max(1,Math.ceil(s.trim().split(/\s+/).length/200)):0});
+function transform(t){let e=$('textIn'),s=e.value;if(t==='upper')s=s.toUpperCase();if(t==='lower')s=s.toLowerCase();if(t==='title')s=s.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());if(t==='clean')s=s.replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();e.value=s;e.dispatchEvent(new Event('input'))}
+function calculate(){let s=$('calcIn').value.trim();if(!s||!/^[\d\s()+\-*/%.]+$/.test(s)){$('calcOut').textContent='Enter a valid expression with numbers and basic math operators.';return}try{let r=Function('"use strict";return ('+s+')')();$('calcOut').textContent=Number.isFinite(r)?String(r):'Result is not finite'}catch{$('calcOut').textContent='Invalid expression. Check brackets and operators.'}}
+function makePassword(){let len=Number($('passLen').value);if(!Number.isInteger(len)||len<8||len>64){notify('Password length must be 8–64');return}let type=$('passType').value,chars=type==='numbers'?'0123456789':type==='letters'?'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ':type==='alnum'?'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789':'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}?';let out='',max=Math.floor(4294967296/chars.length)*chars.length;while(out.length<len){let a=secureRandom(len-out.length);for(let x of a){if(x<max){out+=chars[x%chars.length];if(out.length===len)break}}}$('passOut').textContent=out}
+function pickChoice(){let arr=$('choices').value.split('\n').map(s=>s.trim()).filter(Boolean);$('choiceOut').textContent=arr.length?arr[Math.floor(Math.random()*arr.length)]:'Add at least two options, one per line.'}
+function exportData(){downloadBlob('nexora-backup.json',JSON.stringify(db,null,2),'application/json')}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||!Array.isArray(x.tasks)||!Array.isArray(x.notes))throw Error('Unexpected format');db={...defaults,...x};persist();renderTasks();renderNotes();notify('Backup imported')}catch(err){notify('Invalid backup file')}e.target.value=''};r.readAsText(f)}
+function clearWorkspace(){if(!confirm('Delete all saved tasks, notes and focus counts from this browser? Export a backup first if needed.'))return;db={...defaults};persist();renderTasks();renderNotes();clearNoteEditor();notify('Workspace cleared')}
+let timerLength=25*60,timerLeft=timerLength,timerInterval=null,focusStart=0;
+function showTimer(){$('timer').textContent=String(Math.floor(timerLeft/60)).padStart(2,'0')+':'+String(timerLeft%60).padStart(2,'0');$('timerProgress').style.width=((timerLength-timerLeft)/timerLength*100)+'%'}
+function setTimer(min){stopTimer();timerLength=min*60;timerLeft=timerLength;showTimer();$('timerStatus').textContent='Timer ready.';$('timerStart').textContent='▶ Start focus'}
+function toggleTimer(){if(timerInterval){stopTimer();$('timerStatus').textContent='Timer paused.';return}focusStart=Date.now();$('timerStart').textContent='Ⅱ Pause';$('timerStatus').textContent='Stay with one task. You can do this.';timerInterval=setInterval(()=>{timerLeft=Math.max(0,timerLeft-1);showTimer();if(timerLeft<=0){stopTimer();$('timerStatus').textContent='Session complete! Take a short break.';if(timerLength>=20*60){db.sessions++;persist()}notify('Timer finished! Take a break.')}},1000)}
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}$('timerStart').textContent='▶ Start focus'}
+function resetTimer(){stopTimer();timerLeft=timerLength;showTimer();$('timerStatus').textContent='Timer reset.'}
+window.addEventListener('beforeunload',()=>{if(imgURL)URL.revokeObjectURL(imgURL)});
+newPalette();showTimer();renderTasks();renderNotes();updateStats();
 </script>
 </body>
 </html>
