@@ -1,280 +1,129 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080d19">
-<title>KHUJI — হারানো জিনিস খুঁজে নিন</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>ShieldNet — Safer Internet</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
-:root{--bg:#080d19;--panel:#101828;--line:#253249;--text:#f2f5fc;--muted:#93a1b8;--green:#a3ffbf;--blue:#8db8ff;--red:#ff9b9b}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',sans-serif}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-a{color:inherit}
-.wrap{max-width:1120px;margin:auto;padding:0 20px}
-nav{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-.logo{font:800 25px Inter,sans-serif;letter-spacing:-1.5px}
-.logo span{color:var(--green)}
-.navright{display:flex;gap:10px;align-items:center}
-.btn{border:1px solid var(--line);background:#172237;color:white;border-radius:12px;padding:11px 16px;font-weight:600}
-.btn.primary{background:var(--green);color:#07130c;border-color:var(--green)}
-.btn:hover{filter:brightness(1.1)}
-.hero{padding:65px 0 36px;max-width:800px}
-.pill{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border:1px solid #34513f;border-radius:99px;color:var(--green);font-size:13px;background:#122319}
-h1{font:800 clamp(36px,7vw,68px)/1.12 Inter,'Hind Siliguri',sans-serif;letter-spacing:-2.5px;margin:22px 0 16px}
-h1 span{color:var(--green)}
-.hero p{font-size:18px;color:var(--muted);line-height:1.8;margin:0;max-width:650px}
-.searchbox{display:flex;gap:10px;margin-top:28px;max-width:680px}
-.searchbox input{flex:1;min-width:0}
-input,textarea,select{width:100%;background:#0b1322;color:white;border:1px solid var(--line);border-radius:11px;padding:13px 14px;outline:none}
-input:focus,textarea:focus,select:focus{border-color:var(--green)}
-.stats{display:flex;gap:12px;flex-wrap:wrap;margin:25px 0 40px}
-.stat{background:var(--panel);border:1px solid var(--line);padding:12px 17px;border-radius:13px;color:var(--muted);font-size:13px}
-.stat b{color:white;font:700 19px Inter,sans-serif;display:block;margin-bottom:4px}
-.sectionhead{display:flex;justify-content:space-between;gap:15px;align-items:center;margin:25px 0 17px}
-h2{font-size:24px;margin:0}
-.small{color:var(--muted);font-size:13px}
-.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:5px}
-.tab{white-space:nowrap;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--muted);padding:9px 14px}
-.tab.active{background:var(--green);color:#07130c;border-color:var(--green);font-weight:700}
-.filters{display:grid;grid-template-columns:1fr 210px;gap:10px;margin:16px 0 22px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
-.card{border:1px solid var(--line);background:var(--panel);border-radius:17px;padding:18px;display:flex;flex-direction:column;min-height:220px;transition:.2s}
-.card:hover{transform:translateY(-3px);border-color:#526987}
-.cardtop{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.tag{font-size:12px;padding:5px 9px;border-radius:8px;background:#1d2b40;color:var(--blue)}
-.tag.lost{color:#ffb4a8;background:#36211f}
-.tag.found{color:var(--green);background:#183425}
-.card h3{font-size:20px;margin:17px 0 7px;line-height:1.5}
-.desc{color:var(--muted);font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
-.meta{font-size:13px;color:#c2ccdc;margin-top:15px}
-.cardfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:13px;margin-top:auto}
-.cardfoot button{padding:7px 10px;font-size:13px}
-.empty{grid-column:1/-1;text-align:center;padding:50px 15px;border:1px dashed var(--line);border-radius:16px;color:var(--muted)}
-.empty strong{display:block;font-size:21px;color:white;margin-bottom:8px}
-.notice{margin:45px 0 20px;padding:20px;border:1px solid #3c3a29;background:#201e16;border-radius:15px;color:#e6d9a9;font-size:14px;line-height:1.8}
-footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 38px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
-.overlay{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:16px;z-index:10;overflow:auto}
-.overlay.open{display:flex}
-.modal{width:100%;max-width:520px;background:#101828;border:1px solid var(--line);border-radius:20px;padding:23px;max-height:92vh;overflow:auto}
-.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.modalhead h2{font-size:22px}
-.close{border:1px solid var(--line);border-radius:9px;background:transparent;color:white;padding:5px 11px}
-.field{margin:13px 0}
-.field label{display:block;margin-bottom:7px;font-size:14px;color:#d5deec}
-.field small{display:block;color:var(--muted);margin-top:5px}
-.formrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#07130c;padding:12px 18px;border-radius:12px;font-weight:700;display:none;z-index:30;max-width:90%;text-align:center}
-@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding-top:42px}h1{letter-spacing:-1.5px}.stats{margin-bottom:28px}}
-@media(max-width:520px){.wrap{padding:0 14px}nav{height:65px}.logo{font-size:22px}.navright .btn{padding:9px 10px;font-size:13px}.hero p{font-size:16px}.searchbox{flex-direction:column}.searchbox .btn{width:100%}.grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.sectionhead{align-items:flex-start;flex-direction:column}.formrow{grid-template-columns:1fr}.card{min-height:195px}}
+body{
+ margin:0;font-family:system-ui,Arial,sans-serif;
+ background:#07111f;color:#f1f5f9;
+ padding:20px;line-height:1.6
+}
+main{max-width:600px;margin:auto}
+header{text-align:center;padding:30px 0 22px}
+.logo{font-size:46px}
+h1{margin:0;font-size:32px}
+.sub{color:#9fb0c5}
+.card{
+ background:#111f31;border:1px solid #263a50;
+ border-radius:18px;padding:20px;margin:16px 0
+}
+h2{font-size:19px;margin-top:0}
+p{color:#c0ccda}
+.tag{color:#70f0b1;font-weight:700}
+.address{
+ background:#07111f;padding:12px;border-radius:10px;
+ overflow-wrap:anywhere;font-family:monospace
+}
+button{
+ width:100%;padding:13px;border:0;border-radius:11px;
+ background:#6df0b1;color:#07111f;font-weight:800;
+ font-size:15px;margin-top:10px;cursor:pointer
+}
+.secondary{background:#263a50;color:white}
+ol{padding-left:22px;color:#c0ccda}
+li{margin:9px 0}
+.note{font-size:13px;color:#9fb0c5}
+footer{text-align:center;color:#8495aa;font-size:12px;padding:20px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <nav>
-    <div class="logo">KHUJI<span>.</span></div>
-    <div class="navright">
-      <button class="btn" onclick="showAbout()">কীভাবে কাজ করে?</button>
-      <button class="btn primary" onclick="openModal()">+ পোস্ট দিন</button>
-    </div>
-  </nav>
+<main>
+<header>
+ <div class="logo">🛡️</div>
+ <h1>ShieldNet</h1>
+ <div class="sub">Safer internet starts here.</div>
+ <p>বিজ্ঞাপন, ট্র্যাকার ও ক্ষতিকর ওয়েবসাইটের বিরুদ্ধে
+ অতিরিক্ত DNS সুরক্ষা সেটআপ করুন।</p>
+</header>
 
-  <header class="hero">
-    <div class="pill">● বাংলাদেশের জন্য তৈরি</div>
-    <h1>হারিয়েছে কিছু?<br><span>খুঁজে নিন এখানেই।</span></h1>
-    <p>হারানো ফোন, মানিব্যাগ, সার্টিফিকেট কিংবা খুঁজে পাওয়া কোনো জিনিস—পোস্ট করুন, এলাকার মানুষের সঙ্গে শেয়ার করুন।</p>
-    <div class="searchbox">
-      <input id="heroSearch" placeholder="কী হারিয়েছে বা কোথায় পেয়েছেন?" oninput="syncSearch(this.value)">
-      <button class="btn primary" onclick="document.getElementById('feed').scrollIntoView({behavior:'smooth'})">খুঁজুন ↗</button>
-    </div>
-    <div class="stats">
-      <div class="stat"><b id="totalCount">০</b>মোট পোস্ট</div>
-      <div class="stat"><b id="lostCount">০</b>হারানো জিনিস</div>
-      <div class="stat"><b id="foundCount">০</b>পাওয়া জিনিস</div>
-    </div>
-  </header>
+<section class="card">
+ <div class="tag">OPTION 01 · ADS & TRACKERS</div>
+ <h2>বিজ্ঞাপন ব্লকিং DNS</h2>
+ <p>সমর্থিত অ্যাপ ও ওয়েবসাইটে DNS-ভিত্তিক
+ বিজ্ঞাপন এবং ট্র্যাকার ব্লক করতে সাহায্য করে।</p>
+ <div class="address" id="normal">
+ dns.adguard-dns.com
+ </div>
+ <button onclick="copyDNS('normal')">DNS কপি করুন</button>
+</section>
 
-  <main id="feed">
-    <div class="sectionhead">
-      <div><h2>সাম্প্রতিক পোস্ট</h2><div class="small">আপনার এলাকার পোস্ট খুঁজে নিন</div></div>
-      <button class="btn primary" onclick="openModal()">+ নতুন পোস্ট</button>
-    </div>
-    <div class="tabs">
-      <button class="tab active" data-kind="all" onclick="setKind('all',this)">সব পোস্ট</button>
-      <button class="tab" data-kind="lost" onclick="setKind('lost',this)">🔎 হারিয়েছে</button>
-      <button class="tab" data-kind="found" onclick="setKind('found',this)">🎉 পাওয়া গেছে</button>
-    </div>
-    <div class="filters">
-      <input id="search" placeholder="নাম, বিবরণ বা এলাকা দিয়ে খুঁজুন..." oninput="render()">
-      <select id="district" onchange="render()">
-        <option value="">সব এলাকা</option>
-        <option>ঢাকা</option><option>চট্টগ্রাম</option><option>নরসিংদী</option>
-        <option>গাজীপুর</option><option>নারায়ণগঞ্জ</option><option>কুমিল্লা</option>
-        <option>সিলেট</option><option>রাজশাহী</option><option>খুলনা</option>
-        <option>বরিশাল</option><option>রংপুর</option><option>ময়মনসিংহ</option>
-        <option>অন্যান্য</option>
-      </select>
-    </div>
-    <div class="grid" id="cards"></div>
-  </main>
+<section class="card">
+ <div class="tag">OPTION 02 · FAMILY PROTECTION</div>
+ <h2>Family Protection</h2>
+ <p>বিজ্ঞাপন, ট্র্যাকার এবং প্রাপ্তবয়স্কদের জন্য
+ অনুপযুক্ত সাইট ব্লক করার চেষ্টা করে।</p>
+ <div class="address" id="family">
+ family.adguard-dns.com
+ </div>
+ <button onclick="copyDNS('family')">Family DNS কপি করুন</button>
+</section>
 
-  <div class="notice">
-    <strong>🔐 নিরাপত্তা মনে রাখুন</strong><br>
-    জিনিস ফেরত নেওয়ার আগে মালিকানার প্রমাণ যাচাই করুন। OTP, পাসওয়ার্ড বা ব্যাংকের তথ্য কাউকে দেবেন না। কোনো জিনিস ফেরত দেওয়ার জন্য আগাম টাকা পাঠাবেন না।
-  </div>
-  <footer>
-    <div><strong style="color:white">KHUJI.</strong> — হারানো জিনিস খোঁজার কমিউনিটি</div>
-    <div>আপনার তথ্য সুরক্ষিত রাখুন · নিরাপদে দেখা করুন</div>
-  </footer>
-</div>
+<section class="card">
+ <h2>📱 Android ফোনে চালু করার নিয়ম</h2>
+ <ol>
+  <li>ফোনের Settings খুলুন।</li>
+  <li>Settings-এর সার্চে <b>Private DNS</b> লিখুন।</li>
+  <li><b>Private DNS provider hostname</b> নির্বাচন করুন।</li>
+  <li>উপরের DNS ঠিকানার যেকোনো একটি কপি করে বসান।</li>
+  <li>Save চাপুন এবং ইন্টারনেট কাজ করছে কি না দেখুন।</li>
+ </ol>
+ <button class="secondary" onclick="copyDNS('normal')">
+ সাধারণ DNS কপি
+ </button>
+ <button class="secondary" onclick="copyDNS('family')">
+ Family DNS কপি
+ </button>
+</section>
 
-<div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modalhead"><h2>নতুন পোস্ট তৈরি করুন</h2><button class="close" onclick="closeModal()">✕</button></div>
-    <form id="postForm">
-      <div class="field"><label for="kind">পোস্টের ধরন</label>
-        <select id="kind" required><option value="lost">🔎 আমি কিছু হারিয়েছি</option><option value="found">🎉 আমি কিছু পেয়েছি</option></select>
-      </div>
-      <div class="field"><label for="title">জিনিসটির নাম *</label><input id="title" maxlength="90" required placeholder="যেমন: কালো মানিব্যাগ"></div>
-      <div class="field"><label for="desc">বিস্তারিত *</label><textarea id="desc" maxlength="700" rows="3" required placeholder="কখন, কোথায়, কীভাবে হারিয়েছে বা পেয়েছেন?"></textarea></div>
-      <div class="formrow">
-        <div class="field"><label for="area">জেলা / এলাকা *</label>
-          <select id="area" required>
-            <option value="">এলাকা বাছুন</option>
-            <option>ঢাকা</option><option>চট্টগ্রাম</option><option>নরসিংদী</option>
-            <option>গাজীপুর</option><option>নারায়ণগঞ্জ</option><option>কুমিল্লা</option>
-            <option>সিলেট</option><option>রাজশাহী</option><option>খুলনা</option>
-            <option>বরিশাল</option><option>রংপুর</option><option>ময়মনসিংহ</option><option>অন্যান্য</option>
-          </select>
-        </div>
-        <div class="field"><label for="date">তারিখ</label><input type="date" id="date"></div>
-      </div>
-      <div class="field"><label for="contact">যোগাযোগের উপায় *</label><input id="contact" maxlength="100" required placeholder="ফোন নম্বর / ইমেইল / যোগাযোগের তথ্য"><small>সতর্কতা: এই তথ্য পোস্টে দেখা যাবে। ব্যক্তিগত তথ্য দেওয়ার আগে বিবেচনা করুন।</small></div>
-      <button class="btn primary" style="width:100%;margin-top:8px" type="submit">পোস্ট প্রকাশ করুন ↗</button>
-    </form>
-  </div>
-</div>
+<section class="card">
+ <h2>⚠️ গুরুত্বপূর্ণ সীমাবদ্ধতা</h2>
+ <p>এই ওয়েবসাইট নিজে ফোনের DNS পরিবর্তন করে না।
+ কিছু অ্যাপের বিজ্ঞাপন DNS দিয়ে ব্লক হয় না।
+ VPN, অন্য DNS সেটিংস বা অ্যাপের নিজস্ব সংযোগের
+ কারণে ফলাফল ভিন্ন হতে পারে।</p>
+ <p>DNS ফিল্টারিং পূর্ণাঙ্গ অ্যান্টিভাইরাস নয় এবং
+ সব ক্ষতিকর ওয়েবসাইট আটকানোর নিশ্চয়তা দেয় না।</p>
+</section>
 
-<div class="overlay" id="about" onclick="if(event.target===this)closeAbout()">
-  <div class="modal">
-    <div class="modalhead"><h2>KHUJI কীভাবে কাজ করে?</h2><button class="close" onclick="closeAbout()">✕</button></div>
-    <p>১. হারানো বা পাওয়া জিনিসের পোস্ট দিন।</p>
-    <p>২. এলাকা ও কীওয়ার্ড দিয়ে পোস্ট খুঁজুন।</p>
-    <p>৩. পোস্টদাতার দেওয়া যোগাযোগের তথ্য দিয়ে যোগাযোগ করুন।</p>
-    <p style="color:var(--muted);font-size:13px">এই সংস্করণে পোস্ট আপনার বর্তমান ব্রাউজারেই সংরক্ষিত হয়। এটি এখনো কোনো অনলাইন সার্ভারে পোস্ট শেয়ার করে না। অন্য ব্যবহারকারীদের সঙ্গে বাস্তব সময়ে পোস্ট শেয়ার করতে সার্ভার ও ডেটাবেস যুক্ত করতে হবে।</p>
-    <button class="btn primary" style="width:100%" onclick="closeAbout();openModal()">পোস্ট তৈরি করুন</button>
-  </div>
-</div>
-<div id="toast"></div>
+<footer>
+ShieldNet · DNS Protection Guide<br>
+সেটিংস পরিবর্তনের পর সংযোগে সমস্যা হলে
+Private DNS-কে Automatic করে পরীক্ষা করুন।
+</footer>
+</main>
 
 <script>
-const KEY='khuji_posts_v1';
-const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
-const initial=[
-{id:'demo1',kind:'lost',title:'কালো মানিব্যাগ হারিয়েছে',desc:'বাসস্ট্যান্ডের আশেপাশে একটি কালো মানিব্যাগ হারিয়েছে। যার সন্ধান জানা আছে, অনুগ্রহ করে যোগাযোগ করুন।',area:'নরসিংদী',date:'',contact:'উদাহরণ পোস্ট — নিজের পোস্ট দিন',demo:true},
-{id:'demo2',kind:'found',title:'একটি বই পাওয়া গেছে',desc:'একটি বই পাওয়া গেছে। প্রকৃত মালিক বইটির নাম ও ভেতরের পরিচিতি জানিয়ে যোগাযোগ করতে পারেন।',area:'ঢাকা',date:'',contact:'উদাহরণ পোস্ট — নিজের পোস্ট দিন',demo:true},
-{id:'demo3',kind:'lost',title:'আইডি কার্ড হারানো',desc:'একটি পরিচয়পত্র হারিয়েছে। পরিচয়পত্রের সম্পূর্ণ নম্বর এখানে প্রকাশ করবেন না।',area:'গাজীপুর',date:'',contact:'উদাহরণ পোস্ট — নিজের পোস্ট দিন',demo:true}
-];
-let kindFilter='all';
-function getPosts(){
+async function copyDNS(id){
+ const value=document.getElementById(id).textContent.trim();
  try{
-  const saved=localStorage.getItem(KEY);
-  return saved?JSON.parse(saved):initial;
- }catch(e){return initial}
-}
-function savePosts(posts){localStorage.setItem(KEY,JSON.stringify(posts))}
-function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function syncSearch(value){document.getElementById('search').value=value;render()}
-function setKind(kind,el){
- kindFilter=kind;
- document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
- el.classList.add('active');render();
-}
-function render(){
- const posts=getPosts();
- const q=document.getElementById('search').value.trim().toLowerCase();
- const area=document.getElementById('district').value;
- document.getElementById('totalCount').textContent=bn(posts.filter(p=>!p.demo).length);
- document.getElementById('lostCount').textContent=bn(posts.filter(p=>!p.demo&&p.kind==='lost').length);
- document.getElementById('foundCount').textContent=bn(posts.filter(p=>!p.demo&&p.kind==='found').length);
- const shown=posts.filter(p=>{
-  const hay=[p.title,p.desc,p.area].join(' ').toLowerCase();
-  return (kindFilter==='all'||p.kind===kindFilter)&&(!q||hay.includes(q))&&(!area||p.area===area);
- });
- const root=document.getElementById('cards');
- if(!shown.length){
-  root.innerHTML='<div class="empty"><strong>কোনো পোস্ট পাওয়া যায়নি</strong>অন্য শব্দ বা এলাকা দিয়ে খুঁজে দেখুন।</div>';return;
+  await navigator.clipboard.writeText(value);
+  alert("DNS কপি হয়েছে: "+value);
+ }catch(e){
+  const field=document.createElement("textarea");
+  field.value=value;
+  document.body.appendChild(field);
+  field.select();
+  const ok=document.execCommand("copy");
+  field.remove();
+  alert(ok ? "DNS কপি হয়েছে: "+value :
+    "কপি করা যায়নি। DNS ঠিকানাটি হাতে কপি করুন: "+value);
  }
- root.innerHTML=shown.map(p=>`
- <article class="card">
-  <div class="cardtop">
-   <span class="tag ${p.kind}">${p.kind==='lost'?'🔎 হারিয়েছে':'🎉 পাওয়া গেছে'}</span>
-   <span class="small">${p.demo?'ডেমো':escapeHTML(p.date||'তারিখ নেই')}</span>
-  </div>
-  <h3>${escapeHTML(p.title)}</h3>
-  <div class="desc">${escapeHTML(p.desc)}</div>
-  <div class="meta">📍 ${escapeHTML(p.area)}</div>
-  <div class="cardfoot">
-   <span class="small">${p.demo?'নমুনা পোস্ট':'যোগাযোগের তথ্য'}</span>
-   <button class="btn" onclick="contactPost('${escapeHTML(p.id)}')">বিস্তারিত ↗</button>
-  </div>
- </article>`).join('');
 }
-function contactPost(id){
- const p=getPosts().find(p=>p.id===id);
- if(!p)return;
- if(p.demo){toast('এটি নমুনা পোস্ট। বাস্তব পোস্ট তৈরি করতে “পোস্ট দিন” চাপুন।');return}
- alert('শিরোনাম: '+p.title+'\nএলাকা: '+p.area+'\nযোগাযোগ: '+p.contact);
-}
-function openModal(){
- document.getElementById('modal').classList.add('open');
- document.body.style.overflow='hidden';
-}
-function closeModal(){
- document.getElementById('modal').classList.remove('open');
- document.body.style.overflow='';
-}
-function showAbout(){document.getElementById('about').classList.add('open')}
-function closeAbout(){document.getElementById('about').classList.remove('open')}
-let toastTimer;
-function toast(msg){
- const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';
- clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',2800);
-}
-document.getElementById('postForm').addEventListener('submit',e=>{
- e.preventDefault();
- const post={
-  id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),
-  kind:document.getElementById('kind').value,
-  title:document.getElementById('title').value.trim(),
-  desc:document.getElementById('desc').value.trim(),
-  area:document.getElementById('area').value,
-  date:document.getElementById('date').value,
-  contact:document.getElementById('contact').value.trim(),
-  demo:false
- };
- if(!post.title||!post.desc||!post.area||!post.contact)return;
- try{
-  const posts=getPosts().filter(p=>!p.demo);
-  posts.unshift(post);savePosts(posts);
-  document.getElementById('postForm').reset();
-  closeModal();kindFilter='all';
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.kind==='all'));
-  document.getElementById('search').value='';
-  document.getElementById('heroSearch').value='';
-  document.getElementById('district').value='';
-  render();document.getElementById('feed').scrollIntoView({behavior:'smooth'});
-  toast('আপনার পোস্ট এই ব্রাউজারে সংরক্ষিত হয়েছে ✓');
- }catch(err){
-  toast('পোস্ট সংরক্ষণ করা যায়নি। ব্রাউজারের স্টোরেজ পরীক্ষা করুন।');
- }
-});
-document.addEventListener('keydown',e=>{
- if(e.key==='Escape'){closeModal();closeAbout()}
-});
-render();
 </script>
 </body>
 </html>
